@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Horizontal Bar Chart</title>
+	<script src="js/Chart.min.js"></script>
+	<script src="js/util.js"></script>
+	<style>
+		canvas {
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+		}
+
+		button {
+			width: 100px;
+			height: 100px;
+		}
+
+		.img {
+			width: 50%;
+			height: 50%;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="container" style="width: 100%">
+		<table>
+			<th>
+				<button id="1" onclick="button_click(id)"><img src="icon/applemango.jpg" class="img"></button>
+				<br>
+				<button id="2" onclick="button_click(id)"><img src="icon/lightgreen.PNG" class="img"></button>
+			</th>
+			<th>
+				<canvas id="canvas" style="width:85%"></canvas>
+			</th>
+		</table>
+
+	</div>
+
+	<script>
+		function button_click(id) {
+			console.log(id);
+			myHorizontalBar.data.datasets[Number(id) - 1].data[0]++;
+			myHorizontalBar.update()
+		}
+
+		var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+		var color = Chart.helpers.color;
+		var horizontalBarChartData = {
+			//labels: ['물 마신 횟수'],//, 'February', 'March', 'April', 'May', 'June', 'July'],
+			datasets: [
+				{
+					label: 'Dataset 1',
+					backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+					borderColor: window.chartColors.red,
+					borderWidth: 1,
+					data: [0]
+				},
+				{
+					label: 'Dataset 2',
+					backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+					borderColor: window.chartColors.blue,
+					data: [0]
+				}
+			]
+
+		};
+
+		window.onload = function () {
+			var ctx = document.getElementById('canvas').getContext('2d');
+			window.myHorizontalBar = new Chart(ctx, {
+				type: 'horizontalBar',
+				data: horizontalBarChartData,
+				options: {
+					// Elements options apply to all of the options unless overridden in a dataset
+					// In this case, we are setting the border of each horizontal bar to be 2px wide
+					elements: {
+						rectangle: {
+							borderWidth: 2,
+						}
+					},
+					responsive: true,
+					title: {
+						display: true,
+						text: 'Chart.js Horizontal Bar Chart'
+					},
+					scales: {
+						xAxes: [{
+							ticks: {
+								beginAtZero: true,
+								max:100,
+							},
+						}]
+					},
+				}
+			});
+
+		};
+
+
+	</script>
+</body>
+
+</html>
