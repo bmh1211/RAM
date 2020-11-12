@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".MyPageActivity"></activity>
+        <activity android:name=".MyPageActivity"/>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".FindPasswordActivity" />
         <activity android:name=".FindIdActivity" />
@@ -17,7 +17,6 @@
         <activity android:name=".LogInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
