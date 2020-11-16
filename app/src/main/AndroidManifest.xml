@@ -10,12 +10,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
 
+        <activity
+            android:name=".MyPageActivity"
+            android:label="@string/btn_my_page"
+            android:theme="@style/AppTheme" />
+<!--        마이페이지부분만 NoActionBar 적용시켜놓은 상태-->
 
-        <activity android:name=".MyPageActivity" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".FindPasswordActivity" />
-        <activity android:name=".FindIdActivity" />
-        <activity android:name=".MainPageActivity" />
+        <activity
+            android:name=".RegisterActivity"
+            android:label="@string/btn_register" />
+
+        <activity
+            android:name=".FindPasswordActivity"
+            android:label="@string/btn_findPassword" />
+
+        <activity
+            android:name=".FindIdActivity"
+            android:label="@string/btn_findId" />
+
+        <activity
+            android:name=".MainPageActivity"
+            android:label="MainPage" />
+
         <activity android:name=".LogInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
