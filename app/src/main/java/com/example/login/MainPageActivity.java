@@ -8,21 +8,21 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainPageActivity extends AppCompatActivity {
-    private Button btn_my_page;
+    private Button btn_myPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
 
-        btn_my_page=findViewById(R.id.btn_my_page);
+        btn_myPage=findViewById(R.id.btn_my_page);
 
-        Intent intent_my_page = new Intent(this, MyPageActivity.class);
+        Intent intent_myPage = new Intent(this, MyPageActivity.class);
 
-        btn_my_page.setOnClickListener(new View.OnClickListener() {
+        btn_myPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(intent_my_page);
+                startActivity(intent_myPage);
             }
         });
     }

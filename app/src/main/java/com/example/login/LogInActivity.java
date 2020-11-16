@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -29,20 +30,18 @@ public class LogInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
-        et_id = findViewById(R.id.et_id);
-        et_password=findViewById(R.id.et_password);
-        btn_login=findViewById(R.id.btn_login);
-        chk_login=findViewById(R.id.chk_login);
-        btn_findId=findViewById(R.id.btn_findId);
-        btn_findPassword=findViewById(R.id.btn_findPassword);
-        btn_register=findViewById(R.id.btn_register);
+        et_id = (EditText)findViewById(R.id.et_id);
+        et_password=(EditText)findViewById(R.id.et_password);
+        btn_login=(Button)findViewById(R.id.btn_login);
+        chk_login=(CheckBox)findViewById(R.id.chk_login);
+        btn_findId=(Button)findViewById(R.id.btn_findId);
+        btn_findPassword=(Button)findViewById(R.id.btn_findPassword);
+        btn_register=(Button)findViewById(R.id.btn_register);
 
-        Intent intent_login = new Intent(this, MainPageActivity.class);
+        Intent intent_mainPage = new Intent(this, MainPageActivity.class);
         Intent intent_findId = new Intent(this,FindIdActivity.class);
         Intent intent_findPassword=new Intent(this,FindPasswordActivity.class);
         Intent intent_register = new Intent(this,RegisterActivity.class);
-
-        boolean login_isChecked = chk_login.isChecked(); // 체크상태를 받아옴
 
         DB_Helper = new DBOpenHelper(this);
         DB_Helper.open();
@@ -64,9 +63,7 @@ public class LogInActivity extends AppCompatActivity {
                     // 해당 기능은 회원가입 액티비티가 구현되면 그쪽으로 옮겨줄예정 - 로그인 액티비티에서는 테스트용도
 
                     // 메인 페이지로 이동하는 코드 필요
-                    startActivity(intent_login);
-
-
+                    startActivity(intent_mainPage);
                 }
                 else if(ID_temp.equals(ID) && !PW_temp.equals(PW)){
                     Toast.makeText(getApplicationContext(),"비밀번호 오류",Toast.LENGTH_SHORT).show();
@@ -108,16 +105,18 @@ public class LogInActivity extends AppCompatActivity {
             // 나중에 기능 넣어줘야함
         });
 
-        chk_login.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        chk_login.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(login_isChecked){
+            public void onClick(View v) {
+                boolean login_isChecked = chk_login.isChecked(); // 체크상태를 받아옴
+
+                System.out.println(login_isChecked);
+
+                if(login_isChecked==true){
                     Toast.makeText(LogInActivity.this, "자동로그인 활성화", Toast.LENGTH_SHORT).show();
-                    // 자동저장 기능 넣기
                 }
                 else{
-                    Toast.makeText(LogInActivity.this,"자동로그인 해제",Toast.LENGTH_SHORT).show();
-                    // 기능추가
+                    Toast.makeText(LogInActivity.this, "자동로그인 해제", Toast.LENGTH_SHORT).show();
                 }
             }
         });

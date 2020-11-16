@@ -11,7 +11,7 @@
         android:layout_height="247dp"
         android:layout_marginTop="240dp"
         android:gravity="center"
-        android:text="아이디 찾기"
+        android:text="@string/btn_findId"
         android:textSize="35sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.589"
