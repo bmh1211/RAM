@@ -25,8 +25,6 @@ public class MyPageActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //자동으로 뒤로가기 버튼을 만들어줌
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_launcher_foreground); //뒤로가기버튼 모양
-
-
     }
 
     @Override
