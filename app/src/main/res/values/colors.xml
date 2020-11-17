@@ -8,8 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="colorPrimary">#00FF0D</color>
     <color name="colorPrimaryDark">#3BA140</color>
-    <color name="colorAccent">#000000</color>
+    <color name="colorPrimary">#00FF0D</color>
 </resources>
 <!--toolbar color reference : https://leojihun.wordpress.com/2017/09/22/3-%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-material-theme-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0/-->
