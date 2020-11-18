@@ -17,7 +17,7 @@ public class RegisterActivity extends AppCompatActivity {
         tb_register = (Toolbar)findViewById(R.id.tb_register);
         setSupportActionBar(tb_register);
 
-        getSupportActionBar().setTitle("Main Page");
+        getSupportActionBar().setTitle("Register");
         //getSupportActionBar().setDisplayShowTitleEnabled(false); //기본 제목을 없애줌
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //자동으로 뒤로가기 버튼을 만들어줌

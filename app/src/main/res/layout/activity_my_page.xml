@@ -13,14 +13,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/black" />
+        android:background="@color/black"
+        app:titleTextColor="@color/white"/>
 <!--    툴바 위에 기본 메뉴있는 바 보이게 해야함-->
 
     <ImageView
         android:id="@+id/iv_profile"
         android:layout_width="117dp"
         android:layout_height="137dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="128dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.085"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,10 +32,10 @@
         android:id="@+id/tv_name"
         android:layout_width="129dp"
         android:layout_height="70dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="128dp"
         android:text="여기는 이름이 들어올거에요"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.184"
+        app:layout_constraintHorizontal_bias="0.185"
         app:layout_constraintStart_toEndOf="@+id/iv_profile"
         app:layout_constraintTop_toTopOf="@+id/tb_myPage" />
 
@@ -55,10 +56,10 @@
         android:id="@+id/tv_email"
         android:layout_width="276dp"
         android:layout_height="44dp"
-        android:layout_marginTop="248dp"
+        android:layout_marginTop="316dp"
         android:text="● 이메일 : bmh1211@gmail.com (자바파일에서 수정해야함)"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.185"
+        app:layout_constraintHorizontal_bias="0.281"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -66,10 +67,10 @@
         android:id="@+id/tv_favoriteRegion"
         android:layout_width="205dp"
         android:layout_height="41dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="28dp"
         android:text="● 선호하는 거래 장소??????"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.121"
+        app:layout_constraintHorizontal_bias="0.184"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_email" />
 
