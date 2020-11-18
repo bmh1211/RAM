@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".LogInActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tb_logIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/black"/>
+
     <ImageView
         android:id="@+id/img_logo"
         android:layout_width="129dp"

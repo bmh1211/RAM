@@ -13,7 +13,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/colorPrimary"/>
+        android:background="@color/black" />
 <!--    툴바 위에 기본 메뉴있는 바 보이게 해야함-->
 
     <ImageView
