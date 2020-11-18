@@ -4,38 +4,26 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-public class MyPageActivity extends AppCompatActivity {
-    private Toolbar tb_myPage;
+public class ChangeProfileActivity extends AppCompatActivity {
+    private Toolbar tb_changeProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_page);
+        setContentView(R.layout.activity_change_profile);
 
-        tb_myPage = (Toolbar)findViewById(R.id.tb_myPage);
-        setSupportActionBar(tb_myPage);
+        tb_changeProfile=(Toolbar)findViewById(R.id.tb_changeProfile);
+        setSupportActionBar(tb_changeProfile);
 
-        getSupportActionBar().setTitle("My Page");
+        getSupportActionBar().setTitle("Change Profile");
         //getSupportActionBar().setDisplayShowTitleEnabled(false); //기본 제목을 없애줌
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //자동으로 뒤로가기 버튼을 만들어줌
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_dialog_close_dark); //뒤로가기버튼 모양
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //return super.onCreateOptionsMenu(menu);
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu,menu);
-
-        return true;
     }
 
     @Override
@@ -45,16 +33,8 @@ public class MyPageActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
-                
-            case R.id.item_change_profile:
-                Intent intent_changeProfile = new Intent(this, ChangeProfileActivity.class);
-
-                Toast.makeText(getApplicationContext(), "정보수정 버튼 누름", Toast.LENGTH_SHORT).show();
-                startActivity(intent_changeProfile);
-                return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 }
-// reference : https://www.hanumoka.net/2017/10/28/android-20171028-android-toolbar/
