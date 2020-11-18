@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+// TODO : 회원가입 관련 작업 필요
 public class RegisterActivity extends AppCompatActivity {
     private Toolbar tb_register;
 

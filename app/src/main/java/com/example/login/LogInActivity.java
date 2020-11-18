@@ -1,7 +1,7 @@
 package com.example.login;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +24,7 @@ public class LogInActivity extends AppCompatActivity {
     String PW_temp = "1234567890"; // 임시지정한 PW
     private DBOpenHelper DB_Helper;
     //reference : https://github.com/yoondowon/InnerDatabaseSQLite/blob/master/app/src/main/java/com/example/user/innerdatabasesqlite/
+    private Toolbar tb_logIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class LogInActivity extends AppCompatActivity {
         btn_findId=(Button)findViewById(R.id.btn_findId);
         btn_findPassword=(Button)findViewById(R.id.btn_findPassword);
         btn_register=(Button)findViewById(R.id.btn_register);
+        tb_logIn = (Toolbar)findViewById(R.id.tb_logIn);
 
         Intent intent_mainPage = new Intent(this, MainPageActivity.class);
         Intent intent_findId = new Intent(this,FindIdActivity.class);
@@ -62,7 +64,6 @@ public class LogInActivity extends AppCompatActivity {
                     DB_Helper.insertColumn("방민호","MINO",PW,"010-5014-3278",ID);
                     // 해당 기능은 회원가입 액티비티가 구현되면 그쪽으로 옮겨줄예정 - 로그인 액티비티에서는 테스트용도
 
-                    // 메인 페이지로 이동하는 코드 필요
                     startActivity(intent_mainPage);
                 }
                 else if(ID_temp.equals(ID) && !PW_temp.equals(PW)){
@@ -84,7 +85,6 @@ public class LogInActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"아이디 찾기",Toast.LENGTH_SHORT).show();
                 startActivity(intent_findId);
             }
-            // 나중에 기능 넣어줘야함
         });
         
         btn_findPassword.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +93,6 @@ public class LogInActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"비밀번호 찾기",Toast.LENGTH_SHORT).show();
                 startActivity(intent_findPassword);
             }
-            // 나중에 기능 넣어줘야함
         });
         
         btn_register.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +101,6 @@ public class LogInActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"회원가입",Toast.LENGTH_SHORT).show();
                 startActivity(intent_register);
             }
-            // 나중에 기능 넣어줘야함
         });
 
         chk_login.setOnClickListener(new View.OnClickListener() {
@@ -114,11 +112,17 @@ public class LogInActivity extends AppCompatActivity {
 
                 if(login_isChecked==true){
                     Toast.makeText(LogInActivity.this, "자동로그인 활성화", Toast.LENGTH_SHORT).show();
+                    // TODO : 자동로그인에 필요한 생채인식을 해줄 팝업창 필요함
                 }
                 else{
                     Toast.makeText(LogInActivity.this, "자동로그인 해제", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+        setSupportActionBar(tb_logIn);
+        getSupportActionBar().setTitle("Log In");
+        //getSupportActionBar().setDisplayShowTitleEnabled(false); //기본 제목을 없애줌
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
     }
 }
