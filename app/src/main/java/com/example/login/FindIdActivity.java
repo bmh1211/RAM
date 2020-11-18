@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+// TODO : ID 찾기 작업 필요
 public class FindIdActivity extends AppCompatActivity {
     private Toolbar tb_findId;
 

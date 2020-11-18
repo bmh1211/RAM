@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+// TODO : 메인페이지 레이아웃부터
 public class MainPageActivity extends AppCompatActivity {
     private Button btn_myPage;
     private Toolbar tb_mainPage;
