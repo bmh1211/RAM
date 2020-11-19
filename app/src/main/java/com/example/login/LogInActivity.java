@@ -22,7 +22,6 @@ public class LogInActivity extends AppCompatActivity {
     String ID_temp = "bmh1211@gmail.com"; // 임시지정한 ID
     String PW_temp = "1234567890"; // 임시지정한 PW
     private DBOpenHelper DB_Helper;
-    //reference : https://github.com/yoondowon/InnerDatabaseSQLite/blob/master/app/src/main/java/com/example/user/innerdatabasesqlite/
     private Toolbar tb_logIn;
     private SharedPreferences.Editor sp_editor_login;
     private SharedPreferences sp_login;
@@ -49,6 +48,7 @@ public class LogInActivity extends AppCompatActivity {
         Intent intent_register = new Intent(this, RegisterActivity.class);
 
         // =================== 내부 SQLite 사용을 위한 DB생성 ==================//
+        // reference : https://github.com/yoondowon/InnerDatabaseSQLite/blob/master/app/src/main/java/com/example/user/innerdatabasesqlite/
         DB_Helper = new DBOpenHelper(this);
         DB_Helper.open();
         DB_Helper.create();
