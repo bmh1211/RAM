@@ -2,19 +2,28 @@
 <project version="4">
   <component name="AndroidLayouts">
     <shared>
+<<<<<<< HEAD
       <config>
         <device id="pixel_2" />
         <device id="pixel" />
       </config>
+=======
+      <config />
+>>>>>>> 18dc30adc61c5051ce77941de1ec43c8a27d9a65
     </shared>
   </component>
   <component name="AndroidLogFilters">
     <option name="TOOL_WINDOW_LOG_LEVEL" value="error" />
+<<<<<<< HEAD
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
+=======
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+>>>>>>> 18dc30adc61c5051ce77941de1ec43c8a27d9a65
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
+<<<<<<< HEAD
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -51,12 +60,20 @@
       <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
     </list>
+=======
+  <component name="ChangeListManager">
+    <list default="true" id="cbbacd90-634c-4bf7-9a9c-758021ac3718" name="Default Changelist" comment="" />
+>>>>>>> 18dc30adc61c5051ce77941de1ec43c8a27d9a65
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+<<<<<<< HEAD
   <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
+=======
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[Pixel_2_API_29]" />
+>>>>>>> 18dc30adc61c5051ce77941de1ec43c8a27d9a65
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -65,13 +82,19 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+<<<<<<< HEAD
         <option value="valueResourceFile" />
         <option value="Class" />
         <option value="resourceFile" />
+=======
+        <option value="resourceFile" />
+        <option value="layoutResourceFile" />
+>>>>>>> 18dc30adc61c5051ce77941de1ec43c8a27d9a65
       </list>
     </option>
   </component>
   <component name="Git.Settings">
+<<<<<<< HEAD
     <excluded-from-favorite>
       <branch-storage>
         <map>
@@ -104,11 +127,17 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
+=======
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1kQnR2CrtKiJ4agHyobG76WEAg6" />
+>>>>>>> 18dc30adc61c5051ce77941de1ec43c8a27d9a65
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+<<<<<<< HEAD
     <property name="DEBUGGABLE_DEVICE" value="Pixel_3a_API_30_x86 [emulator-5554]" />
     <property name="DEBUGGABLE_PROCESS" value="com.example.webview" />
     <property name="DEBUGGER_ID" value="Auto" />
@@ -146,6 +175,17 @@
     </key>
     <key name="android.template.-1267177530">
       <recent name="com.example.login" />
+=======
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\RAM2\app\src\main\res\menu" />
+      <recent name="E:\RAM2\app\src\main\res\drawable-v24" />
+>>>>>>> 18dc30adc61c5051ce77941de1ec43c8a27d9a65
     </key>
   </component>
   <component name="RunManager">
@@ -219,6 +259,7 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
+<<<<<<< HEAD
       <changelist id="e4303425-67dc-4d2f-bcd9-21426947e4cc" name="Default Changelist" comment="" />
       <created>1604467059409</created>
       <option name="number" value="Default" />
@@ -377,5 +418,56 @@
       <screen x="-1920" y="-8" width="1920" height="1040" />
     </state>
     <state x="-1297" y="217" width="672" height="678" key="search.everywhere.popup/0.0.1536.824/-1920.-8.1920.1040@-1920.-8.1920.1040" timestamp="1605768654697" />
+=======
+      <changelist id="cbbacd90-634c-4bf7-9a9c-758021ac3718" name="Default Changelist" comment="" />
+      <created>1605641670232</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1605641670232</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="690" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1605773223770">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="690" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1605773223770" />
+    <state x="540" y="275" key="AndroidCreateResourceDirectoryDialog" timestamp="1605771890080">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="540" y="275" key="AndroidCreateResourceDirectoryDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1605771890080" />
+    <state x="687" y="297" key="AndroidCreateResourceFileDialog" timestamp="1605773231055">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="687" y="297" key="AndroidCreateResourceFileDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1605773231055" />
+    <state x="804" y="327" key="AndroidCreateXmlResourceDialog" timestamp="1605769752212">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="804" y="327" key="AndroidCreateXmlResourceDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1605769752212" />
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1605677279946">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1605677279946" />
+    <state width="1876" height="281" key="GridCell.Tab.0.bottom" timestamp="1605773153091">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1876" height="281" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1605773153091" />
+    <state width="1876" height="281" key="GridCell.Tab.0.center" timestamp="1605773153091">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1876" height="281" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1605773153091" />
+    <state width="1876" height="281" key="GridCell.Tab.0.left" timestamp="1605773153091">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1876" height="281" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1605773153091" />
+    <state width="1876" height="281" key="GridCell.Tab.0.right" timestamp="1605773153091">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1876" height="281" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1605773153091" />
+    <state x="922" y="168" key="SettingsEditor" timestamp="1605770832797">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="922" y="168" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1605770832797" />
+>>>>>>> 18dc30adc61c5051ce77941de1ec43c8a27d9a65
   </component>
 </project>

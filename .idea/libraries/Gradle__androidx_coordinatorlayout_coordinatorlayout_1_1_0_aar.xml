@@ -4,9 +4,15 @@
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/43d28a6cb6aa3ef105d8e111681e9af4/coordinatorlayout-1.1.0/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
+<<<<<<< HEAD
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/43d28a6cb6aa3ef105d8e111681e9af4/coordinatorlayout-1.1.0/AndroidManifest.xml" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/43d28a6cb6aa3ef105d8e111681e9af4/coordinatorlayout-1.1.0/res" />
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/43d28a6cb6aa3ef105d8e111681e9af4/coordinatorlayout-1.1.0/jars/classes.jar!/" />
+=======
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/43d28a6cb6aa3ef105d8e111681e9af4/coordinatorlayout-1.1.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/43d28a6cb6aa3ef105d8e111681e9af4/coordinatorlayout-1.1.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/43d28a6cb6aa3ef105d8e111681e9af4/coordinatorlayout-1.1.0/AndroidManifest.xml" />
+>>>>>>> 18dc30adc61c5051ce77941de1ec43c8a27d9a65
     </CLASSES>
     <JAVADOC />
     <SOURCES>
