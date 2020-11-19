@@ -3,32 +3,31 @@ package com.example.login;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager2.widget.ViewPager2;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
+import android.widget.ViewFlipper;
 
-// TODO : 메인페이지 레이아웃부터
+// TODO : 메인페이지 레이아웃부터 - ViewPager + TabLayout
 public class MainPageActivity extends AppCompatActivity {
-    private Button btn_myPage;
     private Toolbar tb_mainPage;
+    private ViewPager2 vp_mainPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
 
-        btn_myPage=findViewById(R.id.btn_my_page);
-
-        Intent intent_myPage = new Intent(this, MyPageActivity.class);
-
-        btn_myPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(intent_myPage);
-            }
-        });
+        vp_mainPage=(ViewPager2)findViewById(R.id.vp_mainPage);
 
         tb_mainPage = (Toolbar)findViewById(R.id.tb_mainPage);
         setSupportActionBar(tb_mainPage);
@@ -38,6 +37,16 @@ public class MainPageActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //자동으로 뒤로가기 버튼을 만들어줌
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_dialog_close_dark); //뒤로가기버튼 모양
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //return super.onCreateOptionsMenu(menu);
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_my_page,menu);
+
+        return true;
     }
 
     @Override
@@ -46,6 +55,13 @@ public class MainPageActivity extends AppCompatActivity {
         switch(item.getItemId()){
             case android.R.id.home:
                 finish();
+                return true;
+
+            case R.id.item_my_page:
+                Intent intent_myPage = new Intent(this, MyPageActivity.class);
+
+                Toast.makeText(getApplicationContext(), "마이페이지 버튼 누름", Toast.LENGTH_SHORT).show();
+                startActivity(intent_myPage);
                 return true;
         }
 
