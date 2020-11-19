@@ -9,36 +9,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
-
+        <activity android:name=".SignUpActivity"></activity>
         <activity
             android:name=".MyPageActivity"
             android:label="@string/btn_my_page"
-            android:theme="@style/AppTheme" />
-<!--        마이페이지부분만 NoActionBar 적용시켜놓은 상태-->
-
+            android:theme="@style/AppTheme" /> <!-- 마이페이지부분만 NoActionBar 적용시켜놓은 상태 -->
         <activity
             android:name=".RegisterActivity"
             android:label="@string/btn_register" />
-
         <activity
             android:name=".FindPasswordActivity"
             android:label="@string/btn_findPassword" />
-
         <activity
             android:name=".FindIdActivity"
             android:label="@string/btn_findId" />
-
         <activity
             android:name=".MainPageActivity"
             android:label="MainPage" />
-
         <activity android:name=".LogInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
-    <!--    한 manifest 파일에 application 태그를 두개 이상 쓸수 있는가?-->
-    <!--    몇몇의 액티비티는 액션바가 필요하지만 몇몇의 액티비티는 액션바가 필요없음-->
+
 </manifest>

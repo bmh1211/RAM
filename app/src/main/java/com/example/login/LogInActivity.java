@@ -51,30 +51,32 @@ public class LogInActivity extends AppCompatActivity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String ID = et_id.getText().toString(); // 입력된 id를 가져옴
-                String PW = et_password.getText().toString(); // 입력된 비밀번호를 가져옴
-                
-                if(ID_temp.equals(ID) && PW_temp.equals(PW)){
-                    Toast.makeText(getApplicationContext(),"로그인 성공",Toast.LENGTH_SHORT).show();
-
-                    // 안드로이드 내부 DB에 데이터 집어넣기(테스트용)
-                    DB_Helper.open();
-                    DB_Helper.insertColumn("방민호","MINO",PW,"010-5014-3278",ID);
-                    // 해당 기능은 회원가입 액티비티가 구현되면 그쪽으로 옮겨줄예정 - 로그인 액티비티에서는 테스트용도
-
-                    // 메인 페이지로 이동하는 코드 필요
-                    startActivity(intent_mainPage);
-                }
-                else if(ID_temp.equals(ID) && !PW_temp.equals(PW)){
-                    Toast.makeText(getApplicationContext(),"비밀번호 오류",Toast.LENGTH_SHORT).show();
-                }
-                else if(!ID_temp.equals(ID) && PW_temp.equals(PW)){
-                    Toast.makeText(getApplicationContext(),"존재하지 않는 ID",Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    //Toast.makeText(getApplicationContext(),ID_temp+", "+ID+", "+PW_temp+", "+PW,Toast.LENGTH_SHORT).show();
-                    Toast.makeText(getApplicationContext(),"로그인 실패",Toast.LENGTH_SHORT).show();
-                }
+//                String ID = et_id.getText().toString(); // 입력된 id를 가져옴
+//                String PW = et_password.getText().toString(); // 입력된 비밀번호를 가져옴
+//
+//                if(ID_temp.equals(ID) && PW_temp.equals(PW)){
+//                    Toast.makeText(getApplicationContext(),"로그인 성공",Toast.LENGTH_SHORT).show();
+//
+//                    // 안드로이드 내부 DB에 데이터 집어넣기(테스트용)
+//                    DB_Helper.open();
+//                    DB_Helper.insertColumn("방민호","MINO",PW,"010-5014-3278",ID);
+//                    // 해당 기능은 회원가입 액티비티가 구현되면 그쪽으로 옮겨줄예정 - 로그인 액티비티에서는 테스트용도
+//
+//                    // 메인 페이지로 이동하는 코드 필요
+//                    startActivity(intent_mainPage);
+//                }
+//                else if(ID_temp.equals(ID) && !PW_temp.equals(PW)){
+//                    Toast.makeText(getApplicationContext(),"비밀번호 오류",Toast.LENGTH_SHORT).show();
+//                }
+//                else if(!ID_temp.equals(ID) && PW_temp.equals(PW)){
+//                    Toast.makeText(getApplicationContext(),"존재하지 않는 ID",Toast.LENGTH_SHORT).show();
+//                }
+//                else{
+//                    //Toast.makeText(getApplicationContext(),ID_temp+", "+ID+", "+PW_temp+", "+PW,Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(),"로그인 실패",Toast.LENGTH_SHORT).show();
+//                }
+                Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -101,6 +103,8 @@ public class LogInActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(),"회원가입",Toast.LENGTH_SHORT).show();
                 startActivity(intent_register);
+                Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
+                startActivity(intent);
             }
             // 나중에 기능 넣어줘야함
         });
