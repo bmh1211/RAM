@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PostingFragment">
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="485dp"
+        android:background="@drawable/rectangle" />
+<!--    얘는 위치만 잡아볼라고 넣은것 - 여기에 게시물 작성하는 레이아웃 만들어야함-->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="취소" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="작성" />
+    </LinearLayout>
+
+</FrameLayout>

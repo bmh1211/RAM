@@ -21,7 +21,7 @@ import com.google.android.material.navigation.NavigationView;
 import static com.example.login.R.id.item3;
 
 public class MainPageActivity extends AppCompatActivity {
-    private Button btn_myPage;
+//    private Button btn_myPage;
     private DrawerLayout mDrawerLayout;
     Fragment fragment1;
     Fragment fragment2;
@@ -54,7 +54,7 @@ public class MainPageActivity extends AppCompatActivity {
                 else if(id == R.id.item2){
                     Toast.makeText(getApplicationContext(), title + "Second Item", Toast.LENGTH_SHORT).show();
                 }
-                else if(id == item3){
+                else if(id == R.id.item3){
                     Toast.makeText(getApplicationContext(), title + "Third Item", Toast.LENGTH_SHORT).show();
                 }
 
@@ -82,22 +82,27 @@ public class MainPageActivity extends AppCompatActivity {
                             case R.id.test3:
                                 getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment3).commit();
                                 return true;
+                            case R.id.test4:
+                                Intent intent_myPage = new Intent(getApplicationContext(), MyPageActivity.class);
+                                startActivity(intent_myPage);
+                                // 기존의 마이페이지 액티비티에 연결함 - 얘도 프레그먼트로 수정할까???
+                                return true;
                         }
                         return false;
                     }
                 }
         );
 
-        btn_myPage=findViewById(R.id.btn_my_page);
+//        btn_myPage=findViewById(R.id.btn_my_page);
 
-        Intent intent_myPage = new Intent(this, MyPageActivity.class);
+//        Intent intent_myPage = new Intent(this, MyPageActivity.class);
 
-        btn_myPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(intent_myPage);
-            }
-        });
+//        btn_myPage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(intent_myPage);
+//            }
+//        });
     }
 
     @Override

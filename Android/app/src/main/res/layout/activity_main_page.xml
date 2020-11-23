@@ -38,28 +38,6 @@
             app:headerLayout="@layout/navi_header"
             app:menu="@menu/navi_drawer" />
     </androidx.drawerlayout.widget.DrawerLayout>
-    <TextView
-        android:id="@+id/textView_nav"
-        android:layout_width="match_parent"
-        android:layout_height="247dp"
-        android:layout_marginTop="128dp"
-        android:gravity="center"
-        android:text="로그인 성공하면 넘어오는 화면"
-        android:textSize="35sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btn_my_page"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
-        android:text="@string/btn_my_page"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_nav" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom"
@@ -69,6 +47,29 @@
         app:backgroundTint="#FFFFFF"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_my_page"
         app:menu="@menu/menu_bottom" />
+<!--    <TextView-->
+<!--        android:id="@+id/textView_nav"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="247dp"-->
+<!--        android:layout_marginTop="128dp"-->
+<!--        android:gravity="center"-->
+<!--        android:text="로그인 성공하면 넘어오는 화면"-->
+<!--        android:textSize="35sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/btn_my_page"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="76dp"-->
+<!--        android:text="@string/btn_my_page"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/textView_nav" />-->
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
