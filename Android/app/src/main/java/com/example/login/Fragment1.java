@@ -35,7 +35,8 @@ public class Fragment1 extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String strText = (String) parent.getItemAtPosition(position) ;
-                Toast.makeText(getActivity().getApplicationContext(), strText+"번째 아이템, id : "+id, Toast.LENGTH_SHORT).show();
+                // TODO : Toast 동작이 갑자기 안됨 - 나중에 수정
+                Toast.makeText(container.getContext(), strText+"번째 아이템, id : "+id, Toast.LENGTH_SHORT).show();
             }
         });
 

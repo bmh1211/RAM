@@ -10,14 +10,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 public class PostingFragment extends Fragment {
     private Button btn_cancel;
     private Button btn_apply;
-    private ListView lv_posting;
-    static final String[] LIST_MENU={"1","2","3","4","5","6","7","8","9"};
+    private EditText et_title;
+    private EditText et_posting;
+    Fragment fragment1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -26,16 +28,22 @@ public class PostingFragment extends Fragment {
 
         btn_cancel=(Button)view.findViewById(R.id.btn_cancel);
         btn_apply=(Button)view.findViewById(R.id.btn_apply);
-
-        lv_posting=(ListView)view.findViewById(R.id.lv_posting);
-        ArrayAdapter board_adapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,LIST_MENU);
-        lv_posting.setAdapter(board_adapter);
-
-        lv_posting.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        et_title=(EditText)view.findViewById(R.id.et_title);
+        et_posting=(EditText)view.findViewById(R.id.et_posting);
+        fragment1=new Fragment1();
+        
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String strText = (String) parent.getItemAtPosition(position) ;
-                Toast.makeText(getActivity().getApplicationContext(), strText+"번째 아이템, id : "+id, Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                //TODO : 취소 버튼 눌렀을 떄 동작 기능
+                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment1).commit();
+            }
+        });
+        
+        btn_apply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO : 작성 버튼 눌렀을 때 동작 기능
             }
         });
 

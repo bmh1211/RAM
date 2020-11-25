@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragment1">
+    tools:context=".Fragment1"
+    android:layout_marginTop="50dp"
+    android:layout_marginBottom="50dp">
 
     <!-- TODO: Update blank fragment layout -->
 <!--    <TextView-->
@@ -14,8 +16,9 @@
     <ListView
         android:id="@+id/lv_board"
         android:layout_width="match_parent"
-        android:layout_height="485dp"
-        android:background="@drawable/rectangle" />
+        android:layout_height="400dp"
+        android:background="@drawable/rectangle"
+        android:isScrollContainer="true"/>
 
     <Button
         android:id="@+id/btn_write"

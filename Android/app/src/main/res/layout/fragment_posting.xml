@@ -3,32 +3,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PostingFragment">
-
-    <ListView
-        android:id="@+id/lv_posting"
-        android:layout_width="match_parent"
-        android:layout_height="485dp"
-        android:background="@drawable/rectangle" />
-<!--    얘는 위치만 잡아볼라고 넣은것 - 여기에 게시물 작성하는 레이아웃 만들어야함-->
+    tools:context=".PostingFragment"
+    android:layout_marginTop="50dp"
+    android:layout_marginBottom="50dp">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|bottom"
-        android:layout_marginBottom="50dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_cancel"
+        <EditText
+            android:id="@+id/et_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/et_title"/>
+
+        <EditText
+            android:id="@+id/et_posting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="200dp"
+            android:maxHeight="400dp"
+            android:isScrollContainer="true"
+            android:hint="@string/et_posting"
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="textMultiLine" />
+        <!--    얘는 위치만 잡아볼라고 넣은것 - 여기에 게시물 작성하는 레이아웃 만들어야함-->
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="취소" />
+            android:layout_gravity="right|bottom"
+            android:layout_marginBottom="50dp">
 
-        <Button
-            android:id="@+id/btn_apply"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="작성" />
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_cancel" />
+
+            <Button
+                android:id="@+id/btn_apply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_apply" />
+        </LinearLayout>
     </LinearLayout>
-
 </FrameLayout>
