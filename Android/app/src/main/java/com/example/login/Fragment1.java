@@ -3,6 +3,7 @@ package com.example.login;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +19,12 @@ import java.util.ArrayList;
 
 public class Fragment1 extends Fragment {
     private ListView lv_board;
-    ArrayList<String> LIST_MENU;
+    //ArrayList<String> LIST_MENU;
+    static final String[] LIST_MENU={"1","2","3","4","5","6","7","8","9","10"};
     private Button btn_write;
     Fragment postingFragment;
     ArrayAdapter board_adapter;
+    SwipeRefreshLayout swipe_layout_board;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,16 +34,17 @@ public class Fragment1 extends Fragment {
         lv_board = (ListView)view.findViewById(R.id.lv_board);
         postingFragment = new PostingFragment();
         btn_write=(Button)view.findViewById(R.id.btn_write);
-        LIST_MENU=new ArrayList<>();
+        //LIST_MENU=new ArrayList<>();
         board_adapter = new ArrayAdapter(getActivity().getApplicationContext(),android.R.layout.simple_list_item_1,LIST_MENU);
+        swipe_layout_board = (SwipeRefreshLayout)view.findViewById(R.id.swipe_layout_board);
 
         // TODO : 기존에 가지고 있는 게시판 리스트가 있다면 불러오기(DB에서??)
-        if(getArguments() != null){
-            // 번들을 통해서 온 데이터가 있는 경우
-            String test=getArguments().getString("et_title","");
-            LIST_MENU.add(test);
-            board_adapter.notifyDataSetChanged();
-        }
+//        if(getArguments() != null){
+//            // 번들을 통해서 온 데이터가 있는 경우
+//            String test=getArguments().getString("et_title","");
+//            LIST_MENU.add(test);
+//            board_adapter.notifyDataSetChanged();
+//        }
 
         lv_board.setAdapter(board_adapter);
 
@@ -52,15 +56,36 @@ public class Fragment1 extends Fragment {
             }
         });
 
+        // 게시물 작성 버튼 클릭시
         btn_write.setOnClickListener(new View.OnClickListener() {
-            // 게시물 작성 버튼 클릭시
             @Override
             public void onClick(View v) {
                 ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,postingFragment).commit();
             }
         });
 
+        swipe_layout_board.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Toast.makeText((MainPageActivity)getActivity(), "새로고침 정상 작동", Toast.LENGTH_SHORT).show();
+                // TODO : 새로고침 했을 때 동작할 부분
+
+                // 새로고침 완료
+                swipe_layout_board.setRefreshing(false);
+            }
+        });
+
+        // 새로고침 화살표 한바퀴 돌때마다 각각의 색상으로 나타난다?
+        // TODO : 맨 위 하나만나옴 - 알아보기
+        swipe_layout_board.setColorSchemeResources(
+                android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light
+        );
+
         // Inflate the layout for this fragment
         return view;
     }
 }
+// listview 새로고침 reference : https://medium.com/@bluesh55/android-%EB%8B%B9%EA%B2%A8%EC%84%9C-%EC%83%88%EB%A1%9C%EA%B3%A0%EC%B9%A8-%EA%B0%84%EB%8B%A8%ED%95%98%EA%B2%8C-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0-a42846c14c23
