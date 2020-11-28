@@ -8,6 +8,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,6 +26,11 @@ public class Fragment1 extends Fragment {
     Fragment postingFragment;
     ArrayAdapter board_adapter;
     SwipeRefreshLayout swipe_layout_board;
+
+    private int currentPage=1;
+    private int previousTotal=0;
+    private int totalPageCount=0;
+    private boolean page_loading = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,6 +62,24 @@ public class Fragment1 extends Fragment {
             }
         });
 
+        lv_board.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                // 리스트뷰 최상단
+//                if(!lv_board.canScrollVertically(-1)){
+//                }
+                if(!lv_board.canScrollVertically(1)){
+                    // TODO : 최하단 스크롤 시 보이는 리스트 추가
+                    Toast.makeText((MainPageActivity)getActivity(), "리스트뷰 최하단 스크롤 시도", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
+
         // 게시물 작성 버튼 클릭시
         btn_write.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +92,6 @@ public class Fragment1 extends Fragment {
             @Override
             public void onRefresh() {
                 Toast.makeText((MainPageActivity)getActivity(), "새로고침 정상 작동", Toast.LENGTH_SHORT).show();
-                // TODO : 새로고침 했을 때 동작할 부분
 
                 // 새로고침 완료
                 swipe_layout_board.setRefreshing(false);
