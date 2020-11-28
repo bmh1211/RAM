@@ -3,6 +3,7 @@ package com.example.login;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,19 +32,41 @@ public class PostingFragment extends Fragment {
         et_title=(EditText)view.findViewById(R.id.et_title);
         et_posting=(EditText)view.findViewById(R.id.et_posting);
         fragment1=new Fragment1();
-        
+
+        // 취소 버튼 눌렀을 때 동작 기능
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO : 취소 버튼 눌렀을 떄 동작 기능
                 ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment1).commit();
             }
         });
-        
+
+        //작성 버튼 눌렀을 때 동작 기능
         btn_apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO : 작성 버튼 눌렀을 때 동작 기능
+                String send_title = et_title.getText().toString();
+                String send_posting=et_posting.getText().toString();
+
+                Bundle bundle = new Bundle(); // 번들은 이동시킬 데이터를 모아 담을 보따리 느낌
+
+                if(send_posting.equals("") && send_title.equals("")){
+                    Toast.makeText((MainPageActivity)getActivity(), "제목과 내용을 입력해주세요", Toast.LENGTH_SHORT).show();
+                }
+                else if(send_title.equals("")){
+                    Toast.makeText((MainPageActivity)getActivity(), "제목을 입력해주세요", Toast.LENGTH_SHORT).show();
+                }
+                else if(send_posting.equals("")){
+                    Toast.makeText((MainPageActivity)getActivity(), "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    // TODO : 데이터를 객체형태로 보내서 제목, 내용 둘다 보여질수 있게 하기
+                    bundle.putString("et_title",et_title.getText().toString());
+
+                    fragment1.setArguments(bundle);//번들안의 데이터를 넣어주는 과정
+
+                    ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment1).commit();
+                }
             }
         });
 
