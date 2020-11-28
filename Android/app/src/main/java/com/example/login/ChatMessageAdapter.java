@@ -1,10 +1,14 @@
 package com.example.login;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +43,13 @@ public class ChatMessageAdapter extends ArrayAdapter {
             LayoutInflater inflater=(LayoutInflater)this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row=inflater.inflate(R.layout.chatting_message,parent,false);
         }
+        //Arrary List 에 들어있는 채팅 문자열을 읽어
+        ChatMessage msg=(ChatMessage) msgs.get(position);
+
+        //inflater를 이용해서 생성한 View에 Chatmessage 삽입
+        TextView msgText=(TextView)row.findViewById(R.id.chatmessage);
+        msgText.setText(msg.getMessage());
+        msgText.setTextColor(Color.parseColor("#000000"));
         return row;
     }
 }
