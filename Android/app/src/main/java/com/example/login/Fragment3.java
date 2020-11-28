@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,15 +23,32 @@ import org.java_websocket.handshake.ServerHandshake;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import ua.naiksoftware.stomp.Stomp;
+import ua.naiksoftware.stomp.client.StompClient;
+
 public class Fragment3 extends Fragment {
 
+
+    private static final String TAG = "TAG";
+    private StompClient mStompClient;
     private WebSocketClient webSocketClient;
     ChatMessageAdapter chatMessageAdapter;
     View view;
+    Button messageSendBtn;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        connectWebSocket();
+        //버튼 초기화, 클릭 이벤트 추가
+        messageSendBtn=(Button)view.findViewById(R.id.btn_send);
+        messageSendBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                SendMessage(view);
+            }
+        });
+        //Stomp 연결
+        StompClientConnect();
+        //connectWebSocket();
         setHasOptionsMenu(true);
         // Inflate the layout for this fragment
         view=inflater.inflate(R.layout.fragment_3, container, false);
@@ -57,13 +75,28 @@ public class Fragment3 extends Fragment {
    }
 
 
-   public void send(View view){
+
+   public void StompClientConnect(){
+       mStompClient = Stomp.over(okhttp3.WebSocket.class, "ws://localhost:8080/websockethandler/websocket");
+       mStompClient.connect();
+   }
+
+   public void StompClientRegister(){
+       mStompClient.topic("/topic/greetings").subscribe(topicMessage -> {
+           Log.d(TAG, topicMessage.getPayload());
+       });
+   }
+   public void SendMessage(View view){
+       mStompClient.send("/topic/hello-msg-mapping", "My first STOMP message!").subscribe();
        EditText etMsg=(EditText)view.findViewById(R.id.etMessage);
        String strMsg=(String)etMsg.getText().toString();
        chatMessageAdapter.add(new ChatMessage(strMsg));
    }
+   public void StompClientDisconnect(){
+       mStompClient.disconnect();
+   }
 
-   private void connectWebSocket(){
+   /*private void connectWebSocket(){
         URI uri = null;
         try{
             uri=new URI("주소");
@@ -84,8 +117,8 @@ public class Fragment3 extends Fragment {
                     @Override
                     public void run(){
                         chatMessageAdapter.add(new ChatMessage(message));
-                        /*TextView textView=(TextView)view.findViewById(R.id.etMessage);
-                        textView.setText(textView.getText()+"\n"+message);*/
+                        *//*TextView textView=(TextView)view.findViewById(R.id.etMessage);
+                        textView.setText(textView.getText()+"\n"+message);*//*
                     }
                 });
             }
@@ -100,5 +133,5 @@ public class Fragment3 extends Fragment {
                 Log.i("Websocket", "Error " + ex.getMessage());
             }
         };
-   }
+   }*/
 }
