@@ -1,9 +1,5 @@
 package com.example.ramserver.Controller;
 
-import com.example.ramserver.Model.User;
-import com.example.ramserver.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,14 +18,11 @@ public class TestController {
     private static final String USER ="rottenmaster";
 
     private static final String PW = "hellorottenam1028";
-    /*@Autowired
-    UserMapper userMapper;*/
 
-    @RequestMapping(path="/user")
+    @RequestMapping(path="/connectionexample")
     @ResponseBody
-    public String hello() throws Exception {
-        //return userMapper.findAll("kim").getPassword();
-
+    //connection 설정후 데이터 뽑아내기
+    public String connectionExample() throws Exception {
         Class.forName(DRIVER);
         try(Connection con= DriverManager.getConnection(URL,USER,PW)){
             Statement stmt=con.createStatement();
@@ -45,4 +38,6 @@ public class TestController {
         }
         return "helloeveryone";
     }
+
+
 }
