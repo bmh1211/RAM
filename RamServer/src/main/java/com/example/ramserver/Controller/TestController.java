@@ -1,43 +1,42 @@
 package com.example.ramserver.Controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
+
 
 @RestController
+@RequestMapping("test")
 public class TestController {
-    private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-
-    private static final String URL = "jdbc:mysql://13.125.231.184:3306/rotten";
-
-    private static final String USER ="rottenmaster";
-
-    private static final String PW = "hellorottenam1028";
-
-    @RequestMapping(path="/connectionexample")
-    @ResponseBody
-    //connection 설정후 데이터 뽑아내기
-    public String connectionExample() throws Exception {
-        Class.forName(DRIVER);
-        try(Connection con= DriverManager.getConnection(URL,USER,PW)){
-            Statement stmt=con.createStatement();
-            ResultSet rs= ((Statement) stmt).executeQuery("select * from USER");
-            while(rs.next()){
-                String s=rs.getString("ID");
-                String p=rs.getString("password");
-                System.out.println(s+p);
-            }
-        }
-        catch(Exception e){
-            System.err.println(e);
-        }
-        return "helloeveryone";
+    private static Connection db;
+    PreparedStatement pstmt=null;
+    private TestController(){
+        db=connectToDB();
     }
 
+    /*@GetMapping("/a")
+    public String getParameter(@RequestParam String id, @RequestParam(name="password") String pwd){
+
+    }*/
+
+    private static Connection connectToDB(){
+        try{
+            Class.forName("org.mariadb.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try{
+            String Url="jdbc:mariadb://13.125.231.184:3306/rotten?autoReconnect=true&verifyServerCertificate=false&useSSL=false";
+            String userId="rottenmaster";
+            String userPass="hellorottenam1028";
+            Connection connection=DriverManager.getConnection(Url,userId,userPass);
+            System.out.println("연결 성공");
+        } catch (SQLException throwables) {
+            System.out.println("연결 실패");
+            throwables.printStackTrace();
+        }
+        return null;
+    }
 
 }
