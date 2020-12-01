@@ -35,7 +35,6 @@ public class MyPageActivity extends AppCompatActivity {
 
         setSupportActionBar(tb_myPage);
         getSupportActionBar().setTitle("My Page");
-        //getSupportActionBar().setDisplayShowTitleEnabled(false); //기본 제목을 없애줌
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //자동으로 뒤로가기 버튼을 만들어줌
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_dialog_close_dark); //뒤로가기버튼 모양
@@ -59,6 +58,7 @@ public class MyPageActivity extends AppCompatActivity {
         });
 
         lv_recentBuy.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            //TODO : 퀵메뉴?? 를 사용해서 판매자 정보 말풍선으로 띄워보기 **
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String strText = (String) parent.getItemAtPosition(position) ;

@@ -27,11 +27,6 @@ public class Fragment1 extends Fragment {
     ArrayAdapter board_adapter;
     SwipeRefreshLayout swipe_layout_board;
 
-    private int currentPage=1;
-    private int previousTotal=0;
-    private int totalPageCount=0;
-    private boolean page_loading = true;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
