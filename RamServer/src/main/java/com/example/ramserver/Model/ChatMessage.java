@@ -4,16 +4,15 @@ import lombok.Data;
 
 import javax.persistence.Id;
 import java.util.Date;
-
 @Data
 public class ChatMessage {
-    @Id
     private String email;
     private String text;
     private String author;
     private Date createDate;
 
-    public ChatMessage(String text,String author,Date createDate){
+    public ChatMessage(String email ,String text,String author,Date createDate){
+        this.email=email;
         this.text=text;
         this.author=author;
         this.createDate=createDate;
