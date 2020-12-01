@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
-// TODO : 기능에 대한 작업 필요
 public class MyPageActivity extends AppCompatActivity {
     private Toolbar tb_myPage;
     private ListView lv_recentSell;
@@ -61,6 +60,7 @@ public class MyPageActivity extends AppCompatActivity {
         lv_favorite.setAdapter(favorite_adapter);
 
         lv_recentSell.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            // TODO : 판매내역 아이템 클릭시 해당하는 게시물로, 판매완료 된 것은 판매완료 됐다는 표시 필요
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String strText = (String) parent.getItemAtPosition(position) ;
@@ -69,7 +69,6 @@ public class MyPageActivity extends AppCompatActivity {
         });
 
         lv_recentBuy.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            //TODO : 안드로이드 팝업윈도우
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String strText = (String) parent.getItemAtPosition(position) ;
@@ -98,7 +97,7 @@ public class MyPageActivity extends AppCompatActivity {
                 tv_sellerName.setText("거래 상대 : "+ "상대이름");
                 tv_price.setText("가격 : "+ "가격(원)");
                 tv_location.setText("거래 위치 : "+"거래위치");
-                tv_evalPoint.setText("5.0");
+                tv_evalPoint.setText("5.0(평점)");
             }
         });
 

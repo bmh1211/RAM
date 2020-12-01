@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-// TODO : 회원정보 수정 - 비밀번호 변경, 생체정보 변경 등 작업 필요
 public class ChangeProfileActivity extends AppCompatActivity {
     private Toolbar tb_changeProfile;
 
