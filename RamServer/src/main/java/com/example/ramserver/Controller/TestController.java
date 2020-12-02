@@ -7,7 +7,7 @@ import java.sql.*;
 
 
 @RestController
-@RequestMapping("test")
+@RequestMapping("/test")
 public class TestController {
     private static Connection db;
     PreparedStatement pstmt=null;

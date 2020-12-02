@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class RamserverApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(RamserverApplication.class, args);
     }
 

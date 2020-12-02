@@ -28,7 +28,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation group:'org.javassist',name:'javassist',version:'3.15.0-GA'
     compile group: 'com.zaxxer', name: 'HikariCP', version: '3.3.0'
-    implementation group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.2.2.Final'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }

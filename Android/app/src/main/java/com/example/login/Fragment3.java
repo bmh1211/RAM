@@ -77,8 +77,9 @@ public class Fragment3 extends Fragment {
 
 
    public void StompClientConnect(){
-       mStompClient = Stomp.over(okhttp3.WebSocket.class, "ws://localhost:8080/websockethandler/websocket");
+       mStompClient = Stomp.over(okhttp3.WebSocket.class, "ws://localhost:8080/websockethandler");
        mStompClient.connect();
+       System.out.println("연결");
    }
 
    public void StompClientRegister(){
