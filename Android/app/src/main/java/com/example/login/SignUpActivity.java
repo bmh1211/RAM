@@ -14,6 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -200,6 +203,17 @@ public class SignUpActivity extends AppCompatActivity {
             {
                 if(check1 == true && check2 == true && check3 == true && check4 == true && check5 == true)
                 {
+                    JSONObject jsonObject = new JSONObject();
+
+                    try {
+                        jsonObject.put("name",et_name.getText() );                      //회원가입 정보 json객체 생성
+                        jsonObject.put("password", et_pw.getText());
+                        jsonObject.put("email", et_email.getText());
+                        jsonObject.put("nickname", et_nickname.getText());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                     Toast.makeText(SignUpActivity.this, "완료되었습니다!", Toast.LENGTH_SHORT).show();
                     Toast.makeText(SignUpActivity.this, "이메일을 인증해주세요!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getApplicationContext(), LogInActivity.class);
