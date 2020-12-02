@@ -1,0 +1,186 @@
+[
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\menu_menu_change_profile.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\menu\\menu_change_profile.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi_ic_launcher_background.png.flat",
+        "source": "C:\\RAM\\Android\\app\\build\\generated\\res\\pngs\\debug\\drawable-xxxhdpi\\ic_launcher_background.png"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_find_id.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\layout\\activity_find_id.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\mipmap-anydpi-v26\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v24_ic_launcher_foreground.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\build\\generated\\res\\pngs\\debug\\drawable-anydpi-v24\\ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\menu_menu_bottom.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\menu\\menu_bottom.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_fragment_2.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\layout\\fragment_2.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\menu_navi_drawer.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\menu\\navi_drawer.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi_ic_launcher_background.png.flat",
+        "source": "C:\\RAM\\Android\\app\\build\\generated\\res\\pngs\\debug\\drawable-xxhdpi\\ic_launcher_background.png"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_ic_launcher_background.png.flat",
+        "source": "C:\\RAM\\Android\\app\\build\\generated\\res\\pngs\\debug\\drawable-mdpi\\ic_launcher_background.png"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_find_password.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\layout\\activity_find_password.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_change_profile.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\layout\\activity_change_profile.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_register.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\layout\\activity_register.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_log_in.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\layout\\activity_log_in.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_sign_up.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\layout\\activity_sign_up.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi_ic_launcher_background.png.flat",
+        "source": "C:\\RAM\\Android\\app\\build\\generated\\res\\pngs\\debug\\drawable-hdpi\\ic_launcher_background.png"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_rectangle.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\drawable\\rectangle.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_back.png.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\drawable\\back.png"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi_ic_launcher.png.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_main_page.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\layout\\activity_main_page.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_chatting_message.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\layout\\chatting_message.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_error.png.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\drawable\\error.png"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher.png.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi_ic_launcher_background.png.flat",
+        "source": "C:\\RAM\\Android\\app\\build\\generated\\res\\pngs\\debug\\drawable-xhdpi\\ic_launcher_background.png"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_navi_header.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\layout\\navi_header.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_applemango.jpg.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\drawable\\applemango.jpg"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v21_ic_launcher_background.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\build\\generated\\res\\pngs\\debug\\drawable-anydpi-v21\\ic_launcher_background.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_fragment_3.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\layout\\fragment_3.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_popupwindow_seller_info.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\layout\\popupwindow_seller_info.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\menu_menu_my_page.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\menu\\menu_my_page.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_confirm.png.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\drawable\\confirm.png"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\menu_toolbar.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\menu\\toolbar.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_fragment_1.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\layout\\fragment_1.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\menu_menu.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\menu\\menu.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-ldpi_ic_launcher_background.png.flat",
+        "source": "C:\\RAM\\Android\\app\\build\\generated\\res\\pngs\\debug\\drawable-ldpi\\ic_launcher_background.png"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_fragment_posting.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\layout\\fragment_posting.xml"
+    },
+    {
+        "merged": "C:\\RAM\\Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_my_page.xml.flat",
+        "source": "C:\\RAM\\Android\\app\\src\\main\\res\\layout\\activity_my_page.xml"
+    }
+]
