@@ -18,14 +18,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.java_websocket.client.WebSocketClient;
+
+import okhttp3.OkHttpClient;
 import okhttp3.WebSocket;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 import ua.naiksoftware.stomp.Stomp;
-import ua.naiksoftware.stomp.client.StompClient;
+import ua.naiksoftware.stomp.StompClient;
 
 public class Fragment3 extends Fragment {
 
@@ -75,22 +78,21 @@ public class Fragment3 extends Fragment {
        });
        //return true;
    }
-
+    private Map<String, String> subscriptions;
 
 
    public void StompClientConnect(){
-       mStompClient = Stomp.over(WebSocket.class, "ws://localhost:3000/websockethandler");
+       mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, "ws://localhost:3000/websockethandler");
        mStompClient.connect();
-       System.out.println("연결");
    }
 
    public void StompClientRegister(){
-       mStompClient.topic("/topic/greetings").subscribe(topicMessage -> {
+       /*mStompClient.topic("/topic/greetings").subscribe(topicMessage -> {
            Log.d(TAG, topicMessage.getPayload());
-       });
+       });*/
    }
    public void SendMessage(View view){
-       mStompClient.send("/topic/hello-msg-mapping", "My first STOMP message!");
+       //mStompClient.send("/topic/hello-msg-mapping", "My first STOMP message!");
        EditText etMsg=(EditText)view.findViewById(R.id.etMessage);
        String strMsg=(String)etMsg.getText().toString();
        chatMessageAdapter.add(new ChatMessage(strMsg));
