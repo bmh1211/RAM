@@ -9,10 +9,11 @@
         android:enabled="true"
         android:icon="@android:drawable/ic_delete"
         app:showAsAction="ifRoom"/>
-    <item android:title="게시판"
+    <item
         android:id="@+id/test2"
         android:enabled="true"
         android:icon="@android:drawable/ic_delete"
+        android:title="게시판"
         app:showAsAction="ifRoom" />
     <item android:title="채팅"
         android:id="@+id/test3"
