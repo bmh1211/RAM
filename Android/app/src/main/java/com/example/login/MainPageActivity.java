@@ -9,24 +9,20 @@ import androidx.fragment.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 //import android.support.v7.app.ActionBar
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
-import static com.example.login.R.id.item3;
-
 public class MainPageActivity extends AppCompatActivity {
-//    private Button btn_myPage;
+    //    private Button btn_myPage;
     private DrawerLayout mDrawerLayout;
     Fragment fragment1;
     Fragment fragment2;
     Fragment fragment3;
+    Fragment fragment_my_page;
     Toolbar toolbar;
 
     @Override
@@ -37,6 +33,7 @@ public class MainPageActivity extends AppCompatActivity {
         fragment1 = new Fragment1(); //fragment 생성
         fragment2 = new Fragment2();
         fragment3 = new Fragment3();
+        fragment_my_page=new MyPageFragment();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -84,9 +81,7 @@ public class MainPageActivity extends AppCompatActivity {
                                 getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment3).commit();
                                 return true;
                             case R.id.test4:
-                                Intent intent_myPage = new Intent(getApplicationContext(), MyPageActivity.class);
-                                startActivity(intent_myPage);
-                                // 기존의 마이페이지 액티비티에 연결함 - 얘도 프레그먼트로 수정할까???
+                                getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_my_page).commit();
                                 return true;
                         }
                         return false;

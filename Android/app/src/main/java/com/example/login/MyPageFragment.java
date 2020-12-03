@@ -3,30 +3,35 @@ package com.example.login;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-public class MyPageActivity extends AppCompatActivity {
+public class MyPageFragment extends Fragment {
     private Toolbar tb_myPage;
     private ListView lv_recentSell;
     private ListView lv_recentBuy;
     private ListView lv_favorite;
     static final String[] LIST_MENU={"LIST_1","LIST_2","LIST_3"};
+    Fragment fragment1;
+    Button btn_changeProfile;
+
     //private PopupWindow pw_sellerInfo;
     private PopupWindow ll_sellerInfo;
     private TextView tv_sellerName;
@@ -35,36 +40,51 @@ public class MyPageActivity extends AppCompatActivity {
     private TextView tv_evalPoint;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_page);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_my_page, container, false);
 
-        tb_myPage = (Toolbar)findViewById(R.id.tb_myPage);
-        lv_recentSell=(ListView)findViewById(R.id.lv_recentSell);
-        lv_recentBuy=(ListView)findViewById(R.id.lv_recentBuy);
-        lv_favorite=(ListView)findViewById(R.id.lv_favorite);
+//        tb_myPage = (Toolbar)view.findViewById(R.id.tb_myPage);
+        lv_recentSell=(ListView)view.findViewById(R.id.lv_recentSell);
+        lv_recentBuy=(ListView)view.findViewById(R.id.lv_recentBuy);
+        lv_favorite=(ListView)view.findViewById(R.id.lv_favorite);
+        fragment1 = new Fragment1();
+        btn_changeProfile=(Button)view.findViewById(R.id.btn_changeProfile);
 
-        setSupportActionBar(tb_myPage);
-        getSupportActionBar().setTitle("My Page");
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //자동으로 뒤로가기 버튼을 만들어줌
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_dialog_close_dark); //뒤로가기버튼 모양
+//        setSupportActionBar(tb_myPage);
+//        getSupportActionBar().setTitle("My Page");
+//        getSupportActionBar().setDisplayShowCustomEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //자동으로 뒤로가기 버튼을 만들어줌
+//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_dialog_close_dark); //뒤로가기버튼 모양
 
         // 리스트에 들어갈 내용은 나중에 변경시켜줄 예정
-        ArrayAdapter sell_adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,LIST_MENU);
-        ArrayAdapter buy_adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,LIST_MENU);
-        ArrayAdapter favorite_adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,LIST_MENU);
+        ArrayAdapter sell_adapter = new ArrayAdapter(container.getContext(),android.R.layout.simple_list_item_1,LIST_MENU);
+        ArrayAdapter buy_adapter = new ArrayAdapter(container.getContext(),android.R.layout.simple_list_item_1,LIST_MENU);
+        ArrayAdapter favorite_adapter = new ArrayAdapter(container.getContext(),android.R.layout.simple_list_item_1,LIST_MENU);
 
         lv_recentSell.setAdapter(sell_adapter);
         lv_recentBuy.setAdapter(buy_adapter);
         lv_favorite.setAdapter(favorite_adapter);
 
         lv_recentSell.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            // TODO : 판매내역 아이템 클릭시 해당하는 게시물로, 판매완료 된 것은 판매완료 됐다는 표시 필요
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String strText = (String) parent.getItemAtPosition(position) ;
-                Toast.makeText(MyPageActivity.this, strText, Toast.LENGTH_SHORT).show();
+                Toast.makeText(container.getContext(), strText, Toast.LENGTH_SHORT).show();
+
+                // 프래그먼트로 이동 -> 현재는 테스트용으로 fragment1 으로 지정해놓음
+                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment1).commit();
+            }
+        });
+
+        lv_favorite.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String strText = (String) parent.getItemAtPosition(position) ;
+                Toast.makeText(container.getContext(), strText, Toast.LENGTH_SHORT).show();
+
+                // 프래그먼트로 이동 -> 현재는 테스트용으로 fragment1 으로 지정해놓음
+                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment1).commit();
             }
         });
 
@@ -72,7 +92,7 @@ public class MyPageActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String strText = (String) parent.getItemAtPosition(position) ;
-                Toast.makeText(MyPageActivity.this, strText, Toast.LENGTH_SHORT).show();
+                Toast.makeText(container.getContext(), strText, Toast.LENGTH_SHORT).show();
 
                 // 팝업창이 들어갈 뷰를 하나 생성해주고, 해당 뷰의 레이아웃을 LinearLayout 으로 지정
                 View popupView = getLayoutInflater().inflate(R.layout.popupwindow_seller_info,null);
@@ -105,38 +125,48 @@ public class MyPageActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String strText = (String) parent.getItemAtPosition(position) ;
-                Toast.makeText(MyPageActivity.this, strText, Toast.LENGTH_SHORT).show();
+                Toast.makeText(container.getContext(), strText, Toast.LENGTH_SHORT).show();
             }
         });
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //return super.onCreateOptionsMenu(menu);
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_change_profile,menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        //다른 메뉴를 만들경우 여기에 id별 기능 추가(switch - case 사용)
-        switch(item.getItemId()){
-            case android.R.id.home:
-                finish();
-                return true;
-                
-            case R.id.item_change_profile:
-                Intent intent_changeProfile = new Intent(this, ChangeProfileActivity.class);
-
-                Toast.makeText(getApplicationContext(), "정보수정 버튼 누름", Toast.LENGTH_SHORT).show();
+        btn_changeProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent_changeProfile = new Intent(container.getContext(), ChangeProfileActivity.class);
                 startActivity(intent_changeProfile);
-                return true;
-        }
+            }
+        });
 
-        return super.onOptionsItemSelected(item);
+        return view;
     }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        //return super.onCreateOptionsMenu(menu);
+//        MenuInflater menuInflater = getMenuInflater();
+//        menuInflater.inflate(R.menu.menu_change_profile,menu);
+//
+//        return true;
+//    }
+
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        //다른 메뉴를 만들경우 여기에 id별 기능 추가(switch - case 사용)
+//        switch(item.getItemId()){
+//            case android.R.id.home:
+//                finish();
+//                return true;
+//
+//            case R.id.item_change_profile:
+//                Intent intent_changeProfile = new Intent(this, ChangeProfileActivity.class);
+//
+//                Toast.makeText(getApplicationContext(), "정보수정 버튼 누름", Toast.LENGTH_SHORT).show();
+//                startActivity(intent_changeProfile);
+//                return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 }
 // 툴바 관련 reference : https://www.hanumoka.net/2017/10/28/android-20171028-android-toolbar/
 // 리스트뷰 관련 reference : https://recipes4dev.tistory.com/42

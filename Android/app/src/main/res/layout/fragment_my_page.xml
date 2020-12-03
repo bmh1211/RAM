@@ -4,55 +4,66 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="30dp">
+    android:layout_marginTop="100dp"
+    android:layout_marginBottom="60dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".MyPageActivity">
+        android:layout_height="wrap_content"
+        tools:context=".MyPageFragment">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/tb_myPage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:titleTextColor="@color/white" />
+        <!--        <androidx.appcompat.widget.Toolbar-->
+        <!--            android:id="@+id/tb_myPage"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:background="@color/black"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            app:titleTextColor="@color/white" />-->
 
         <ImageView
             android:id="@+id/iv_profile"
             android:layout_width="117dp"
             android:layout_height="137dp"
-            android:layout_marginTop="96dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.105"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tb_myPage"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/applemango" />
 
         <TextView
             android:id="@+id/tv_name"
-            android:layout_width="150dp"
+            android:layout_width="100dp"
             android:layout_height="40dp"
-            android:layout_marginTop="120dp"
+            android:layout_marginTop="28dp"
             android:text="이   름 : 방민호"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.12"
+            app:layout_constraintHorizontal_bias="0.159"
             app:layout_constraintStart_toEndOf="@+id/iv_profile"
-            app:layout_constraintTop_toTopOf="@+id/tb_myPage" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_nickname"
-            android:layout_width="150dp"
+            android:layout_width="100dp"
             android:layout_height="40dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="24dp"
             android:text="닉네임 : 마이노"
             app:layout_constraintEnd_toEndOf="@+id/tv_name"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/tv_name"
             app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+
+        <Button
+            android:id="@+id/btn_changeProfile"
+            android:layout_width="82dp"
+            android:layout_height="104dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/item_change_profile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.95"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:id="@+id/divider"
@@ -69,10 +80,10 @@
             android:id="@+id/tv_email"
             android:layout_width="276dp"
             android:layout_height="44dp"
-            android:layout_marginTop="320dp"
+            android:layout_marginTop="220dp"
             android:text="● 이메일 : bmh1211@gmail.com"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.238"
+            app:layout_constraintHorizontal_bias="0.237"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -152,6 +163,8 @@
             app:layout_constraintHorizontal_bias="0.566"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_favorite"/>
+
+
 
         <!--    <TextView-->
         <!--        android:id="@+id/textView2"-->
