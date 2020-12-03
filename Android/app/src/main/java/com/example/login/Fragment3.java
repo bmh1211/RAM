@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.java_websocket.client.WebSocketClient;
+import okhttp3.WebSocket;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
@@ -38,6 +39,8 @@ public class Fragment3 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        view=inflater.inflate(R.layout.fragment_3, container, false);
+        // Inflate the layout for this fragment
         //버튼 초기화, 클릭 이벤트 추가
         messageSendBtn=(Button)view.findViewById(R.id.btn_send);
         messageSendBtn.setOnClickListener(new View.OnClickListener(){
@@ -50,8 +53,7 @@ public class Fragment3 extends Fragment {
         StompClientConnect();
         //connectWebSocket();
         setHasOptionsMenu(true);
-        // Inflate the layout for this fragment
-        view=inflater.inflate(R.layout.fragment_3, container, false);
+
         return view;
     }
 
@@ -77,7 +79,7 @@ public class Fragment3 extends Fragment {
 
 
    public void StompClientConnect(){
-       mStompClient = Stomp.over(okhttp3.WebSocket.class, "ws://localhost:8080/websockethandler");
+       mStompClient = Stomp.over(WebSocket.class, "ws://localhost:3000/websockethandler");
        mStompClient.connect();
        System.out.println("연결");
    }
@@ -88,7 +90,7 @@ public class Fragment3 extends Fragment {
        });
    }
    public void SendMessage(View view){
-       mStompClient.send("/topic/hello-msg-mapping", "My first STOMP message!").subscribe();
+       mStompClient.send("/topic/hello-msg-mapping", "My first STOMP message!");
        EditText etMsg=(EditText)view.findViewById(R.id.etMessage);
        String strMsg=(String)etMsg.getText().toString();
        chatMessageAdapter.add(new ChatMessage(strMsg));

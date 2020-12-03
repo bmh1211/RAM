@@ -27,7 +27,7 @@ public class TestController {
             e.printStackTrace();
         }
         try{
-            String Url="jdbc:mariadb://13.125.231.184:3306/rotten?autoReconnect=true&verifyServerCertificate=false&useSSL=false";
+            String Url="jdbc:mariadb://3.35.48.170:3306/rotten?autoReconnect=true&verifyServerCertificate=false&useSSL=false";
             String userId="rottenmaster";
             String userPass="hellorottenam1028";
             Connection connection=DriverManager.getConnection(Url,userId,userPass);
