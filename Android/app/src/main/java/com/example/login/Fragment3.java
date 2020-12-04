@@ -55,16 +55,33 @@ public class Fragment3 extends Fragment {
         //Stomp 연결
         StompClientConnect();
         //connectWebSocket();
-        setHasOptionsMenu(true);
+        GetListView();
 
         return view;
     }
 
+    public void GetListView(){
+
+        chatMessageAdapter=new ChatMessageAdapter(getActivity().getApplicationContext(),R.layout.chatting_message);
+
+        ListView listView=(ListView)view.findViewById(R.id.listView12);
+        listView.setAdapter(chatMessageAdapter);
+        listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+
+        //메시지가 추가되었을때 마지막 메시지를 스크롤할수 있는 리스트뷰를 만든다
+        chatMessageAdapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged(){
+                super.onChanged();
+                listView.setSelection(chatMessageAdapter.getCount()-1);
+            }
+        });
+    }
    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
        getActivity().getMenuInflater().inflate(R.menu.menu,menu);
 
-       final ListView listView=(ListView)view.findViewById(R.id.listView);
+       final ListView listView=(ListView)view.findViewById(R.id.listView12);
        listView.setAdapter(chatMessageAdapter);
        listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
 
@@ -93,7 +110,7 @@ public class Fragment3 extends Fragment {
    }
    public void SendMessage(View view){
        //mStompClient.send("/topic/hello-msg-mapping", "My first STOMP message!");
-       EditText etMsg=(EditText)view.findViewById(R.id.etMessage);
+       EditText etMsg=(EditText)getView().findViewById(R.id.etMessage);
        String strMsg=(String)etMsg.getText().toString();
        chatMessageAdapter.add(new ChatMessage(strMsg));
    }
