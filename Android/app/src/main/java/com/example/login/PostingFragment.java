@@ -15,6 +15,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class PostingFragment extends Fragment {
     private Button btn_cancel;
     private Button btn_apply;
@@ -48,8 +51,6 @@ public class PostingFragment extends Fragment {
                 String send_title = et_title.getText().toString();
                 String send_posting=et_posting.getText().toString();
 
-                Bundle bundle = new Bundle(); // 번들은 이동시킬 데이터를 모아 담을 보따리 느낌
-
                 if(send_posting.equals("") && send_title.equals("")){
                     Toast.makeText((MainPageActivity)getActivity(), "제목과 내용을 입력해주세요", Toast.LENGTH_SHORT).show();
                 }
@@ -60,10 +61,16 @@ public class PostingFragment extends Fragment {
                     Toast.makeText((MainPageActivity)getActivity(), "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    // TODO : 데이터를 객체형태로 보내서 제목, 내용 둘다 보여질수 있게 하기
-                    bundle.putString("et_title",et_title.getText().toString());
+                    JSONObject jsonObject = new JSONObject();
 
-                    fragment1.setArguments(bundle);//번들안의 데이터를 넣어주는 과정
+                    try {
+                        Toast.makeText((MainPageActivity)getActivity(), "작성되었습니다", Toast.LENGTH_SHORT).show();
+                        
+                        jsonObject.put("title",et_title.getText() );
+                        jsonObject.put("body", et_posting.getText());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
                     ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment1).commit();
                 }
