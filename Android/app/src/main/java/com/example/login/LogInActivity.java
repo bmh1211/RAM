@@ -19,8 +19,10 @@ public class LogInActivity extends AppCompatActivity {
     private EditText et_id, et_password;
     private Button btn_login, btn_findId, btn_findPassword, btn_register;
     private CheckBox chk_login;
-    String ID_temp = "bmh1211@gmail.com"; // 임시지정한 ID
-    String PW_temp = "1234567890"; // 임시지정한 PW
+    String ID_temp = "1"; // 귀찮아서 바꿈
+    String PW_temp = "1"; // 귀찮아서 바꿈
+    //String ID_temp = "bmh1211@gmail.com"; // 임시지정한 ID
+    //String PW_temp = "1234567890"; // 임시지정한 PW
     private DBOpenHelper DB_Helper;
     private Toolbar tb_logIn;
     private SharedPreferences.Editor sp_editor_login;

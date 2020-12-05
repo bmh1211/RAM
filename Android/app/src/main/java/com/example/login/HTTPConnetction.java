@@ -18,7 +18,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HTTPConnetction {
+public class HTTPConnetction { //ddddd
 
     public static void HttpGet() {
         new AsyncTask<Void, Void, JSONObject>() {
@@ -98,8 +98,6 @@ public class HTTPConnetction {
                         os.close();
                     }
 
-
-
                     int responseCode = connection.getResponseCode();
                     if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
                         BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -134,4 +132,5 @@ public class HTTPConnetction {
             }
         }.execute();
     }
+
 }

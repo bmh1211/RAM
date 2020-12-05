@@ -1,10 +1,12 @@
 package com.example.login;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -68,10 +71,10 @@ public class PostingFragment extends Fragment {
                         
                         jsonObject.put("title",et_title.getText() );
                         jsonObject.put("body", et_posting.getText());
+                        saveText(et_title.getText().toString(), et_posting.getText().toString(), 1,1);        //핸드폰 sharedpreference에 저장
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                     ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment1).commit();
                 }
             }
@@ -79,5 +82,45 @@ public class PostingFragment extends Fragment {
 
         // Inflate the layout for this fragment
         return view;
+
+    }
+    private void saveText(String title, String name, int hour, int minute){
+        String temp = PostingData.getArray(getActivity());
+        JSONObject jsonObject = new JSONObject();
+        if(temp != "empty")
+        {
+            try{
+                JSONArray jsonTemp = new JSONArray(temp);
+                try{
+                    jsonObject.put("name",name);
+                    jsonObject.put("title",title);
+                    jsonObject.put("hour",hour);
+                    jsonObject.put("minute",minute);
+                    jsonTemp.put(jsonObject);
+                    Log.d("test 게시글 작성",jsonTemp.toString());
+                    PostingData.setArray(getActivity(),jsonTemp.toString());
+                }catch(JSONException e)
+                {
+                    e.printStackTrace();
+                }
+            }catch(JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            JSONArray jsonTemp = new JSONArray();
+            try{
+                jsonObject.put("name",name);
+                jsonObject.put("title",title);
+                jsonObject.put("hour",hour);
+                jsonObject.put("minute",minute);
+                jsonTemp.put(jsonObject);
+                PostingData.setArray(getActivity(),jsonTemp.toString());
+            }catch(JSONException e)
+            {
+                e.printStackTrace();
+            }}
     }
 }

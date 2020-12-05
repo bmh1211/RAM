@@ -20,8 +20,9 @@
             android:id="@+id/lv_board"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/rectangle"
-            android:isScrollContainer="true" />
+            android:background="@drawable/posting_item"
+            android:isScrollContainer="true"
+            tools:listitem="@layout/posting_item_theme"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <Button
