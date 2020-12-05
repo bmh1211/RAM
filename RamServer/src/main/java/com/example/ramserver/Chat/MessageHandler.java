@@ -24,6 +24,7 @@ public class MessageHandler  {
     //리턴값은 Sendto 어노테이션에 mapping되어있는 api를 구독하고 있는 클라이언트들에게 브로드캐스팅
     @SendTo("/topic/roomid")
     public Message broadcasting(ClientMessage message){
+        System.out.println(message+"받은 메시지");
         return new Message(message.getContent());
     }
 

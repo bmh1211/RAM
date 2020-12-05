@@ -1,5 +1,6 @@
 package com.example.login;
 
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,8 +18,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.login.service.SocketService;
+
 import org.java_websocket.client.WebSocketClient;
 
+import io.reactivex.disposables.Disposable;
 import okhttp3.OkHttpClient;
 import okhttp3.WebSocket;
 import org.java_websocket.handshake.ServerHandshake;
@@ -52,10 +56,14 @@ public class Fragment3 extends Fragment {
                 SendMessage(view);
             }
         });
+        Intent intent=new Intent(
+                getActivity().getApplicationContext(), SocketService.class);
+        getActivity().startService(intent);
+
         //Stomp 연결
-        StompClientConnect();
+        //StompClientConnect();
         //connectWebSocket();
-        GetListView();
+        //GetListView();
 
         return view;
     }
@@ -77,42 +85,43 @@ public class Fragment3 extends Fragment {
             }
         });
     }
-   @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
-       getActivity().getMenuInflater().inflate(R.menu.menu,menu);
 
-       final ListView listView=(ListView)view.findViewById(R.id.listView12);
-       listView.setAdapter(chatMessageAdapter);
-       listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-
-       //메시지가 추가되었을때 마지막 메시지를 스크롤할수 있는 리스트뷰를 만든다
-       chatMessageAdapter.registerDataSetObserver(new DataSetObserver() {
-           @Override
-           public void onChanged(){
-               super.onChanged();
-               listView.setSelection(chatMessageAdapter.getCount()-1);
-           }
-       });
-       //return true;
-   }
     private Map<String, String> subscriptions;
 
 
-   public void StompClientConnect(){
-       mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, "ws://localhost:3000/websockethandler");
-       mStompClient.connect();
-   }
+   /*public void StompClientConnect(){
+       mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, "ws://127.0.0.1:3000/websockethandler/");
+       //mStompClient.connect();
+       Disposable lifecycle=mStompClient.lifecycle().subscribe(lifecycleEvent -> {
+           switch(lifecycleEvent.getType()){
+               case OPENED:
+                   Log.i(TAG,"Connection Openede");
+                   break;
+               case ERROR:
+                   Log.i(TAG,"Error",lifecycleEvent.getException());
+                   break;
+               case CLOSED:
+                   Log.i(TAG,"Stomp Connection Closed");
+                   break;
+           }
+       });
+       if(!mStompClient.isConnected()){
+           mStompClient.connect();
+       }
+       StompClientRegister();
+   }*/
 
    public void StompClientRegister(){
-       /*mStompClient.topic("/topic/greetings").subscribe(topicMessage -> {
-           Log.d(TAG, topicMessage.getPayload());
-       });*/
+       mStompClient.topic("/topic/roomid").subscribe(topicMessage->{
+           Log.d(TAG,topicMessage.getPayload());
+       });
    }
    public void SendMessage(View view){
-       //mStompClient.send("/topic/hello-msg-mapping", "My first STOMP message!");
+
        EditText etMsg=(EditText)getView().findViewById(R.id.etMessage);
        String strMsg=(String)etMsg.getText().toString();
        chatMessageAdapter.add(new ChatMessage(strMsg));
+       mStompClient.send("/app/hello", strMsg);
    }
    public void StompClientDisconnect(){
        mStompClient.disconnect();

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/*
 public class EchoHandler extends TextWebSocketHandler {
     //Map<String, WebSocketSession> sessions=new HashMap<String,WebSocketSession>();
     private List<WebSocketSession> sessionList=new ArrayList<WebSocketSession>();
@@ -34,3 +35,4 @@ public class EchoHandler extends TextWebSocketHandler {
         System.out.println("채팅방 퇴장자 ; "+session.getPrincipal().getName());
     }
 }
+*/
