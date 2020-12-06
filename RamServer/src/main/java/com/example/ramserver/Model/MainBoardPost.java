@@ -14,6 +14,6 @@ public class MainBoardPost {
     private String Region;
     private Bool Status;
     private String content;
-    private String imgpath;
+    private String imgPath;
     private int price;
 }

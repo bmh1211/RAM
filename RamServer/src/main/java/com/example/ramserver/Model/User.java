@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class User {
     private String ID;
     private String password;
-    private String phonNumber;
+    private String phoneNumber;
     private String nickName;
     private String bank;
     private String account;
