@@ -40,6 +40,8 @@ import org.java_websocket.handshake.ServerHandshake;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.Map;
 
 import ua.naiksoftware.stomp.Stomp;
@@ -108,13 +110,12 @@ public class Fragment3 extends Fragment {
     private final Messenger mMessenger=new Messenger(new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message msg) {
-            Log.i("test","act :what "+msg.what);
+            Log.i("test receive","act :what "+msg.what);
             switch(msg.what){
                 case SocketService.MSG_SEND_TO_ACTIVITY:
-                    int value1=msg.getData().getInt("from service");
                     String value2=msg.getData().getString("test");
-                    Log.i("test","act : value1 "+value1);
                     Log.i("test","act : value2 "+value2);
+                    chatMessageAdapter.add(new ChatMessage(value2));
                     break;
             }
             return false;
