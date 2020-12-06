@@ -16,4 +16,9 @@ public class MainBoardPost {
     private String content;
     private String imgPath;
     private int price;
+
+    public MainBoardPost()
+    {
+
+    }
 }

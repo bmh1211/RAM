@@ -21,15 +21,16 @@ public class MainBoardController {
         return mainBoardPost;
     }
 
-    @PostMapping("/all")
-    public List<MainBoardPost> ShowMainBoardList(
-            @RequestBody List<MainBoardPost> mainBoardPostList)
-    {
-        mainBoardPostList = new List<MainBoardPost>;
-         //db에서 전체 조회후 가져오는 코드 필요할듯
+//    @PostMapping("/all")
+//    public List<MainBoardPost> ShowMainBoardList(
+//            @RequestBody List<MainBoardPost> mainBoardPostList)
+//    {
+//        mainBoardPostList = new List<>();
+//         //db에서 전체 조회후 가져오는 코드 필요할듯
+//
+//        return mainBoardPostList;
+//    }
 
-        return mainBoardPostList;
-    }
 
 
 }

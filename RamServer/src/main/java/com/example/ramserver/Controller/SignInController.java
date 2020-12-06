@@ -16,11 +16,11 @@ public class SignInController {
         String res = CheckIdPwd(id,pwd);
         if(res=="1")
         {
-            return "존재하지 않는 아이디 입니다."
+            return "존재하지 않는 아이디 입니다.";
         }
         else if(res=="2")
         {
-            return "아이디와 비밀번호가 일치하지 않습니다."
+            return "아이디와 비밀번호가 일치하지 않습니다.";
         }
         else
         {
