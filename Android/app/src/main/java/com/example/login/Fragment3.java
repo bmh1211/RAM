@@ -1,12 +1,22 @@
 package com.example.login;
 
+import android.app.Service;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.database.DataSetObserver;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +37,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.WebSocket;
 import org.java_websocket.handshake.ServerHandshake;
 
+import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
@@ -36,10 +47,9 @@ import ua.naiksoftware.stomp.StompClient;
 
 public class Fragment3 extends Fragment {
 
-
+    private Messenger mServiceMessenger=null;
+    private boolean mIsBound;
     private static final String TAG = "TAG";
-    private StompClient mStompClient;
-    private WebSocketClient webSocketClient;
     ChatMessageAdapter chatMessageAdapter;
     View view;
     Button messageSendBtn;
@@ -56,22 +66,62 @@ public class Fragment3 extends Fragment {
                 SendMessage(view);
             }
         });
-        Intent intent=new Intent(
+       /* Intent intent=new Intent(
                 getActivity().getApplicationContext(), SocketService.class);
-        getActivity().startService(intent);
+        getActivity().startService(intent);*/
+        setStartService();
 
         //Stomp 연결
         //StompClientConnect();
         //connectWebSocket();
-        //GetListView();
+        GetListView();
 
         return view;
     }
+    //서비스 시작
+    private void setStartService(){
+        getActivity().startService(new Intent(getActivity().getApplicationContext(), SocketService.class));
+        getActivity().bindService(new Intent(getActivity().getApplicationContext(), SocketService.class),mConnection, Context.BIND_AUTO_CREATE);
+        mIsBound = true;
+    }
 
+    private ServiceConnection mConnection=new ServiceConnection(){
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            Log.d("test","onServiceconnected");
+            mServiceMessenger=new Messenger(iBinder);
+            try{
+                Message msg=Message.obtain(null,SocketService.MSG_REGISTER_CLIENT);
+                msg.replyTo=mMessenger;
+                mServiceMessenger.send(msg);
+            } catch (RemoteException e) {
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+
+        }
+
+    };
+    //service로부터 message 받음
+    private final Messenger mMessenger=new Messenger(new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(@NonNull Message msg) {
+            Log.i("test","act :what "+msg.what);
+            switch(msg.what){
+                case SocketService.MSG_SEND_TO_ACTIVITY:
+                    int value1=msg.getData().getInt("from service");
+                    String value2=msg.getData().getString("test");
+                    Log.i("test","act : value1 "+value1);
+                    Log.i("test","act : value2 "+value2);
+                    break;
+            }
+            return false;
+        }
+    }));
     public void GetListView(){
-
         chatMessageAdapter=new ChatMessageAdapter(getActivity().getApplicationContext(),R.layout.chatting_message);
-
         ListView listView=(ListView)view.findViewById(R.id.listView12);
         listView.setAdapter(chatMessageAdapter);
         listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
@@ -86,83 +136,70 @@ public class Fragment3 extends Fragment {
         });
     }
 
-    private Map<String, String> subscriptions;
-
-
-   /*public void StompClientConnect(){
-       mStompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, "ws://127.0.0.1:3000/websockethandler/");
-       //mStompClient.connect();
-       Disposable lifecycle=mStompClient.lifecycle().subscribe(lifecycleEvent -> {
-           switch(lifecycleEvent.getType()){
-               case OPENED:
-                   Log.i(TAG,"Connection Openede");
-                   break;
-               case ERROR:
-                   Log.i(TAG,"Error",lifecycleEvent.getException());
-                   break;
-               case CLOSED:
-                   Log.i(TAG,"Stomp Connection Closed");
-                   break;
-           }
-       });
-       if(!mStompClient.isConnected()){
-           mStompClient.connect();
-       }
-       StompClientRegister();
-   }*/
-
-   public void StompClientRegister(){
-       mStompClient.topic("/topic/roomid").subscribe(topicMessage->{
-           Log.d(TAG,topicMessage.getPayload());
-       });
-   }
-   public void SendMessage(View view){
-
-       EditText etMsg=(EditText)getView().findViewById(R.id.etMessage);
-       String strMsg=(String)etMsg.getText().toString();
-       chatMessageAdapter.add(new ChatMessage(strMsg));
-       mStompClient.send("/app/hello", strMsg);
-   }
-   public void StompClientDisconnect(){
-       mStompClient.disconnect();
-   }
-
-   /*private void connectWebSocket(){
-        URI uri = null;
-        try{
-            uri=new URI("주소");
-        }catch (URISyntaxException e){
+  /*  private void connectWebSocket() {
+        URI uri;
+        try {
+            uri = new URI("ws://192.168.56.1:3000/");
+            //uri = new URI("ws://127.0.0.1:3000/websockethandler/websocket");
+        } catch (URISyntaxException e) {
             e.printStackTrace();
+            return;
         }
-        webSocketClient=new WebSocketClient(uri) {
+
+        mWebSocketClient = new WebSocketClient(uri) {
             @Override
-            public void onOpen(ServerHandshake handshakedata) {
-                Log.i("Websocket","Opened");
-                webSocketClient.send("Hello from "+ Build.MANUFACTURER+" "+Build.MODEL);
+            public void onOpen(ServerHandshake serverHandshake) {
+                Log.i("Websocket", "Opened");
+                mWebSocketClient.send("Hello from " + Build.MANUFACTURER + " " + Build.MODEL);
             }
 
             @Override
             public void onMessage(String s) {
-                final String message=s;
-                getActivity().runOnUiThread(new Runnable(){
+                final String message = s;
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
-                    public void run(){
-                        chatMessageAdapter.add(new ChatMessage(message));
-                        *//*TextView textView=(TextView)view.findViewById(R.id.etMessage);
-                        textView.setText(textView.getText()+"\n"+message);*//*
+                    public void run() {
+                        TextView textView = (TextView)getView().findViewById(R.id.message);
+                        textView.setText(textView.getText() + "\n" + message);
                     }
                 });
             }
 
             @Override
-            public void onClose(int code, String reason, boolean remote) {
-                Log.i("Websocket", "Closed " + reason);
+            public void onClose(int i, String s, boolean b) {
+                Log.i("Websocket", "Closed " + s);
             }
 
             @Override
-            public void onError(Exception ex) {
-                Log.i("Websocket", "Error " + ex.getMessage());
+            public void onError(Exception e) {
+                Log.i("Websocket", "Error " + e.getMessage());
             }
         };
-   }*/
+        mWebSocketClient.connect();
+    }*/
+    //버튼 클릭 이벤트
+    public void SendMessage(View view){
+        EditText etMsg=(EditText)getView().findViewById(R.id.etMessage);
+        String strMsg=(String)etMsg.getText().toString();
+
+        chatMessageAdapter.add(new ChatMessage(strMsg));
+        sendMessageToservice(strMsg);
+
+
+        //mStompClient.send("/app/hello", strMsg);
+    }
+    //서비스로 메시지 전송
+    private void sendMessageToservice(String str){
+        if(mIsBound){
+            if(mServiceMessenger!=null){
+                try{
+                    Message msg=Message.obtain(null, SocketService.MSG_SEND_TO_SERVICE,str);
+                    msg.replyTo=mMessenger;
+                    mServiceMessenger.send(msg);
+                } catch (RemoteException e) {
+
+                }
+            }
+        }
+    }
 }
