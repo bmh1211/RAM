@@ -47,7 +47,7 @@ import java.util.Map;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
 
-public class Fragment3 extends Fragment {
+public class ChattingFragment extends Fragment {
 
     private Messenger mServiceMessenger=null;
     private boolean mIsBound;
@@ -58,7 +58,7 @@ public class Fragment3 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view=inflater.inflate(R.layout.fragment_3, container, false);
+        view=inflater.inflate(R.layout.fragment_chatting, container, false);
         // Inflate the layout for this fragment
         //버튼 초기화, 클릭 이벤트 추가
         messageSendBtn=(Button)view.findViewById(R.id.btn_send);
@@ -137,47 +137,47 @@ public class Fragment3 extends Fragment {
         });
     }
 
-  /*  private void connectWebSocket() {
-        URI uri;
-        try {
-            uri = new URI("ws://192.168.56.1:3000/");
-            //uri = new URI("ws://127.0.0.1:3000/websockethandler/websocket");
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            return;
-        }
+    /*  private void connectWebSocket() {
+          URI uri;
+          try {
+              uri = new URI("ws://192.168.56.1:3000/");
+              //uri = new URI("ws://127.0.0.1:3000/websockethandler/websocket");
+          } catch (URISyntaxException e) {
+              e.printStackTrace();
+              return;
+          }
 
-        mWebSocketClient = new WebSocketClient(uri) {
-            @Override
-            public void onOpen(ServerHandshake serverHandshake) {
-                Log.i("Websocket", "Opened");
-                mWebSocketClient.send("Hello from " + Build.MANUFACTURER + " " + Build.MODEL);
-            }
+          mWebSocketClient = new WebSocketClient(uri) {
+              @Override
+              public void onOpen(ServerHandshake serverHandshake) {
+                  Log.i("Websocket", "Opened");
+                  mWebSocketClient.send("Hello from " + Build.MANUFACTURER + " " + Build.MODEL);
+              }
 
-            @Override
-            public void onMessage(String s) {
-                final String message = s;
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        TextView textView = (TextView)getView().findViewById(R.id.message);
-                        textView.setText(textView.getText() + "\n" + message);
-                    }
-                });
-            }
+              @Override
+              public void onMessage(String s) {
+                  final String message = s;
+                  getActivity().runOnUiThread(new Runnable() {
+                      @Override
+                      public void run() {
+                          TextView textView = (TextView)getView().findViewById(R.id.message);
+                          textView.setText(textView.getText() + "\n" + message);
+                      }
+                  });
+              }
 
-            @Override
-            public void onClose(int i, String s, boolean b) {
-                Log.i("Websocket", "Closed " + s);
-            }
+              @Override
+              public void onClose(int i, String s, boolean b) {
+                  Log.i("Websocket", "Closed " + s);
+              }
 
-            @Override
-            public void onError(Exception e) {
-                Log.i("Websocket", "Error " + e.getMessage());
-            }
-        };
-        mWebSocketClient.connect();
-    }*/
+              @Override
+              public void onError(Exception e) {
+                  Log.i("Websocket", "Error " + e.getMessage());
+              }
+          };
+          mWebSocketClient.connect();
+      }*/
     //버튼 클릭 이벤트
     public void SendMessage(View view){
         EditText etMsg=(EditText)getView().findViewById(R.id.etMessage);
