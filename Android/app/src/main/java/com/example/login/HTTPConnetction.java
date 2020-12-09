@@ -26,7 +26,7 @@ public class HTTPConnetction { //ddddd
             protected JSONObject doInBackground(Void... voids) {
                 JSONObject result = null;
                 try {
-                    URL url = new URL("");
+                    URL url = new URL("https://0f0e146e0b89.ngrok.io/upload");
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
                     connection.setRequestProperty("key", "value");
@@ -90,7 +90,6 @@ public class HTTPConnetction { //ddddd
                     connection.setConnectTimeout(15000);
 
                     String jsonInputString  = jsonObject.toString();  //보낼데이터
-
                     try(OutputStream os = connection.getOutputStream()){
                         byte[] input = jsonInputString.getBytes("utf-8"); //전송할값
                         os.write(input,0,input.length);

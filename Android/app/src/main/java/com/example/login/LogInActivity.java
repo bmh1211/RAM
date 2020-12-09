@@ -48,11 +48,11 @@ public class LogInActivity extends AppCompatActivity {
         Intent intent_findPassword = new Intent(this, FindPasswordActivity.class);
         Intent intent_register = new Intent(this, SignUpActivity.class);
 
-        // =================== 내부 SQLite 사용을 위한 DB생성 ==================//
-        // reference : https://github.com/yoondowon/InnerDatabaseSQLite/blob/master/app/src/main/java/com/example/user/innerdatabasesqlite/
-        DB_Helper = new DBOpenHelper(this);
-        DB_Helper.open();
-        DB_Helper.create();
+//        // =================== 내부 SQLite 사용을 위한 DB생성 ==================//
+//        // reference : https://github.com/yoondowon/InnerDatabaseSQLite/blob/master/app/src/main/java/com/example/user/innerdatabasesqlite/
+//        DB_Helper = new DBOpenHelper(this);
+//        DB_Helper.open();
+//        DB_Helper.create();
 
         // ================== 자동로그인을 위한 SharedPreference와 Editor ==============//
         sp_login = getSharedPreferences("setting", 0);
@@ -68,10 +68,10 @@ public class LogInActivity extends AppCompatActivity {
                 if (ID_temp.equals(ID) && PW_temp.equals(PW)) {
                     Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
 
-                    // 안드로이드 내부 DB에 데이터 집어넣기(테스트용)
-                    DB_Helper.open();
-                    DB_Helper.insertColumn("방민호", "MINO", PW, "010-5014-3278", ID);
-                    // 해당 기능은 회원가입 액티비티가 구현되면 그쪽으로 옮겨줄예정 - 로그인 액티비티에서는 테스트용도
+//                    // 안드로이드 내부 DB에 데이터 집어넣기(테스트용)
+//                    DB_Helper.open();
+//                    DB_Helper.insertColumn("방민호", "MINO", PW, "010-5014-3278", ID);
+//                    // 해당 기능은 회원가입 액티비티가 구현되면 그쪽으로 옮겨줄예정 - 로그인 액티비티에서는 테스트용도
 
                     startActivity(intent_mainPage);
                 } else if (ID_temp.equals(ID) && !PW_temp.equals(PW)) {

@@ -1,10 +1,7 @@
 package com.example.login;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -15,19 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-
-//public class Fragment1 extends Fragment {
+//public class BoardFragment extends Fragment {
 //    private ListView lv_board;
 //    //ArrayList<String> LIST_MENU;
 //    //static final String[] LIST_MENU={"1","2","3","4","5","6","7","8","9","10"};
@@ -76,7 +65,7 @@ import java.util.ArrayList;
 //        });
 
 
-public class Fragment1 extends Fragment {
+public class BoardFragment extends Fragment {
 
     Fragment postingFragment;
     SwipeRefreshLayout swipe_layout_board;
@@ -93,7 +82,7 @@ public class Fragment1 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_1, container, false);  //https://swalloow.tistory.com/87
+        View view = inflater.inflate(R.layout.fragment_board, container, false);  //https://swalloow.tistory.com/87
 
         //LoadPosting(getActivity());
         PostingAdapter = new Adapter();
@@ -119,7 +108,7 @@ public class Fragment1 extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 adapterPosition = position;
                 PostingAdapter.removeItem(position);
-                //Intent intent = new Intent(Fragment1.this, PostingFragment.class); //게시판에서 정보 받아옴
+                //Intent intent = new Intent(BoardFragment.this, PostingFragment.class); //게시판에서 정보 받아옴
                 //startActivityForResult(intent,REQUEST_CODE1);
             }
         });

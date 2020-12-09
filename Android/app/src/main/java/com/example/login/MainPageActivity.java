@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +13,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -45,9 +43,9 @@ public class MainPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
 
-        fragment1 = new Fragment1(); //fragment 생성
-        fragment2 = new Fragment2();
-        fragment3 = new Fragment3();
+        fragment1 = new BoardFragment(); //fragment 생성
+        fragment2 = new HomeFragment();
+        fragment3 = new ChattingFragment();
         fragment_my_page=new MyPageFragment();
         PostingAdapter = new Adapter();
         //listView = (ListView) getSupportFragmentManager().findFragmentById(R.id.lv_board);

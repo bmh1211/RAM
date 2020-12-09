@@ -15,13 +15,6 @@
         <activity android:name=".SignUpActivity"/>
         <activity android:name=".ChangeProfileActivity" /> <!-- android:theme="@style/Theme.AppCompat.Light.DarkActionBar"> -->
         <activity
-            android:name=".MyPageActivity"
-            android:label="@string/btn_my_page" /> <!-- android:theme="@style/AppTheme"/> -->
-        <!-- 마이페이지부분만 NoActionBar 적용시켜놓은 상태 -->
-        <activity
-            android:name=".RegisterActivity"
-            android:label="@string/btn_register" />
-        <activity
             android:name=".FindPasswordActivity"
             android:label="@string/btn_findPassword" />
         <activity

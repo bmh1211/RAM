@@ -1,20 +1,15 @@
 package com.example.login;
 
-import android.app.FragmentManager;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -37,7 +32,7 @@ public class PostingFragment extends Fragment {
         btn_apply=(Button)view.findViewById(R.id.btn_apply);
         et_title=(EditText)view.findViewById(R.id.et_title);
         et_posting=(EditText)view.findViewById(R.id.et_posting);
-        fragment1=new Fragment1();
+        fragment1=new BoardFragment();
 
         // 취소 버튼 눌렀을 때 동작 기능
         btn_cancel.setOnClickListener(new View.OnClickListener() {
