@@ -1,21 +1,9 @@
-package com.example.ramserver.Chat;
+package com.example.ramserver.chat;
 
-import com.example.ramserver.Model.ChatMessage;
-import com.example.ramserver.Model.ClientMessage;
-import com.example.ramserver.Model.Message;
-import com.fasterxml.jackson.core.JsonParser;
-import org.slf4j.LoggerFactory;
+import com.example.ramserver.model.ChatMessage;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.socket.WebSocketSession;
-import org.springframework.web.socket.handler.TextWebSocketHandler;
-import sun.security.util.Debug;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 public class MessageHandler  {

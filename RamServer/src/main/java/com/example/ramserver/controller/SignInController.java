@@ -1,11 +1,19 @@
-package com.example.ramserver.Controller;
+package com.example.ramserver.controller;
 
-import com.example.ramserver.Model.SearchParam;
+import com.example.ramserver.mapper.UserMapper;
+import com.example.ramserver.model.User;
+import com.example.ramserver.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/signin")
 public class SignInController {
+
+    @Autowired
+    UserService userService;
 
     @GetMapping("/login")
     public String login(
@@ -38,10 +46,15 @@ public class SignInController {
 
 
     @PostMapping("/submit")
-    public void postMethod(@RequestBody SearchParam searchParam){
+    public User postMethod(@RequestBody User user){
+        //HttpSession session=req.getSession();
+        System.out.println(user.getId());
+        //User dto=userMapper.findAll();
         //로그인 제출시 body에 담아서 정보 생성
-        System.out.println(searchParam);
-
+        //System.out.println(searchParam);
+        User userList= userService.findAll();
+       // return dto.getId();
+        return userList;
         //return searchParam;
     }
 }

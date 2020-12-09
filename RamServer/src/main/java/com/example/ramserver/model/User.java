@@ -1,16 +1,10 @@
-package com.example.ramserver.Model;
+package com.example.ramserver.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.*;
-import java.io.Serializable;
 
 @Data
 public class User {
-    private String ID;
+    private String id;
     private String password;
     private String phoneNumber;
     private String nickName;

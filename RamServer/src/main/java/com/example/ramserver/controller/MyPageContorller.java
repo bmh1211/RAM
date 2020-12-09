@@ -1,6 +1,6 @@
-package com.example.ramserver.Controller;
+package com.example.ramserver.controller;
 
-import com.example.ramserver.Model.User;
+import com.example.ramserver.model.User;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

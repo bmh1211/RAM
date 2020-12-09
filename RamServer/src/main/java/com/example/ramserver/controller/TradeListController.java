@@ -1,6 +1,6 @@
-package com.example.ramserver.Controller;
+package com.example.ramserver.controller;
 
-import com.example.ramserver.Model.Trade;
+import com.example.ramserver.model.Trade;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

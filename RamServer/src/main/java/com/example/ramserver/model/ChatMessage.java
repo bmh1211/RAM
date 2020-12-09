@@ -1,10 +1,8 @@
-package com.example.ramserver.Model;
+package com.example.ramserver.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import javax.persistence.Id;
-import java.util.Date;
 @Data
 @AllArgsConstructor
 public class ChatMessage {

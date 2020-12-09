@@ -1,7 +1,7 @@
-package com.example.ramserver.Controller;
+package com.example.ramserver.controller;
 
 
-import com.example.ramserver.Model.SearchParam;
+import com.example.ramserver.model.SearchParam;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

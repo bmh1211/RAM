@@ -1,7 +1,7 @@
-package com.example.ramserver.Controller;
+package com.example.ramserver.controller;
 
-import com.example.ramserver.Model.ClientMessage;
-import com.example.ramserver.Model.Greeting;
+import com.example.ramserver.model.ClientMessage;
+import com.example.ramserver.model.Greeting;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;

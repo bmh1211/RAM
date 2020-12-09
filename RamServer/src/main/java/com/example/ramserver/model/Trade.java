@@ -1,4 +1,4 @@
-package com.example.ramserver.Model;
+package com.example.ramserver.model;
 
 import lombok.Data;
 

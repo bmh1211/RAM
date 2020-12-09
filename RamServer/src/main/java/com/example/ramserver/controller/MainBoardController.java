@@ -1,9 +1,7 @@
-package com.example.ramserver.Controller;
+package com.example.ramserver.controller;
 
-import com.example.ramserver.Model.MainBoardPost;
+import com.example.ramserver.model.MainBoardPost;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/MainBoard")
