@@ -1,7 +1,9 @@
 package com.example.ramserver.Chat;
 
+import com.example.ramserver.Model.ChatMessage;
 import com.example.ramserver.Model.ClientMessage;
 import com.example.ramserver.Model.Message;
+import com.fasterxml.jackson.core.JsonParser;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -23,9 +25,10 @@ public class MessageHandler  {
     //리턴값은 Sendto 어노테이션에 mapping되어있는 api를 구독하고 있는 클라이언트들에게 브로드캐스팅
     @MessageMapping("/hello")
     @SendTo("/topic/roomid")
-    public String broadcasting(String message){
+    public ChatMessage broadcasting(ChatMessage message){
+
         System.out.println(message);
-        return message+"from server to client";
+        return message;
     }
     /*public Message broadcasting(ClientMessage message){
         System.out.println(message.getContent());

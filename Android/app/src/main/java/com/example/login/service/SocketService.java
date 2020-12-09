@@ -2,10 +2,12 @@ package com.example.login.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -15,6 +17,11 @@ import com.example.login.ChatMessageAdapter;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.client.WebSocketClient;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
@@ -49,11 +56,28 @@ public class SocketService extends Service {
                     mClient=msg.replyTo;
                     break;
                 case MSG_SEND_TO_SERVICE:
-                    mStompClient.send("/app/hello", msg.obj.toString()).subscribe();
+                    try {
+                        mStompClient.send("/app/hello", MakeJsonObject(msg.obj.toString()).toString()).subscribe();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
             }
             return false;
         }
     }));
+    private JSONObject MakeJsonObject(String str) throws JSONException {
+        JSONObject object=new JSONObject();
+        object.put("author", "방민호");
+        object.put("msg",str);
+        long now=System.currentTimeMillis();
+        Date date=new Date(now);
+        SimpleDateFormat sdfNow=new SimpleDateFormat("HH:mm:ss");
+        String formatDate=sdfNow.format(date);
+        object.put("Date",formatDate);
+
+        return object;
+    }
+
     @Override
     public void onCreate(){
         super.onCreate();
@@ -76,7 +100,12 @@ public class SocketService extends Service {
 
     public void StompClientRegister(){
         mStompClient.topic("/topic/roomid").subscribe(topicMessage->{
-            Log.d("register test",topicMessage.getPayload());
+            Log.d("received message",topicMessage.getPayload());
+            JSONObject obj=new JSONObject(topicMessage.getPayload());
+            if(obj.getString("author").equals("방민호")){
+                String s= obj.getString("msg");
+                sendMsgToActivity(s);
+            }
         });
     }
 
@@ -84,5 +113,13 @@ public class SocketService extends Service {
         mStompClient.disconnect();
     }
 
+    //activity로 메시지 전달
+    private void sendMsgToActivity(String str) throws RemoteException {
+        Bundle bundle=new Bundle();
+        bundle.putString("test",str);
+        Message msg=Message.obtain(null,MSG_SEND_TO_ACTIVITY);
+        msg.setData(bundle);
+        mClient.send(msg);
+    }
 
 }

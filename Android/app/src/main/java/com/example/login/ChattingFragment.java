@@ -1,10 +1,12 @@
 package com.example.login;
 
+import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.DataSetObserver;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,15 +19,35 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.login.service.SocketService;
 
-public class ChattingFragment extends Fragment {
+import org.java_websocket.client.WebSocketClient;
+
+import io.reactivex.disposables.Disposable;
+import okhttp3.OkHttpClient;
+import okhttp3.WebSocket;
+import org.java_websocket.handshake.ServerHandshake;
+
+import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Map;
+
+import ua.naiksoftware.stomp.Stomp;
+import ua.naiksoftware.stomp.StompClient;
+
+public class Fragment3 extends Fragment {
 
     private Messenger mServiceMessenger=null;
     private boolean mIsBound;
@@ -36,7 +58,7 @@ public class ChattingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view=inflater.inflate(R.layout.fragment_chatting, container, false);
+        view=inflater.inflate(R.layout.fragment_3, container, false);
         // Inflate the layout for this fragment
         //버튼 초기화, 클릭 이벤트 추가
         messageSendBtn=(Button)view.findViewById(R.id.btn_send);
@@ -88,13 +110,12 @@ public class ChattingFragment extends Fragment {
     private final Messenger mMessenger=new Messenger(new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message msg) {
-            Log.i("test","act :what "+msg.what);
+            Log.i("test receive","act :what "+msg.what);
             switch(msg.what){
                 case SocketService.MSG_SEND_TO_ACTIVITY:
-                    int value1=msg.getData().getInt("from service");
                     String value2=msg.getData().getString("test");
-                    Log.i("test","act : value1 "+value1);
                     Log.i("test","act : value2 "+value2);
+                    chatMessageAdapter.add(new ChatMessage(value2));
                     break;
             }
             return false;

@@ -2,10 +2,12 @@ package com.example.login;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatMessageAdapter extends ArrayAdapter {
+    boolean message_left=true;
     List msgs=new ArrayList();
     public ChatMessageAdapter(Context context,int textViewResourceId){
         super(context,textViewResourceId);
@@ -50,6 +53,20 @@ public class ChatMessageAdapter extends ArrayAdapter {
         TextView msgText=(TextView)row.findViewById(R.id.chatmessage);
         msgText.setText(msg.getMessage());
         msgText.setTextColor(Color.parseColor("#000000"));
+
+
+        msgText.setBackground(this.getContext().getResources().getDrawable((message_left?R.drawable.inbox2:R.drawable.outbox2)));
+
+        LinearLayout chatMessageContainer=(LinearLayout)row.findViewById(R.id.chatmessage_container);
+        int align;
+        if(message_left){
+            align= Gravity.LEFT;
+            message_left=false;
+        }
+        else{
+            align=Gravity.RIGHT;
+            message_left=true;
+        }
         return row;
     }
 }

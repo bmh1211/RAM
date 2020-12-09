@@ -49,7 +49,7 @@ public class MainPageActivity extends AppCompatActivity {
         fragment_my_page=new MyPageFragment();
         PostingAdapter = new Adapter();
         //listView = (ListView) getSupportFragmentManager().findFragmentById(R.id.lv_board);
-        listView.setAdapter(PostingAdapter);
+        //listView.setAdapter(PostingAdapter);
 
         Intent intent = getIntent(); //intent를 받아서 fragment로 넘김
 
