@@ -13,7 +13,6 @@
         android:theme="@style/AppTheme"
         android:networkSecurityConfig="@xml/network_security_config">
         <activity android:name=".SignUpActivity"/>
-        <activity android:name=".ChangeProfileActivity" /> <!-- android:theme="@style/Theme.AppCompat.Light.DarkActionBar"> -->
         <activity
             android:name=".FindPasswordActivity"
             android:label="@string/btn_findPassword" />

@@ -25,6 +25,7 @@ public class MyPageFragment extends Fragment {
     private ListView lv_favorite;
     static final String[] LIST_MENU={"LIST_1","LIST_2","LIST_3"};
     Fragment fragment1;
+    Fragment fragment_change_profile;
     Button btn_changeProfile;
 
     //private PopupWindow pw_sellerInfo;
@@ -44,6 +45,7 @@ public class MyPageFragment extends Fragment {
         lv_recentBuy=(ListView)view.findViewById(R.id.lv_recentBuy);
         lv_favorite=(ListView)view.findViewById(R.id.lv_favorite);
         fragment1 = new BoardFragment();
+        fragment_change_profile = new ChangeProfileFragment();
         btn_changeProfile=(Button)view.findViewById(R.id.btn_changeProfile);
 
 //        setSupportActionBar(tb_myPage);
@@ -127,8 +129,8 @@ public class MyPageFragment extends Fragment {
         btn_changeProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent_changeProfile = new Intent(container.getContext(), ChangeProfileActivity.class);
-                startActivity(intent_changeProfile);
+                Toast.makeText(container.getContext(), "정보수정", Toast.LENGTH_SHORT).show();
+                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_change_profile).commit();
             }
         });
 
