@@ -57,11 +57,12 @@ public class SignInController {
        // return dto.getId();
         User result=loginService.findAll(loginVo);
         if(result==null){
+            session.invalidate();//세션 삭제
             return "Login Failed";
         }
         else {
-            session.setAttribute("SessionId",result.getId());
-            return "Login Successed";
+            session.setAttribute("login",result);
+            return "Login Success";
         }
         //return loginService.findAll(loginVo);
         //return searchParam;

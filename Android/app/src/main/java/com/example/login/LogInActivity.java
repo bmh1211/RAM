@@ -3,9 +3,12 @@ package com.example.login;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +17,23 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class LogInActivity extends AppCompatActivity {
     private EditText et_id, et_password;
@@ -27,7 +47,8 @@ public class LogInActivity extends AppCompatActivity {
     private Toolbar tb_logIn;
     private SharedPreferences.Editor sp_editor_login;
     private SharedPreferences sp_login;
-
+    private HttpURLConnection con;
+    private String loginResult;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +86,21 @@ public class LogInActivity extends AppCompatActivity {
                 String ID = et_id.getText().toString(); // 입력된 id를 가져옴
                 String PW = et_password.getText().toString(); // 입력된 비밀번호를 가져옴
 
+                //서버와 연결 내용( 현재는 배포가 안되었으니 주석처리 )
+                //실험해 보고 싶으면 서버 실행하고 하단 LoginReqeust 함수 에서 url 아이피부분만 자기 컴퓨터 ip로 바꿔서 돌리면
+                //loginresult 변수에 Fail인지 Success인지 확인하면됨!!
+               /* new Thread(){
+                    public void run(){
+                        loginResult=LoginRequest(ID,PW);
+                    }
+                }.start();
+
+                if(loginResult=="Login Success"){
+                    startActivity(intent_mainPage);
+                }
+                else{
+
+                }*/
                 if (ID_temp.equals(ID) && PW_temp.equals(PW)) {
                     Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
 
@@ -162,4 +198,86 @@ public class LogInActivity extends AppCompatActivity {
         }
 
     }
+    //로그인 요청
+    private String LoginRequest(String id,String password){
+        try{
+            URL url=new URL("http://192.168.56.1:3000/signin/submit");
+            con=(HttpURLConnection)url.openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type","application/json");
+            con.setRequestProperty("Accept","application/json");
+            con.setDefaultUseCaches(false);
+            con.setUseCaches(false);
+            con.setDoInput(true);
+            con.setDoOutput(true);
+            setCookieHeader();
+
+
+            //파라미터 세팅
+            String json="";
+            JSONObject jsonObject=new JSONObject();
+            jsonObject.put("id",id);
+            jsonObject.put("password",password);
+            OutputStream os=con.getOutputStream();
+            os.write(jsonObject.toString().getBytes("UTF-8"));
+           /* os.flush();
+            os.close();*/
+
+            int num=con.getResponseCode();
+            /*if(con.getResponseCode()!=HttpURLConnection.HTTP_OK){
+                Log.d("Log","Connection Error");
+                return null;
+            }*/
+
+            BufferedReader reader=new BufferedReader(new InputStreamReader(con.getInputStream(),"UTF-8"));
+            String line;
+            String loginResult="";
+            while((line=reader.readLine())!=null){
+                loginResult+=line;
+            }
+            getCookieHeader();
+            return loginResult;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    //쿠키 설정
+    private void setCookieHeader(){
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("sessionCookie",Context.MODE_PRIVATE);
+        String sessionid = pref.getString("sessionid",null);
+        if(sessionid!=null) {
+            Log.d("LOG","세션 아이디"+sessionid+"가 요청 헤더에 포함 되었습니다.");
+            con.setRequestProperty("Cookie", sessionid);
+        }
+    }
+    private void getCookieHeader(){
+        List<String> cookies=con.getHeaderFields().get("Set-Cookie");
+        if(cookies!=null){
+            for(String cookie: cookies){
+                String sessionID=cookie.split(";\\s*")[0];
+                //JSESSOINID=~~~
+                //세션 아이디가 포함된 쿠키를 얻음
+                setSessionIdInSharedPref(sessionID);
+            }
+        }
+    }
+
+    private void setSessionIdInSharedPref(String sessionID) {
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("sessionCookie", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = pref.edit();
+        if(pref.getString("sessionid",null) == null){ //처음 로그인하여 세션아이디를 받은 경우
+            Log.d("LOG","처음 로그인하여 세션 아이디를 pref에 넣었습니다."+sessionID);
+        }else if(!pref.getString("sessionid",null).equals(sessionID)){ //서버의 세션 아이디 만료 후 갱신된 아이디가 수신된경우
+            Log.d("LOG","기존의 세션 아이디"+pref.getString("sessionid",null)+"가 만료 되어서 "
+                    +"서버의 세션 아이디 "+sessionID+" 로 교체 되었습니다.");
+        }
+        edit.putString("sessionid",sessionID);
+        edit.apply(); //비동기 처리
+    }
+
 }
