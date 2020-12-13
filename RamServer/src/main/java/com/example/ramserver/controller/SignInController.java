@@ -50,7 +50,7 @@ public class SignInController {
 
 
     @PostMapping("/submit")
-    public String postMethod(@RequestBody LoginVo loginVo, HttpServletRequest request){
+    public LoginResponse postMethod(@RequestBody LoginVo loginVo, HttpServletRequest request){
         HttpSession session=request.getSession();
         //System.out.println(user.getId());
         //User dto=userMapper.findAll();
@@ -59,17 +59,17 @@ public class SignInController {
         //User userList=
        // return dto.getId();
         User result=loginService.findAll(loginVo);
-
+        LoginResponse response=new LoginResponse();
         if(result==null){
             session.invalidate();//세션 삭제
             //loginResponse.setMsg("Login Failed");
-            return "Login Failed";
+            response.setMsg("Login Failed");
         }
         else {
             session.setAttribute("login",result);
-            //loginResponse.setMsg("Login Success");
-            return "Login Success";
+            response.setMsg("Login Success");
         }
+        return response;
         //return loginService.findAll(loginVo);
         //return searchParam;
     }

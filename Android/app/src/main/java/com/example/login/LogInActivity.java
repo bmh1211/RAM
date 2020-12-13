@@ -18,6 +18,8 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.login.network.NetworkTask;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -93,7 +95,7 @@ public class LogInActivity extends AppCompatActivity {
                 //실험해 보고 싶으면 서버 실행하고 하단 LoginReqeust 함수 에서 url 아이피부분만 자기 컴퓨터 ip로 바꿔서 돌리면
                 //loginresult 변수에 Fail인지 Success인지 확인하면됨!!
                 //파라미터 세팅
-                /*String json="";
+                String json="";
                 JSONObject jsonObject=new JSONObject();
                 try {
                     jsonObject.put("id",ID);
@@ -101,16 +103,30 @@ public class LogInActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                NetworkTask networkTask=new NetworkTask(getApplicationContext(),"http://192.168.56.1:3000/signin/submit",jsonObject,"POST");
                 try {
-                    JSONObject result=connection.HttpPost("http://192.168.56.1:3000/signin/submit",jsonObject);
-                    System.out.println("결과값 " +result);
+                    JSONObject resultObject=new JSONObject(networkTask.execute().get());
+                    if(resultObject==null){
+                        Log.d("fail","연결 실패");
+                        return;
+                    }
+                    String resultString=resultObject.getString("msg");
+
+                    if(resultString.equals("Login Success")){
+                        startActivity(intent_mainPage);
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }*/
+                }
 
-                new Thread(){
+                /*new Thread(){
                     public void run(){
                         loginResult=LoginRequest(ID,PW);
                     }
@@ -121,7 +137,7 @@ public class LogInActivity extends AppCompatActivity {
                 }
                 else{
 
-                }
+                }*/
                 /*if (ID_temp.equals(ID) && PW_temp.equals(PW)) {
                     Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
 
