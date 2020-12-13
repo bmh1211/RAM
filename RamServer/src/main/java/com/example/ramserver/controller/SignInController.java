@@ -1,8 +1,10 @@
 package com.example.ramserver.controller;
 
+import com.example.ramserver.model.LoginResponse;
 import com.example.ramserver.model.User;
 import com.example.ramserver.service.LoginService;
 import com.example.ramserver.vo.LoginVo;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,7 @@ public class SignInController {
 
     @Autowired
     LoginService loginService;
+    LoginResponse loginResponse;
 
     @GetMapping("/login")
     public String login(
@@ -47,7 +50,7 @@ public class SignInController {
 
 
     @PostMapping("/submit")
-    public String postMethod(@RequestBody LoginVo loginVo,HttpServletRequest request){
+    public String postMethod(@RequestBody LoginVo loginVo, HttpServletRequest request){
         HttpSession session=request.getSession();
         //System.out.println(user.getId());
         //User dto=userMapper.findAll();
@@ -56,12 +59,15 @@ public class SignInController {
         //User userList=
        // return dto.getId();
         User result=loginService.findAll(loginVo);
+
         if(result==null){
             session.invalidate();//세션 삭제
+            //loginResponse.setMsg("Login Failed");
             return "Login Failed";
         }
         else {
             session.setAttribute("login",result);
+            //loginResponse.setMsg("Login Success");
             return "Login Success";
         }
         //return loginService.findAll(loginVo);

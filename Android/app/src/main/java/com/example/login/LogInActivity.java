@@ -34,6 +34,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 public class LogInActivity extends AppCompatActivity {
     private EditText et_id, et_password;
@@ -49,6 +50,7 @@ public class LogInActivity extends AppCompatActivity {
     private SharedPreferences sp_login;
     private HttpURLConnection con;
     private String loginResult;
+    private HTTPConnetction connection;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +64,7 @@ public class LogInActivity extends AppCompatActivity {
         btn_findId = (Button) findViewById(R.id.btn_findId);
         btn_findPassword = (Button) findViewById(R.id.btn_findPassword);
         btn_register = (Button) findViewById(R.id.btn_register);
+        connection=new HTTPConnetction();
 
         // ======================= 다른 액티비티로 이동하기 위한 intent들 =================//
         Intent intent_mainPage = new Intent(this, MainPageActivity.class);
@@ -89,19 +92,37 @@ public class LogInActivity extends AppCompatActivity {
                 //서버와 연결 내용( 현재는 배포가 안되었으니 주석처리 )
                 //실험해 보고 싶으면 서버 실행하고 하단 LoginReqeust 함수 에서 url 아이피부분만 자기 컴퓨터 ip로 바꿔서 돌리면
                 //loginresult 변수에 Fail인지 Success인지 확인하면됨!!
-               /* new Thread(){
+                //파라미터 세팅
+                /*String json="";
+                JSONObject jsonObject=new JSONObject();
+                try {
+                    jsonObject.put("id",ID);
+                    jsonObject.put("password",PW);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    JSONObject result=connection.HttpPost("http://192.168.56.1:3000/signin/submit",jsonObject);
+                    System.out.println("결과값 " +result);
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }*/
+
+                new Thread(){
                     public void run(){
                         loginResult=LoginRequest(ID,PW);
                     }
                 }.start();
 
-                if(loginResult=="Login Success"){
+                if(loginResult.equals("Login Success")){
                     startActivity(intent_mainPage);
                 }
                 else{
 
-                }*/
-                if (ID_temp.equals(ID) && PW_temp.equals(PW)) {
+                }
+                /*if (ID_temp.equals(ID) && PW_temp.equals(PW)) {
                     Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
 
 //                    // 안드로이드 내부 DB에 데이터 집어넣기(테스트용)
@@ -135,7 +156,7 @@ public class LogInActivity extends AppCompatActivity {
                         sp_editor_login.commit();
                         chk_login.setChecked(false);
                     }
-                }
+                }*/
             }
         });
 

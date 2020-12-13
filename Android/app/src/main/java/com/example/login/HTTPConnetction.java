@@ -17,6 +17,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public class HTTPConnetction { //ddddd
 
@@ -70,15 +71,15 @@ public class HTTPConnetction { //ddddd
         }.execute();
     }
 
-    public static void HttpPost(String URL, JSONObject jsonObject){
+    public static JSONObject HttpPost(String URL, JSONObject jsonObject) throws ExecutionException, InterruptedException {
 
-        new AsyncTask<URL, Void, JSONObject>(){ //doInBackground파라미터 타입, onProgressUpdate 파라미터 타입, doInBackground 리턴값
+       JSONObject resultObject= new AsyncTask<URL, Void, JSONObject>(){ //doInBackground파라미터 타입, onProgressUpdate 파라미터 타입, doInBackground 리턴값
             @Override
             protected JSONObject doInBackground(URL... voids) {
 
                 JSONObject result = null;
                 try{
-                    URL url = new URL("요청 URL");
+                    URL url = new URL(URL);
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
                     connection.setRequestProperty("content-type", "application/json; utf-8");
@@ -87,7 +88,7 @@ public class HTTPConnetction { //ddddd
                     connection.setDoInput(true);
                     connection.setDoOutput(true);
                     connection.setUseCaches(false);
-                    connection.setConnectTimeout(15000);
+                    //connection.setConnectTimeout(15000);
 
                     String jsonInputString  = jsonObject.toString();  //보낼데이터
                     try(OutputStream os = connection.getOutputStream()){
@@ -129,7 +130,9 @@ public class HTTPConnetction { //ddddd
             protected void onPostExecute(JSONObject jsonObject) {
                 super.onPostExecute(jsonObject);
             }
-        }.execute();
+        }.execute().get();
+
+       return resultObject;
     }
 
 }
