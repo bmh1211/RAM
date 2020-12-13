@@ -95,7 +95,7 @@ public class LogInActivity extends AppCompatActivity {
                 //실험해 보고 싶으면 서버 실행하고 하단 LoginReqeust 함수 에서 url 아이피부분만 자기 컴퓨터 ip로 바꿔서 돌리면
                 //loginresult 변수에 Fail인지 Success인지 확인하면됨!!
                 //파라미터 세팅
-                String json="";
+                /*String json="";
                 JSONObject jsonObject=new JSONObject();
                 try {
                     jsonObject.put("id",ID);
@@ -125,20 +125,9 @@ public class LogInActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+*/
 
-                /*new Thread(){
-                    public void run(){
-                        loginResult=LoginRequest(ID,PW);
-                    }
-                }.start();
-
-                if(loginResult.equals("Login Success")){
-                    startActivity(intent_mainPage);
-                }
-                else{
-
-                }*/
-                /*if (ID_temp.equals(ID) && PW_temp.equals(PW)) {
+                if (ID_temp.equals(ID) && PW_temp.equals(PW)) {
                     Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
 
 //                    // 안드로이드 내부 DB에 데이터 집어넣기(테스트용)
@@ -172,7 +161,7 @@ public class LogInActivity extends AppCompatActivity {
                         sp_editor_login.commit();
                         chk_login.setChecked(false);
                     }
-                }*/
+                }
             }
         });
 
@@ -234,87 +223,6 @@ public class LogInActivity extends AppCompatActivity {
             chk_login.setChecked(true);
         }
 
-    }
-    //로그인 요청
-    private String LoginRequest(String id,String password){
-        try{
-            URL url=new URL("http://192.168.56.1:3000/signin/submit");
-            con=(HttpURLConnection)url.openConnection();
-            con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type","application/json");
-            con.setRequestProperty("Accept","application/json");
-            con.setDefaultUseCaches(false);
-            con.setUseCaches(false);
-            con.setDoInput(true);
-            con.setDoOutput(true);
-            setCookieHeader();
-
-
-            //파라미터 세팅
-            String json="";
-            JSONObject jsonObject=new JSONObject();
-            jsonObject.put("id",id);
-            jsonObject.put("password",password);
-            OutputStream os=con.getOutputStream();
-            os.write(jsonObject.toString().getBytes("UTF-8"));
-           /* os.flush();
-            os.close();*/
-
-            int num=con.getResponseCode();
-            /*if(con.getResponseCode()!=HttpURLConnection.HTTP_OK){
-                Log.d("Log","Connection Error");
-                return null;
-            }*/
-
-            BufferedReader reader=new BufferedReader(new InputStreamReader(con.getInputStream(),"UTF-8"));
-            String line;
-            String loginResult="";
-            while((line=reader.readLine())!=null){
-                loginResult+=line;
-            }
-            getCookieHeader();
-            return loginResult;
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    //쿠키 설정
-    private void setCookieHeader(){
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("sessionCookie",Context.MODE_PRIVATE);
-        String sessionid = pref.getString("sessionid",null);
-        if(sessionid!=null) {
-            Log.d("LOG","세션 아이디"+sessionid+"가 요청 헤더에 포함 되었습니다.");
-            con.setRequestProperty("Cookie", sessionid);
-        }
-    }
-    private void getCookieHeader(){
-        List<String> cookies=con.getHeaderFields().get("Set-Cookie");
-        if(cookies!=null){
-            for(String cookie: cookies){
-                String sessionID=cookie.split(";\\s*")[0];
-                //JSESSOINID=~~~
-                //세션 아이디가 포함된 쿠키를 얻음
-                setSessionIdInSharedPref(sessionID);
-            }
-        }
-    }
-
-    private void setSessionIdInSharedPref(String sessionID) {
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("sessionCookie", Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = pref.edit();
-        if(pref.getString("sessionid",null) == null){ //처음 로그인하여 세션아이디를 받은 경우
-            Log.d("LOG","처음 로그인하여 세션 아이디를 pref에 넣었습니다."+sessionID);
-        }else if(!pref.getString("sessionid",null).equals(sessionID)){ //서버의 세션 아이디 만료 후 갱신된 아이디가 수신된경우
-            Log.d("LOG","기존의 세션 아이디"+pref.getString("sessionid",null)+"가 만료 되어서 "
-                    +"서버의 세션 아이디 "+sessionID+" 로 교체 되었습니다.");
-        }
-        edit.putString("sessionid",sessionID);
-        edit.apply(); //비동기 처리
     }
 
 }
