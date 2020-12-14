@@ -34,12 +34,16 @@ public class ChangeProfileFragment extends Fragment {
     Fragment fragment_my_page;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_change_profile, container, false);
 
-        btn_change_apply = (Button)view.findViewById(R.id.btn_change_apply);
-        btn_change_cancel=(Button)view.findViewById(R.id.btn_change_cancel);
+        this.InitializeView(view);
+        this.SetListener();
+
+        return view;
+    }
+
+    public void InitializeView(View view){
         et_present_password=(EditText)view.findViewById(R.id.et_present_password);
         et_change_password=(EditText)view.findViewById(R.id.et_change_password);
         et_check_password=(EditText)view.findViewById(R.id.et_check_password);
@@ -52,10 +56,12 @@ public class ChangeProfileFragment extends Fragment {
         iv_change_password=(ImageView)view.findViewById(R.id.iv_change_password);
         iv_check_password=(ImageView)view.findViewById(R.id.iv_check_password);
         iv_change_nickname=(ImageView)view.findViewById(R.id.iv_change_nickname);
+        btn_change_apply = (Button)view.findViewById(R.id.btn_change_apply);
+        btn_change_cancel=(Button)view.findViewById(R.id.btn_change_cancel);
         fragment_my_page = new MyPageFragment();
+    }
 
-
-
+    public void SetListener(){
         btn_change_apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +75,5 @@ public class ChangeProfileFragment extends Fragment {
                 ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_my_page).commit();
             }
         });
-
-        return view;
     }
 }
