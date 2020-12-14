@@ -1,19 +1,23 @@
 package com.example.ramserver.controller;
 
-import com.example.ramserver.mapper.UserMapper;
+import com.example.ramserver.model.LoginResponse;
 import com.example.ramserver.model.User;
-import com.example.ramserver.service.UserService;
+import com.example.ramserver.service.LoginService;
+import com.example.ramserver.vo.LoginVo;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/signin")
 public class SignInController {
 
     @Autowired
-    UserService userService;
+    LoginService loginService;
+    LoginResponse loginResponse;
 
     @GetMapping("/login")
     public String login(
@@ -46,15 +50,27 @@ public class SignInController {
 
 
     @PostMapping("/submit")
-    public User postMethod(@RequestBody User user){
-        //HttpSession session=req.getSession();
-        System.out.println(user.getId());
+    public LoginResponse postMethod(@RequestBody LoginVo loginVo, HttpServletRequest request){
+        HttpSession session=request.getSession();
+        //System.out.println(user.getId());
         //User dto=userMapper.findAll();
         //로그인 제출시 body에 담아서 정보 생성
         //System.out.println(searchParam);
-        User userList= userService.findAll();
+        //User userList=
        // return dto.getId();
-        return userList;
+        User result=loginService.findAll(loginVo);
+        LoginResponse response=new LoginResponse();
+        if(result==null){
+            session.invalidate();//세션 삭제
+            //loginResponse.setMsg("Login Failed");
+            response.setMsg("Login Failed");
+        }
+        else {
+            session.setAttribute("login",result);
+            response.setMsg("Login Success");
+        }
+        return response;
+        //return loginService.findAll(loginVo);
         //return searchParam;
     }
 }

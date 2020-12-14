@@ -3,9 +3,12 @@ package com.example.login;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +17,26 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import com.example.login.network.NetworkTask;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 public class LogInActivity extends AppCompatActivity {
     private EditText et_id, et_password;
@@ -27,7 +50,9 @@ public class LogInActivity extends AppCompatActivity {
     private Toolbar tb_logIn;
     private SharedPreferences.Editor sp_editor_login;
     private SharedPreferences sp_login;
-
+    private HttpURLConnection con;
+    private String loginResult;
+    private HTTPConnetction connection;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +66,7 @@ public class LogInActivity extends AppCompatActivity {
         btn_findId = (Button) findViewById(R.id.btn_findId);
         btn_findPassword = (Button) findViewById(R.id.btn_findPassword);
         btn_register = (Button) findViewById(R.id.btn_register);
+        connection=new HTTPConnetction();
 
         // ======================= 다른 액티비티로 이동하기 위한 intent들 =================//
         Intent intent_mainPage = new Intent(this, MainPageActivity.class);
@@ -64,6 +90,42 @@ public class LogInActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String ID = et_id.getText().toString(); // 입력된 id를 가져옴
                 String PW = et_password.getText().toString(); // 입력된 비밀번호를 가져옴
+
+                //서버와 연결 내용( 현재는 배포가 안되었으니 주석처리 )
+                //실험해 보고 싶으면 서버 실행하고 하단 LoginReqeust 함수 에서 url 아이피부분만 자기 컴퓨터 ip로 바꿔서 돌리면
+                //loginresult 변수에 Fail인지 Success인지 확인하면됨!!
+                //파라미터 세팅
+                /*String json="";
+                JSONObject jsonObject=new JSONObject();
+                try {
+                    jsonObject.put("id",ID);
+                    jsonObject.put("password",PW);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                NetworkTask networkTask=new NetworkTask(getApplicationContext(),"http://192.168.56.1:3000/signin/submit",jsonObject,"POST");
+                try {
+                    JSONObject resultObject=new JSONObject(networkTask.execute().get());
+                    if(resultObject==null){
+                        Log.d("fail","연결 실패");
+                        return;
+                    }
+                    String resultString=resultObject.getString("msg");
+
+                    if(resultString.equals("Login Success")){
+                        startActivity(intent_mainPage);
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+*/
 
                 if (ID_temp.equals(ID) && PW_temp.equals(PW)) {
                     Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
@@ -162,4 +224,5 @@ public class LogInActivity extends AppCompatActivity {
         }
 
     }
+
 }

@@ -45,7 +45,7 @@ public class MainPageActivity extends AppCompatActivity {
 
         fragment1 = new BoardFragment(); //fragment 생성
         fragment2 = new HomeFragment();
-        fragment3 = new ChattingFragment();
+        fragment3 = new ChattingRoomFragment();
         fragment_my_page=new MyPageFragment();
         PostingAdapter = new Adapter();
         //listView = (ListView) getSupportFragmentManager().findFragmentById(R.id.lv_board);

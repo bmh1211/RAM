@@ -1,6 +1,9 @@
 package com.example.login;
 
+import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -16,120 +19,127 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public class HTTPConnetction { //ddddd
 
-    public static void HttpGet() {
-        new AsyncTask<Void, Void, JSONObject>() {
-            @Override
-            protected JSONObject doInBackground(Void... voids) {
-                JSONObject result = null;
-                try {
-                    URL url = new URL("https://0f0e146e0b89.ngrok.io/upload");
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    public static JSONObject  HttpGet(String Url) {
+        JSONObject result = null;
+        try {
+            URL url = new URL(Url);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-                    connection.setRequestProperty("key", "value");
-                    connection.setRequestMethod("GET");
-                    connection.setDoInput(true);
-                    connection.setUseCaches(false);
-                    connection.setConnectTimeout(15000); //통신 타임아웃
+            connection.setRequestProperty("key", "value");
+            connection.setRequestMethod("GET");
+            connection.setDoInput(true);
+            connection.setUseCaches(false);
+            connection.setConnectTimeout(15000); //통신 타임아웃
 
-                    int responseCode = connection.getResponseCode();
+            int responseCode = connection.getResponseCode();
 
-                    if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
-                        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                        String inputLine;
-                        StringBuffer response = new StringBuffer();
-                        while ((inputLine = in.readLine()) != null) {
-                            response.append(inputLine);
-                        }
-                        in.close();
-                    } else {
-                        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
-                        String inputLine;
-                        StringBuffer response = new StringBuffer();
-                        while ((inputLine = in.readLine()) != null) {
-                            response.append(inputLine);
-                        }
-                        in.close();
-                    }
-                } catch (ConnectException e) {
-                    Log.e("test", "ConnectionException");
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
                 }
-                return result;
+                in.close();
+                result=new JSONObject(response.toString());
+            } else {
+                return null;
             }
-
-            @Override
-            protected void onPostExecute(JSONObject jsonObject) {
-                super.onPostExecute(jsonObject);
-            }
-        }.execute();
+        } catch (ConnectException e) {
+            Log.e("test", "ConnectionException");
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
-    public static void HttpPost(String URL, JSONObject jsonObject){
+    public static JSONObject HttpPost(Context context,String URL, JSONObject jsonObject)  {
+        JSONObject result = null;
+        try{
+            URL url = new URL(URL);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-        new AsyncTask<URL, Void, JSONObject>(){ //doInBackground파라미터 타입, onProgressUpdate 파라미터 타입, doInBackground 리턴값
-            @Override
-            protected JSONObject doInBackground(URL... voids) {
+            connection.setRequestProperty("content-type", "application/json; utf-8");
+            connection.setRequestProperty("Accept","application/json");
+            connection.setRequestMethod("POST");
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            connection.setUseCaches(false);
+            //connection.setConnectTimeout(15000);
+            setCookieHeader(connection,context);
+            String jsonInputString  = jsonObject.toString();  //보낼데이터
+            try(OutputStream os = connection.getOutputStream()){
+                byte[] input = jsonInputString.getBytes("utf-8"); //전송할값
+                os.write(input,0,input.length);
+                os.flush();
+                os.close();
+            }
 
-                JSONObject result = null;
-                try{
-                    URL url = new URL("요청 URL");
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-                    connection.setRequestProperty("content-type", "application/json; utf-8");
-                    connection.setRequestProperty("Accept","application/json");
-                    connection.setRequestMethod("POST");
-                    connection.setDoInput(true);
-                    connection.setDoOutput(true);
-                    connection.setUseCaches(false);
-                    connection.setConnectTimeout(15000);
-
-                    String jsonInputString  = jsonObject.toString();  //보낼데이터
-                    try(OutputStream os = connection.getOutputStream()){
-                        byte[] input = jsonInputString.getBytes("utf-8"); //전송할값
-                        os.write(input,0,input.length);
-                        os.flush();
-                        os.close();
-                    }
-
-                    int responseCode = connection.getResponseCode();
-                    if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
-                        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                        String inputLine;
-                        StringBuffer response = new StringBuffer();
-                        while ((inputLine = in.readLine()) != null) {
-                            response.append(inputLine);
-                        }
-                        in.close();
-                    } else {
-                        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
-                        String inputLine;
-                        StringBuffer response = new StringBuffer();
-                        while ((inputLine = in.readLine()) != null) {
-                            response.append(inputLine);
-                        }
-                        in.close();
-                        result = new JSONObject(response.toString());
-                    }
-
-                } catch (ConnectException e) {
-                    Log.e("test", "ConnectException");
-                    e.printStackTrace();
-                } catch (Exception e){
-                    e.printStackTrace();
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
                 }
-                return result;
+                in.close();
+                getCookieHeader(connection,context);
+                result = new JSONObject(response.toString());
+            } else {
+                return null;
             }
-            @Override
-            protected void onPostExecute(JSONObject jsonObject) {
-                super.onPostExecute(jsonObject);
+
+        } catch (ConnectException e) {
+            Log.e("test", "ConnectException");
+            e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+
+    //쿠키 설정
+    private static void setCookieHeader(HttpURLConnection con,Context context){
+        SharedPreferences pref = context.getSharedPreferences("sessionCookie", Context.MODE_PRIVATE);
+        String sessionid = pref.getString("sessionid",null);
+        if(sessionid!=null) {
+            Log.d("LOG","세션 아이디"+sessionid+"가 요청 헤더에 포함 되었습니다.");
+            con.setRequestProperty("Cookie", sessionid);
+        }
+    }
+    private static void getCookieHeader(HttpURLConnection con,Context context){
+        List<String> cookies=con.getHeaderFields().get("Set-Cookie");
+        if(cookies!=null){
+            for(String cookie: cookies){
+                String sessionID=cookie.split(";\\s*")[0];
+                //JSESSOINID=~~~
+                //세션 아이디가 포함된 쿠키를 얻음
+                setSessionIdInSharedPref(sessionID,context);
             }
-        }.execute();
+        }
+    }
+
+    private static void setSessionIdInSharedPref(String sessionID,Context context) {
+        SharedPreferences pref = context.getSharedPreferences("sessionCookie", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = pref.edit();
+        if(pref.getString("sessionid",null) == null){ //처음 로그인하여 세션아이디를 받은 경우
+            Log.d("LOG","처음 로그인하여 세션 아이디를 pref에 넣었습니다."+sessionID);
+        }else if(!pref.getString("sessionid",null).equals(sessionID)){ //서버의 세션 아이디 만료 후 갱신된 아이디가 수신된경우
+            Log.d("LOG","기존의 세션 아이디"+pref.getString("sessionid",null)+"가 만료 되어서 "
+                    +"서버의 세션 아이디 "+sessionID+" 로 교체 되었습니다.");
+        }
+        edit.putString("sessionid",sessionID);
+        edit.apply(); //비동기 처리
     }
 
 }
