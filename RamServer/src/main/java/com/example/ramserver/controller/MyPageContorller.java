@@ -1,20 +1,44 @@
 package com.example.ramserver.controller;
 
+import com.example.ramserver.Response.MsgResponse;
+import com.example.ramserver.Response.UserResponse;
 import com.example.ramserver.model.User;
+import com.example.ramserver.service.MyPageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/MyPage")
+@RequestMapping("/myPage")
 public class MyPageContorller {
 
-    @PostMapping("/info")
-    public User postMethod(
-            @RequestParam("Id") String userId,
-            @RequestBody User user)
+    @Autowired
+    MyPageService myPageService;
+
+    @GetMapping("/info")
+    public UserResponse MyPage(@RequestParam("id") String id) {
+        User result = myPageService.myPage(id);
+        UserResponse response = new UserResponse();
+        if(result == null) {
+            response.setMsg("Info Failed");
+        }
+        else
+        {
+            response.setMsg("Info Success");
+        }
+        response.setUser(result);
+        return response;
+    }
+
+    @PostMapping("/update")
+    public MsgResponse Update(@RequestBody User user)
     {
-        //밑에 있는 User Body에 UserId를 이용해서 DB에서 조회해서 가져오기
-        user = new User();
-        System.out.println(userId); //test 코드
-        return user;
+        int result = myPageService.myPageUpdate(user);
+        MsgResponse response = new MsgResponse();
+        if(result==0)
+            response.setMsg("Update Failed");
+        else
+            response.setMsg("Update Success");
+
+        return response;
     }
 }
