@@ -1,34 +1,44 @@
 package com.example.ramserver.controller;
 
 
-import com.example.ramserver.model.SearchParam;
+import com.example.ramserver.Response.MsgResponse;
+import com.example.ramserver.service.JoinService;
+import com.example.ramserver.vo.JoinVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/signup")
 public class SignUpController {
-    //최종회원 가입 버튼 클릭
-    @PostMapping(value = "/submit")
-    public SearchParam postMethod(@RequestBody SearchParam searchParam){
-        //회원가입 제출시 body에 담아서 정보 생성
-        searchParam = new SearchParam("asdf","qwer", 3);
+
+    @Autowired
+    JoinService joinService;
+
+    @PostMapping("/submit")
+    public MsgResponse postMethod(@RequestBody JoinVo joinVo)
+    {
+        int result = joinService.join(joinVo); //여기가 error 지점
+        MsgResponse response = new MsgResponse();
+        if(result == 0)
+            response.setMsg("Join Failed");
+        else
+            response.setMsg("Join Success");
 
 
-        return searchParam;
+
+        return response;
     }
 
     //ID 중복확인
-    @GetMapping("/CheckID")
-    public String CheckID(
-            @RequestParam("Id") String userId)
+    @GetMapping("/checkId")
+    public MsgResponse CheckId(@RequestParam("id") String id)
     {
-        //DB에서 조회해서 결과 확인
-        if(userId=="asdf")
-        {
-            return "true";
-        }
+        int result = joinService.checkId(id);
+        MsgResponse response = new MsgResponse();
+        if(result == 0)
+            response.setMsg("New Id");
         else
-            return "false";
-
+            response.setMsg("Existing Id");
+        return response;
     }
 }
