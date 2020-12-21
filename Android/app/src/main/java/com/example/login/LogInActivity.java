@@ -1,7 +1,10 @@
 package com.example.login;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
@@ -37,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 
 public class LogInActivity extends AppCompatActivity {
     private EditText et_id, et_password;
@@ -53,10 +57,17 @@ public class LogInActivity extends AppCompatActivity {
     private HttpURLConnection con;
     private String loginResult;
     private HTTPConnetction connection;
+
+    private Executor executor;
+    private BiometricPrompt biometricPrompt;
+    private BiometricPrompt.PromptInfo promptInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
+
+
 
         // ======================= 사용할 객체들 =====================//
         et_id = (EditText) findViewById(R.id.et_id);
@@ -223,6 +234,52 @@ public class LogInActivity extends AppCompatActivity {
             chk_login.setChecked(true);
         }
 
+        this.func_Biometric();
     }
 
+    public void func_Biometric(){
+        // 지문인식 창 생성 위치
+        executor = ContextCompat.getMainExecutor(this);
+
+        // 지문인식 결과에 따른 기능
+        biometricPrompt = new BiometricPrompt(this, executor, new BiometricPrompt.AuthenticationCallback() {
+            // 취소버튼 또는 지문인식 지원하지 않을 시
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                Toast.makeText(getApplicationContext(), "지문 인식을 사용하지 않습니다", Toast.LENGTH_SHORT).show();
+
+                // 지문인식 창 없애기
+                biometricPrompt.cancelAuthentication();
+            }
+
+            // 지문인식 성공시
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                Toast.makeText(getApplicationContext(), "지문 인식에 성공했습니다", Toast.LENGTH_SHORT).show();
+
+                Intent intent_bio_success = new Intent(LogInActivity.this, MainPageActivity.class);
+                startActivity(intent_bio_success);
+            }
+
+            // 저장되지 않은 지문 인식 시
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                Toast.makeText(getApplicationContext(), "지문 인식에 실패했습니다. 다시 시도해주세요", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // 지문인식 창에 보이는 텍스트
+        promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("지문 인증")
+                //.setSubtitle("기기에 등록된 지문을 이용하여 지문을 인증해주세요.")
+                .setNegativeButtonText("취소")
+                //.setDeviceCredentialAllowed(false)
+                .build();
+
+        // 지문인식 창 띄우기
+        biometricPrompt.authenticate(promptInfo);
+    }
 }
