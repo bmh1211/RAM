@@ -21,51 +21,28 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.login.adapter.ChatRoomAdapter;
+import com.example.login.item.RoomItem;
 import com.example.login.service.SocketService;
 
 public class ChattingRoomFragment extends Fragment {
     private Messenger mServiceMessenger=null;
     private static final String TAG = "TAG";
-    ChatMessageAdapter chatMessageAdapter;
     View view;
-    Button messageSendBtn;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ChatRoomAdapter chatRoomAdapter=new ChatRoomAdapter(getActivity().getApplicationContext());
         view=inflater.inflate(R.layout.fragment_chattingroom, container, false);
-        // Inflate the layout for this fragment
-        //버튼 초기화, 클릭 이벤트 추가
-        messageSendBtn=(Button)view.findViewById(R.id.btn_send);
-        messageSendBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-            }
-        });
-       /* Intent intent=new Intent(
-                getActivity().getApplicationContext(), SocketService.class);
-        getActivity().startService(intent);*/
 
-        //Stomp 연결
-        //StompClientConnect();
-        //connectWebSocket();
-        GetListView();
+        ListView listView=view.findViewById(R.id.chatRoomView);
+        chatRoomAdapter.addItem(new RoomItem("김재연","백엔드 정복완료",R.drawable.applemango));
+        chatRoomAdapter.addItem(new RoomItem("방민호","게시판? 다했지",R.drawable.confirm));
+        chatRoomAdapter.addItem(new RoomItem("이준영","아 안드로이드 지겹지~",R.drawable.datebg));
 
+        listView.setAdapter(chatRoomAdapter);
         return view;
     }
 
-    public void GetListView(){
-        chatMessageAdapter=new ChatMessageAdapter(getActivity().getApplicationContext(),R.layout.chatting_message);
-        ListView listView=(ListView)view.findViewById(R.id.listView12);
-        listView.setAdapter(chatMessageAdapter);
-        listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-
-        //메시지가 추가되었을때 마지막 메시지를 스크롤할수 있는 리스트뷰를 만든다
-        chatMessageAdapter.registerDataSetObserver(new DataSetObserver() {
-            @Override
-            public void onChanged(){
-                super.onChanged();
-                listView.setSelection(chatMessageAdapter.getCount()-1);
-            }
-        });
-    }
 }

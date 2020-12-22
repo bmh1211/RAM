@@ -137,7 +137,6 @@ public class LogInActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 */
-
                 if (ID_temp.equals(ID) && PW_temp.equals(PW)) {
                     Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
 
