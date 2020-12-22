@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -21,6 +22,8 @@ public class PostingFragment extends Fragment {
     private Button btn_apply;
     private EditText et_title;
     private EditText et_posting;
+    private ImageButton ib_add_photo;
+
     Fragment fragment1;
 
     @Override
@@ -32,6 +35,7 @@ public class PostingFragment extends Fragment {
         btn_apply=(Button)view.findViewById(R.id.btn_apply);
         et_title=(EditText)view.findViewById(R.id.et_title);
         et_posting=(EditText)view.findViewById(R.id.et_posting);
+        ib_add_photo = (ImageButton)view.findViewById(R.id.ib_add_photo);
         fragment1=new BoardFragment();
 
         // 취소 버튼 눌렀을 때 동작 기능
@@ -47,7 +51,7 @@ public class PostingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String send_title = et_title.getText().toString();
-                String send_posting=et_posting.getText().toString();
+                String send_posting = et_posting.getText().toString();
 
                 if(send_posting.equals("") && send_title.equals("")){
                     Toast.makeText((MainPageActivity)getActivity(), "제목과 내용을 입력해주세요", Toast.LENGTH_SHORT).show();
@@ -72,6 +76,13 @@ public class PostingFragment extends Fragment {
                     }
                     ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment1).commit();
                 }
+            }
+        });
+
+        ib_add_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO : 이미지 클릭했을 때 사진촬영/앨범에서선택 고를 수 있도록
             }
         });
 
