@@ -14,35 +14,19 @@
         android:background="@drawable/posting_item">
 
         <TextView
+            android:id="@+id/posting_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:text="날짜"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <TextView
             android:id="@+id/posting_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="이름"
             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-        <TextView
-            android:id="@+id/posting_am_pm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:text="오전오후"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
-        <TextView
-            android:id="@+id/posting_hour"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:text="시간"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
-        <TextView
-            android:id="@+id/posting_minute"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:text="분"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <TextView
             android:id="@+id/posting_title"

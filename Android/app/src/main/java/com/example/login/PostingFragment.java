@@ -17,6 +17,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class PostingFragment extends Fragment {
     private Button btn_cancel;
     private Button btn_apply;
@@ -37,6 +40,8 @@ public class PostingFragment extends Fragment {
         et_posting=(EditText)view.findViewById(R.id.et_posting);
         ib_add_photo = (ImageButton)view.findViewById(R.id.ib_add_photo);
         fragment1=new BoardFragment();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy년 MM월 dd일 HH시mm분ss초");
+        Calendar time = Calendar.getInstance();
 
         // 취소 버튼 눌렀을 때 동작 기능
         btn_cancel.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +75,9 @@ public class PostingFragment extends Fragment {
                         
                         jsonObject.put("title",et_title.getText() );
                         jsonObject.put("body", et_posting.getText());
-                        saveText(et_title.getText().toString(), et_posting.getText().toString(), 1,1);        //핸드폰 sharedpreference에 저장
+                        String date_posting = format.format(time.getTime());
+                        saveText(et_title.getText().toString(), et_posting.getText().toString(), date_posting);        //핸드폰 sharedpreference에 저장
+                        // todo 서버로 넘겨주는 기능 추가하기. (현재는 로컬만)
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -82,7 +89,7 @@ public class PostingFragment extends Fragment {
         ib_add_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO : 이미지 클릭했을 때 사진촬영/앨범에서선택 고를 수 있도록
+                // TODO : 이미지 클릭했을 때 사진촬영/앨범에서선택 고를 수 있도록 -> 내가 다음 스프린트 때 추가해봄(이준영)
             }
         });
 
@@ -90,7 +97,7 @@ public class PostingFragment extends Fragment {
         return view;
 
     }
-    private void saveText(String title, String name, int hour, int minute){
+    private void saveText(String title, String name, String date){
         String temp = PostingData.getArray(getActivity());
         JSONObject jsonObject = new JSONObject();
         if(temp != "empty")
@@ -100,8 +107,7 @@ public class PostingFragment extends Fragment {
                 try{
                     jsonObject.put("name",name);
                     jsonObject.put("title",title);
-                    jsonObject.put("hour",hour);
-                    jsonObject.put("minute",minute);
+                    jsonObject.put("date",date);
                     jsonTemp.put(jsonObject);
                     Log.d("test 게시글 작성",jsonTemp.toString());
                     PostingData.setArray(getActivity(),jsonTemp.toString());
@@ -120,8 +126,7 @@ public class PostingFragment extends Fragment {
             try{
                 jsonObject.put("name",name);
                 jsonObject.put("title",title);
-                jsonObject.put("hour",hour);
-                jsonObject.put("minute",minute);
+                jsonObject.put("date",date);
                 jsonTemp.put(jsonObject);
                 PostingData.setArray(getActivity(),jsonTemp.toString());
             }catch(JSONException e)

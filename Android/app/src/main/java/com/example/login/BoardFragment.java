@@ -1,5 +1,6 @@
 package com.example.login;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,6 +17,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+
+// todo 필요없으면 다음 스프린트 때 삭제함
 //public class BoardFragment extends Fragment {
 //    private ListView lv_board;
 //    //ArrayList<String> LIST_MENU;
@@ -71,12 +80,12 @@ public class BoardFragment extends Fragment {
     SwipeRefreshLayout swipe_layout_board;
     public static final int REQUEST_CODE1 = 1000;  //리스트 터치
     private Adapter PostingAdapter;
-    private int hour, minute;
-    private String name, title, am_pm;
+    private String name, title, date;
     private Handler handler;
     private ListView listView;
     private Button btn_write;
     private int adapterPosition;
+    Context ct;
 
 
     @Override
@@ -84,14 +93,15 @@ public class BoardFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_board, container, false);  //https://swalloow.tistory.com/87
 
-        //LoadPosting(getActivity());
+        ct = container.getContext();
+
         PostingAdapter = new Adapter();
         listView = (ListView) view.findViewById(R.id.lv_board);
         listView.setAdapter(PostingAdapter);
         postingFragment = new PostingFragment();
         btn_write=(Button)view.findViewById(R.id.btn_write);
         swipe_layout_board = (SwipeRefreshLayout)view.findViewById(R.id.swipe_layout_board);
-
+        LoadPosting(ct);
 
 
         // 게시물 작성 버튼 클릭시
@@ -154,38 +164,34 @@ public class BoardFragment extends Fragment {
         // Inflate the layout for this fragment
         return view;
     }
-//    private void LoadPosting(Context context)   //fragment 불릴때 게시글 목록 생성
-//    {
-//        String temp = PostingData.getArray(getActivity());
-//        if(temp != "empty")
-//        {
-//            try{
-//                JSONArray response = new JSONArray(temp);
-//                for(int i = 0;i<response.length() ;i++) {
-//                    JSONObject jsonObject = response.getJSONObject(i);
-//                    Log.d("test 받아오기 제목",jsonObject.getString("title"));
-//                    Log.d("test 받아오기 제목",jsonObject.getString("name"));
-//                    Log.d("test 받아오기 제목",jsonObject.getString("hour"));
-//                    Log.d("test 받아오기 제목",jsonObject.getString("minute"));
-//                    Log.d("test 받아온 목록",temp);
-//                    name = jsonObject.getString("name");
-//                    title = jsonObject.getString("title");
-//                    hour = jsonObject.getInt("hour");
-//                    minute = jsonObject.getInt("minute");
-//                    am_pm = "오전 고정";
-//                    PostingAdapter.addItem(hour, minute, am_pm, name,title);
-//                    PostingAdapter.notifyDataSetChanged();
-//                }
-//            }catch(JSONException e)
-//            {
-//                e.printStackTrace();
-//            }
-//        }
-//        else
-//        {
-//            Toast.makeText((MainPageActivity)getActivity(), "게시물이 없음", Toast.LENGTH_SHORT).show();
-//
-//        }
-//    }
+    private void LoadPosting(Context context)   //fragment 불릴때 게시글 목록 생성
+    {
+        String temp = PostingData.getArray(getActivity());
+        if(temp != "empty")
+        {
+            try{
+                JSONArray response = new JSONArray(temp);
+                for(int i = 0;i<response.length() ;i++) {
+                    JSONObject jsonObject = response.getJSONObject(i);
+                    Log.d("test 받아오기 제목",jsonObject.getString("title"));
+                    Log.d("test 받아오기 내용",jsonObject.getString("name"));
+                    Log.d("test 받아오기 날짜",jsonObject.getString("date"));
+                    Log.d("test 받아온 목록",temp);
+                    name = jsonObject.getString("name");
+                    title = jsonObject.getString("title");
+                    date = jsonObject.getString("date");
+                    PostingAdapter.addItem(date, name,title);
+                    PostingAdapter.notifyDataSetChanged();
+                }
+            }catch(JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            Toast.makeText((MainPageActivity)getActivity(), "게시물이 없음", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
 // listview 새로고침 reference : https://medium.com/@bluesh55/android-%EB%8B%B9%EA%B2%A8%EC%84%9C-%EC%83%88%EB%A1%9C%EA%B3%A0%EC%B9%A8-%EA%B0%84%EB%8B%A8%ED%95%98%EA%B2%8C-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0-a42846c14c23
