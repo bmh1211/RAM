@@ -32,28 +32,18 @@ public class MainPageActivity extends AppCompatActivity {
     Fragment fragment3;
     Fragment fragment_my_page;
     Toolbar toolbar;
-    private Adapter PostingAdapter;
-    private int hour, minute;
-    private String name, title, am_pm;
-    private Handler handler;
-    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
 
-        fragment1 = new BoardFragment(); //fragment 생성
-        fragment2 = new HomeFragment();
+        // todo 첫화면이 홈화면이 뜨게 수정함
+        fragment1 = new HomeFragment(); //fragment 생성
+        fragment2 = new BoardFragment();
         fragment3 = new ChattingRoomFragment();
         fragment_my_page=new MyPageFragment();
-        PostingAdapter = new Adapter();
         //listView = (ListView) getSupportFragmentManager().findFragmentById(R.id.lv_board);
-        //listView.setAdapter(PostingAdapter);
-
-        Intent intent = getIntent(); //intent를 받아서 fragment로 넘김
-
-        LoadPosting(MainPageActivity.this);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -67,14 +57,18 @@ public class MainPageActivity extends AppCompatActivity {
                 String title = menuItem.getTitle().toString();
 
                 if(id == R.id.item1){
-                    Toast.makeText(getApplicationContext(), title + "First Item", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), title + "홈 화면", Toast.LENGTH_SHORT).show();
                 }
                 else if(id == R.id.item2){
-                    Toast.makeText(getApplicationContext(), title + "Second Item", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), title + "게시판 목록", Toast.LENGTH_SHORT).show();
                 }
                 else if(id == R.id.item3){
-                    Toast.makeText(getApplicationContext(), title + "Third Item", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), title + "채팅 목록", Toast.LENGTH_SHORT).show();
                 }
+                // todo 네번째 fragment 어딨는지 모르겠어서 일단 냅둠
+//                else if(id == R.id.item4){
+//                    Toast.makeText(getApplicationContext(), title + "Third Item", Toast.LENGTH_SHORT).show();
+//                }
 
                 return true;
             }
@@ -108,17 +102,6 @@ public class MainPageActivity extends AppCompatActivity {
                     }
                 }
         );
-
-//        btn_myPage=findViewById(R.id.btn_my_page);
-
-//        Intent intent_myPage = new Intent(this, MyPageActivity.class);
-
-//        btn_myPage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(intent_myPage);
-//            }
-//        });
     }
 
     @Override
@@ -130,38 +113,5 @@ public class MainPageActivity extends AppCompatActivity {
             }
         }
         return super.onOptionsItemSelected(item);
-    }
-    protected void LoadPosting(Context context)   //fragment 불릴때 게시글 목록 생성
-    {
-        String temp = PostingData.getArray(MainPageActivity.this);
-        if(temp != "empty")
-        {
-            try{
-                JSONArray response = new JSONArray(temp);
-                for(int i = 0;i<response.length() ;i++) {
-                    JSONObject jsonObject = response.getJSONObject(i);
-                    Log.d("test 받아오기 제목",jsonObject.getString("title"));
-                    Log.d("test 받아오기 제목",jsonObject.getString("name"));
-                    Log.d("test 받아오기 제목",jsonObject.getString("hour"));
-                    Log.d("test 받아오기 제목",jsonObject.getString("minute"));
-                    Log.d("test 받아온 목록",temp);
-                    name = jsonObject.getString("name");
-                    title = jsonObject.getString("title");
-                    hour = jsonObject.getInt("hour");
-                    minute = jsonObject.getInt("minute");
-                    am_pm = "오전 고정";
-                    PostingAdapter.addItem(hour, minute, am_pm, name,title);
-                    PostingAdapter.notifyDataSetChanged();
-                }
-            }catch(JSONException e)
-            {
-                e.printStackTrace();
-            }
-        }
-        else
-        {
-            Toast.makeText(MainPageActivity.this, "게시물이 없음", Toast.LENGTH_SHORT).show();
-
-        }
     }
 }

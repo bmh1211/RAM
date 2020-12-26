@@ -12,9 +12,9 @@
     <!--        android:layout_height="match_parent"-->
     <!--        android:text="Hello First View!" />-->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_layout_board"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:id="@+id/swipe_layout_board">
+        android:layout_height="505dp">
 
         <ListView
             android:id="@+id/lv_board"
@@ -22,7 +22,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/posting_item"
             android:isScrollContainer="true"
-            tools:listitem="@layout/posting_item_theme"/>
+            tools:listitem="@layout/posting_item_theme" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <Button

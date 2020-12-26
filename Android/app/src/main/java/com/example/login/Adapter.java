@@ -1,8 +1,10 @@
 package com.example.login;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -36,15 +38,13 @@ public class Adapter extends BaseAdapter {
 
             TextView name = (TextView)convertView.findViewById(R.id.posting_name);
             TextView title = (TextView)convertView.findViewById(R.id.posting_title);
-            TextView am_pm = (TextView)convertView.findViewById(R.id.posting_am_pm);
-            TextView hour = (TextView)convertView.findViewById(R.id.posting_hour);
-            TextView min = (TextView)convertView.findViewById(R.id.posting_minute);
+            TextView date = (TextView)convertView.findViewById(R.id.posting_date);
+
 
             holder.name = name;
             holder.title = title;
-            holder.am_pm = am_pm;
-            holder.hour = hour;
-            holder.min = min;
+            holder.date = date;
+
 
             convertView.setTag(holder);
         }
@@ -55,21 +55,18 @@ public class Adapter extends BaseAdapter {
         PostingF posting = arrayList.get(position);
         holder.name.setText(posting.getName());
         holder.title.setText(posting.getTitle());
-        holder.am_pm.setText(posting.getAm_pm());
-        holder.hour.setText(posting.getHour()+ "시");
-        holder.min.setText(posting.getMinute()+ "분 ");
+        holder.date.setText(posting.getDate());
+
 
         return convertView;
     }
 
-    public void addItem(int hour, int minute, String am_pm, String name, String title) {
+    public void addItem(String date, String name, String title) {
         PostingF posting = new PostingF();
 
         posting.setName(name);
         posting.setTitle(title);
-        posting.setHour(hour);
-        posting.setMinute(minute);
-        posting.setAm_pm(am_pm);
+        posting.setDate(date);
 
         listviewitem.add(posting);
     }
@@ -95,6 +92,6 @@ public class Adapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView name, hour, am_pm, min, title;
+        TextView name, date, title;
     }
 }
