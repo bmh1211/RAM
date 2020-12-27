@@ -106,7 +106,7 @@ public class LogInActivity extends AppCompatActivity {
                 //실험해 보고 싶으면 서버 실행하고 하단 LoginReqeust 함수 에서 url 아이피부분만 자기 컴퓨터 ip로 바꿔서 돌리면
                 //loginresult 변수에 Fail인지 Success인지 확인하면됨!!
                 //파라미터 세팅
-                /*String json="";
+                String json="";
                 JSONObject jsonObject=new JSONObject();
                 try {
                     jsonObject.put("id",ID);
@@ -136,8 +136,7 @@ public class LogInActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-*/
-                if (ID_temp.equals(ID) && PW_temp.equals(PW)) {
+                /*if (ID_temp.equals(ID) && PW_temp.equals(PW)) {
                     Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
 
 //                    // 안드로이드 내부 DB에 데이터 집어넣기(테스트용)
@@ -171,7 +170,7 @@ public class LogInActivity extends AppCompatActivity {
                         sp_editor_login.commit();
                         chk_login.setChecked(false);
                     }
-                }
+                }*/
             }
         });
 

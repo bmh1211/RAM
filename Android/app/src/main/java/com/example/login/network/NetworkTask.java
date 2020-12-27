@@ -22,6 +22,12 @@ public class NetworkTask extends AsyncTask<Void, Void, String> {
         this.method=HttpMethod;
         this.context=context;
     }
+    public NetworkTask(Context context,String url,String HttpMethod){
+        this.url = url;
+        this.values=new JSONObject();
+        this.method=HttpMethod;
+        this.context=context;
+    }
 
     @Override
     protected void onPreExecute() {
@@ -37,7 +43,7 @@ public class NetworkTask extends AsyncTask<Void, Void, String> {
             result = requestHttpURLConnection.HttpPost(context,url, values);
         }
         else if(method.equals("GET")){
-            result = requestHttpURLConnection.HttpGet(url);
+            result = requestHttpURLConnection.HttpGet(context,url);
         }
         else{
             result=null;
@@ -49,7 +55,7 @@ public class NetworkTask extends AsyncTask<Void, Void, String> {
     protected void onPostExecute(String result) {
         // 통신이 완료되면 호출됩니다.
         // 결과에 따른 수정 등은 여기서 합니다.
-        //Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+        // Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
     }
 }
 
