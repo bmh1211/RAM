@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.ramserver.mapper.ChatRoomMapper">
+    <select id="FindChatter" parameterType="string" resultType="string">
+        select ChatRoom.id2 from
+(SELECT  A.chatroomid, A.userid as id1,B.userid as id2 FROM rotten.chatroom_user A, rotten.chatroom_user B
+where A.chatroomid=B.chatroomid and A.userid!=B.userid) ChatRoom
+where ChatRoom.id1=#{value};
+    </select>
+</mapper>

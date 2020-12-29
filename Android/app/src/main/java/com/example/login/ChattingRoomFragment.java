@@ -17,13 +17,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.login.adapter.ChatRoomAdapter;
 import com.example.login.item.RoomItem;
+import com.example.login.network.NetworkTask;
 import com.example.login.service.SocketService;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.concurrent.ExecutionException;
 
 public class ChattingRoomFragment extends Fragment {
     private Messenger mServiceMessenger=null;
@@ -33,8 +40,32 @@ public class ChattingRoomFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        NetworkTask networkTask=new NetworkTask(getActivity().getApplicationContext(),"http://192.168.56.1:3000/chat/AllRoom","GET");
+        try {
+            JSONObject resultObject=new JSONObject(networkTask.execute().get());
+            if(resultObject==null){
+                Log.d("fail","연결 실패");
+            }
+            else{
+                System.out.println(resultObject);
+            }
+           /// String resultString=resultObject.getString("msg");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+
         ChatRoomAdapter chatRoomAdapter=new ChatRoomAdapter(getActivity().getApplicationContext());
+
         view=inflater.inflate(R.layout.fragment_chattingroom, container, false);
+
+
 
         ListView listView=view.findViewById(R.id.chatRoomView);
         chatRoomAdapter.addItem(new RoomItem("김재연","백엔드 정복완료",R.drawable.applemango));

@@ -25,7 +25,7 @@ import java.util.concurrent.ExecutionException;
 
 public class HTTPConnetction { //ddddd
 
-    public static JSONObject  HttpGet(String Url) {
+    public static JSONObject  HttpGet(Context context,String Url) {
         JSONObject result = null;
         try {
             URL url = new URL(Url);
@@ -36,9 +36,9 @@ public class HTTPConnetction { //ddddd
             connection.setDoInput(true);
             connection.setUseCaches(false);
             connection.setConnectTimeout(15000); //통신 타임아웃
+            setCookieHeader(connection,context);
 
             int responseCode = connection.getResponseCode();
-
             if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String inputLine;

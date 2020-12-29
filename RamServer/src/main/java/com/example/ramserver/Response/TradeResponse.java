@@ -1,17 +1,17 @@
 package com.example.ramserver.Response;
 
-import com.example.ramserver.model.User;
+import com.example.ramserver.vo.TradeVo;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Data
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
-public class UserResponse {
-    private String msg;
+public class TradeResponse {
+    String msg;
 
-    private User user;
+    TradeVo tradeVo;
 }
