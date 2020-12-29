@@ -7,6 +7,9 @@ import com.example.ramserver.service.MyPageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 @RestController
 @RequestMapping("/myPage")
 public class MyPageContorller {
@@ -15,8 +18,10 @@ public class MyPageContorller {
     MyPageService myPageService;
 
     @GetMapping("/info")
-    public UserResponse MyPage(@RequestParam("id") String id) {
-        User result = myPageService.myPage(id);
+    public UserResponse MyPage(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        User info = (User)session.getAttribute("login");
+        User result = myPageService.myPage(info.getId());
         UserResponse response = new UserResponse();
         if(result == null) {
             response.setMsg("Info Failed");
