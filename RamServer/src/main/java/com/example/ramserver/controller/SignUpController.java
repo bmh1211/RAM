@@ -17,7 +17,7 @@ public class SignUpController {
     @PostMapping("/submit")
     public MsgResponse postMethod(@RequestBody JoinVo joinVo)
     {
-        int result = joinService.join(joinVo); //여기가 error 지점
+        int result = joinService.join(joinVo);
         MsgResponse response = new MsgResponse();
         if(result == 0)
             response.setMsg("Join Failed");

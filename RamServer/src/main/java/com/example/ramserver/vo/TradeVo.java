@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Data
 public class TradeVo {
-    private String tradeId;
+    private int tradeId;
     private String buyerId;
     private String sellerId;
     private String boardId;
