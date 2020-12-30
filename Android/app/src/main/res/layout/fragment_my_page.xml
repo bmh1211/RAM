@@ -37,7 +37,7 @@
             android:layout_width="100dp"
             android:layout_height="40dp"
             android:layout_marginTop="28dp"
-            android:text="이   름 : 방민호"
+            android:text="이   름 : ( 이 름 )"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.159"
             app:layout_constraintStart_toEndOf="@+id/iv_profile"
@@ -48,7 +48,7 @@
             android:layout_width="100dp"
             android:layout_height="40dp"
             android:layout_marginTop="24dp"
-            android:text="닉네임 : 마이노"
+            android:text="닉네임 : ( 닉 네 임 )"
             app:layout_constraintEnd_toEndOf="@+id/tv_name"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/tv_name"
@@ -81,7 +81,7 @@
             android:layout_width="276dp"
             android:layout_height="44dp"
             android:layout_marginTop="220dp"
-            android:text="● 이메일 : bmh1211@gmail.com"
+            android:text="● 이메일 : ( 이 메 일 )"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.237"
             app:layout_constraintStart_toStartOf="parent"
@@ -164,6 +164,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_favorite"/>
 
+        <Button
+            android:id="@+id/btn_connection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="280dp"
+            android:text="연결 테스트"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.848"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <!--    <TextView-->
