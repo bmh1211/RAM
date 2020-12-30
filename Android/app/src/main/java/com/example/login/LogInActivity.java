@@ -115,7 +115,7 @@ public class LogInActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 //NetworkTask networkTask=new NetworkTask(getApplicationContext(),"http://192.168.56.1:3000/signin/submit",jsonObject,"POST");
-                NetworkTask networkTask=new NetworkTask(getApplicationContext(),"http://3.35.48.170:3000/singin/submit",jsonObject,"POST");
+                NetworkTask networkTask=new NetworkTask(getApplicationContext(),"http://3.35.48.170:3000/signin/submit",jsonObject,"POST");
                 try {
                     JSONObject resultObject=new JSONObject(networkTask.execute().get());
                     if(resultObject==null){
