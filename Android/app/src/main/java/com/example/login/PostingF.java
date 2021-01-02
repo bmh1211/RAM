@@ -1,7 +1,7 @@
 package com.example.login;
 
 public class PostingF {
-    private String date, title, name;
+    private String date, title, name,index;
 
     public String getDate() {
         return date;
@@ -26,6 +26,15 @@ public class PostingF {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public String getIndex() {
+        return index;
+    }
+
+    public void setIndex(String index) {
+        this.index = index;
+    }
+
 
 //    @Override
 //    public String toString() {

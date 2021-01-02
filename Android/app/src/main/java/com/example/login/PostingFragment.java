@@ -1,47 +1,29 @@
 package com.example.login;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.Build;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.Toast;
+
+import com.example.login.network.NetworkTask;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-
-import static android.app.Activity.RESULT_OK;
-import static android.app.Activity.RESULT_CANCELED;
+import java.util.concurrent.ExecutionException;
 
 public class PostingFragment extends Fragment {
     private Button btn_cancel;
@@ -49,35 +31,59 @@ public class PostingFragment extends Fragment {
     private EditText et_title;
     private EditText et_posting;
     private ImageButton ib_add_photo;
-    private Button btn_camera;
-    private Button btn_album;
-    private PopupWindow ll_chooser;
-
+    private String title, name, date, contents;
     Fragment fragment1;
+    MainPageActivity activity;
+    Context context;
 
-    String str_CurrentPhotoPath;
-    final static int REQUEST_TAKE_PHOTO = 99;
-    final static int PICK_FROM_ALBUM = 100;
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+
+        //메시지 송수신에 필요한 객체 초기화
+        activity = (MainPageActivity) getActivity();
+        title ="";
+        name = "";
+        date = "";
+        contents = "";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_posting, container, false);
 
-        btn_cancel = (Button) view.findViewById(R.id.btn_cancel);
-        btn_apply = (Button) view.findViewById(R.id.btn_apply);
-        et_title = (EditText) view.findViewById(R.id.et_title);
-        et_posting = (EditText) view.findViewById(R.id.et_posting);
-        ib_add_photo = (ImageButton) view.findViewById(R.id.ib_add_photo);
-        fragment1 = new BoardFragment();
+        btn_cancel=(Button)view.findViewById(R.id.btn_cancel);
+        btn_apply=(Button)view.findViewById(R.id.btn_apply);
+        et_title=(EditText)view.findViewById(R.id.et_title);
+        et_posting=(EditText)view.findViewById(R.id.et_posting);
+        ib_add_photo = (ImageButton)view.findViewById(R.id.ib_add_photo);
+        fragment1=new BoardFragment();
         SimpleDateFormat format = new SimpleDateFormat("yyyy년 MM월 dd일 HH시mm분ss초");
         Calendar time = Calendar.getInstance();
 
+//        if(activity.mBundle != null) {
+//            Bundle bundle = activity.mBundle;
+//            receiveData = bundle.getString("sendData");
+//            StudentDTO student3 = (StudentDTO) bundle.getSerializable("student3");
+//            String name = student3.getName();
+//            int age = student3.getAge();
+//            int index = bundle.getInt("index");
+//
+//            textView1.append(receiveData + "\n");
+//            textView1.append("name : " + name + "\nage : " + age + "\nindex : " + index);
+//            activity.mBundle = null;
+//        }
+
+
+
+        //<---------------------------------------------------작성-------------------------------------------------->
         // 취소 버튼 눌렀을 때 동작 기능
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainPageActivity) getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commit();
+                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment1).commit();
             }
         });
 
@@ -88,27 +94,30 @@ public class PostingFragment extends Fragment {
                 String send_title = et_title.getText().toString();
                 String send_posting = et_posting.getText().toString();
 
-                if (send_posting.equals("") && send_title.equals("")) {
-                    Toast.makeText((MainPageActivity) getActivity(), "제목과 내용을 입력해주세요", Toast.LENGTH_SHORT).show();
-                } else if (send_title.equals("")) {
-                    Toast.makeText((MainPageActivity) getActivity(), "제목을 입력해주세요", Toast.LENGTH_SHORT).show();
-                } else if (send_posting.equals("")) {
-                    Toast.makeText((MainPageActivity) getActivity(), "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
-                } else {
+                if(send_posting.equals("") && send_title.equals("")){
+                    Toast.makeText((MainPageActivity)getActivity(), "제목과 내용을 입력해주세요", Toast.LENGTH_SHORT).show();
+                }
+                else if(send_title.equals("")){
+                    Toast.makeText((MainPageActivity)getActivity(), "제목을 입력해주세요", Toast.LENGTH_SHORT).show();
+                }
+                else if(send_posting.equals("")){
+                    Toast.makeText((MainPageActivity)getActivity(), "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
+                }
+                else{
                     JSONObject jsonObject = new JSONObject();
 
                     try {
-                        Toast.makeText((MainPageActivity) getActivity(), "작성되었습니다", Toast.LENGTH_SHORT).show();
-
-                        jsonObject.put("title", et_title.getText());
+                        Toast.makeText((MainPageActivity)getActivity(), "작성되었습니다", Toast.LENGTH_SHORT).show();
+                        jsonObject.put("title",et_title.getText() );
                         jsonObject.put("body", et_posting.getText());
                         String date_posting = format.format(time.getTime());
-                        saveText(et_title.getText().toString(), et_posting.getText().toString(), date_posting);        //핸드폰 sharedpreference에 저장
+                        sendPosting(send_title, send_posting, date_posting);
+//                        saveText(et_title.getText().toString(), et_posting.getText().toString(), date_posting);        //핸드폰 sharedpreference에 저장
                         // todo 서버로 넘겨주는 기능 추가하기. (현재는 로컬만)
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    ((MainPageActivity) getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment1).commit();
+
                 }
             }
         });
@@ -116,207 +125,81 @@ public class PostingFragment extends Fragment {
         ib_add_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 카메라/앨범 권한 요청
-                checkPermissions();
-
-                // 팝업창 띄워서 카메라/앨범 선택하도록
-                setPopupChooser();
-                
-                // TODO : 사진 회전, 사진 크기, 사진 여러장 넣는 방법 - 나중
+                // TODO : 이미지 클릭했을 때 사진촬영/앨범에서선택 고를 수 있도록 -> 내가 다음 스프린트 때 추가해봄(이준영)
             }
         });
 
         // Inflate the layout for this fragment
         return view;
-    }
 
-    private void saveText(String title, String name, String date) {
-        String temp = PostingData.getArray(getActivity());
+    }
+    private void sendPosting(String title, String body, String date) {
         JSONObject jsonObject = new JSONObject();
-        if (temp != "empty") {
-            try {
-                JSONArray jsonTemp = new JSONArray(temp);
-                try {
-                    jsonObject.put("name", name);
-                    jsonObject.put("title", title);
-                    jsonObject.put("date", date);
-                    jsonTemp.put(jsonObject);
-                    Log.d("test 게시글 작성", jsonTemp.toString());
-                    PostingData.setArray(getActivity(), jsonTemp.toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        } else {
-            JSONArray jsonTemp = new JSONArray();
-            try {
-                jsonObject.put("name", name);
-                jsonObject.put("title", title);
-                jsonObject.put("date", date);
-                jsonTemp.put(jsonObject);
-                PostingData.setArray(getActivity(), jsonTemp.toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void checkPermissions() {
-        String permission_camera = Manifest.permission.CAMERA;
-        String permission_write_external_storage = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-        String[] permissions = {permission_camera, permission_write_external_storage};
-
-        int PERMISSION_ALL = 1;
-
-        // checkSelfPermission이 API 23부터 가능, 마시멜로우(Build.VERSION_CODES.M)이 API 23임
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (getActivity().checkSelfPermission(permission_camera) == PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(permission_write_external_storage) == PackageManager.PERMISSION_GRANTED) {
-                Log.w("권한설정 상태", "권한 설정 완료");
-            } else {
-                Log.w("권한설정 상태", "권한 설정 요청");
-                ActivityCompat.requestPermissions(getActivity(), permissions, PERMISSION_ALL);
-            }
-        }
-    }
-
-    public void setPopupChooser(){
-        View popupView = getLayoutInflater().inflate(R.layout.popupwindow_chooser,null);
-        ll_chooser = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-        ll_chooser.setFocusable(true);
-        ll_chooser.showAtLocation(popupView, Gravity.CENTER,0,0);
-
-        btn_camera = (Button)ll_chooser.getContentView().findViewById(R.id.btn_camera);
-        btn_album = (Button)ll_chooser.getContentView().findViewById(R.id.btn_album);
-
-        btn_camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getImageFromCamera();
-
-                ll_chooser.dismiss();
-            }
-        });
-
-        btn_album.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getImageFromAlbum();
-
-                ll_chooser.dismiss();
-            }
-        });
-    }
-
-    // requestPermissions 실행시 호출되는 onRequestPermissionsResult 함수에 대한 수정
-    // 권한 요청
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        // permissions[0] == Manifest.permission.CAMERA , permissions[1] == Manifest.permission.WRITE_EXTERNAL_STORAGE
-        // grantResults[0] => permissions[0]의 권한에 대한 결과 , grantResults[1] => permissions[1]의 권한에 대한 결과
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Log.w("권한설정 결과함수 호출", "onRequestPermissionsResult");
-
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-            // PERMISSION_GRANTED == 0 , PERMISSION_DENIED == -1
-            Log.w("권한설정 결과", "Permission : " + permissions[0] + " was " + grantResults[0]);
-            Log.w("권한설정 결과", "Permission : " + permissions[1] + " was " + grantResults[1]);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         try {
-            switch (requestCode) {
-                case REQUEST_TAKE_PHOTO:
-                    if (resultCode == RESULT_OK) {
-                        File file_from_path = new File(str_CurrentPhotoPath);
-                        Bitmap bitmap = (Bitmap) MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), Uri.fromFile(file_from_path));
-
-                        if (bitmap != null) {
-                            ib_add_photo.setImageBitmap(bitmap);
-                        }
-                    }
-                    break;
-
-                case PICK_FROM_ALBUM:
-                    if (resultCode == RESULT_OK) {
-                        InputStream is_album = getActivity().getContentResolver().openInputStream(intent.getData());
-                        Bitmap bitmap = (Bitmap) BitmapFactory.decodeStream(is_album);
-                        is_album.close();
-                        ib_add_photo.setImageBitmap(bitmap);
-
-                        // 앨범에 저장된 파일 이름
-                        Uri uri_photo = intent.getData();
-                        String str_path = getImagePath(uri_photo);
-
-                        Toast.makeText((MainPageActivity) getActivity(), "파일 path : " + str_path, Toast.LENGTH_SHORT).show();
-                    } else if (resultCode == RESULT_CANCELED) {
-                        Toast.makeText((MainPageActivity) getActivity(), "취소되었습니다", Toast.LENGTH_SHORT).show();
-                    }
-                    break;
+            jsonObject.put("title", title);
+            jsonObject.put("body", body);
+            jsonObject.put("date", date);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        NetworkTask networkTask = new NetworkTask((MainPageActivity)getActivity(), "http://3.35.48.170:3000/singin/submit", jsonObject, "POST");   //올바른 url 넣기
+        try {
+            JSONObject resultObject = new JSONObject(networkTask.execute().get());
+            if (resultObject == null) {
+                Log.d("fail", "연결 실패");
+                return;
             }
-        } catch (Exception e) {
+            String resultString = resultObject.getString("msg");
+            if (resultString.equals("Posting Success")) {
+                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment1).commit();
+            } else {
+                Toast.makeText((MainPageActivity)getActivity(), "게시글 등록 실패", Toast.LENGTH_SHORT).show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (
+                ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    // 카메라로 찍은 사진을 파일로 만들어주는 함수
-    private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-
-        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-
-        str_CurrentPhotoPath = image.getAbsolutePath();
-
-        Log.w("파일이름", "imageFileName : " + imageFileName + ".jpg"); // 생성된 파일 이름
-        Log.w("파일경로", "str_CurrentPhotoPath : " + str_CurrentPhotoPath); // 해당 파일의 경로
-
-        return image;
-    }
-
-    // 카메라로 사진을 찍는 함수
-    private void getImageFromCamera() {
-        Intent intent_take_picture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (intent_take_picture.resolveActivity(getActivity().getPackageManager()) != null) {
-            File file_image = null;
-            try {
-                file_image = createImageFile();
-            } catch (Exception e) {
-                Log.e("알림", "그림 파일 만드는 도중 에러 발생");
-            }
-            if (file_image != null) {
-                Uri uri_image = FileProvider.getUriForFile(getActivity(), "com.example.login.fileprovider", file_image);
-
-                intent_take_picture.putExtra(MediaStore.EXTRA_OUTPUT, uri_image);
-                startActivityForResult(intent_take_picture, REQUEST_TAKE_PHOTO);
+    private void saveText(String title, String name, String date){
+        String temp = PostingData.getArray(getActivity());
+        JSONObject jsonObject = new JSONObject();
+        if(temp != "empty")
+        {
+            try{
+                JSONArray jsonTemp = new JSONArray(temp);
+                try{
+                    jsonObject.put("name",name);
+                    jsonObject.put("title",title);
+                    jsonObject.put("date",date);
+                    jsonTemp.put(jsonObject);
+                    Log.d("test 게시글 작성",jsonTemp.toString());
+                    PostingData.setArray(getActivity(),jsonTemp.toString());
+                }catch(JSONException e)
+                {
+                    e.printStackTrace();
+                }
+            }catch(JSONException e)
+            {
+                e.printStackTrace();
             }
         }
-    }
-
-    // 앨범을 켜주는 함수
-    private void getImageFromAlbum() {
-        Toast.makeText((MainPageActivity) getActivity(), "getImageFromAlbum() 호출", Toast.LENGTH_SHORT).show();
-
-        Intent intent_album = new Intent(Intent.ACTION_PICK);
-        intent_album.setType("image/*");
-        intent_album.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        startActivityForResult(Intent.createChooser(intent_album, "다중 선택은 '포토'를 선택하세요"), PICK_FROM_ALBUM);
-    }
-
-    // 앨범에 저장된 파일의 경로
-    public String getImagePath(Uri uri) {
-        String[] data_album = {MediaStore.Images.Media.DATA};
-        Cursor cursor_album = getActivity().getContentResolver().query(uri, data_album, null, null, null);
-        int column_index = cursor_album.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-
-        cursor_album.moveToFirst();
-
-        String imgPath = cursor_album.getString(column_index);
-
-        return imgPath;
+        else
+        {
+            JSONArray jsonTemp = new JSONArray();
+            try{
+                jsonObject.put("name",name);
+                jsonObject.put("title",title);
+                jsonObject.put("date",date);
+                jsonTemp.put(jsonObject);
+                PostingData.setArray(getActivity(),jsonTemp.toString());
+            }catch(JSONException e)
+            {
+                e.printStackTrace();
+            }}
     }
 }

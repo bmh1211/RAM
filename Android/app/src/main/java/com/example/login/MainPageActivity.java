@@ -32,6 +32,7 @@ public class MainPageActivity extends AppCompatActivity {
     Fragment fragment3;
     Fragment fragment_my_page;
     Toolbar toolbar;
+    Bundle mBundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,5 +114,8 @@ public class MainPageActivity extends AppCompatActivity {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+    public void fragDataSend(Bundle bundle) {
+        this.mBundle = bundle;
     }
 }

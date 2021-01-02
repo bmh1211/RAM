@@ -29,6 +29,12 @@ public class Adapter extends BaseAdapter {
         return position;
     }
 
+    public String getIndex(int position)
+    {
+        return arrayList.get(position).getIndex();
+    }
+
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {    //list에 내용 적용
         ViewHolder holder;
@@ -39,11 +45,15 @@ public class Adapter extends BaseAdapter {
             TextView name = (TextView)convertView.findViewById(R.id.posting_name);
             TextView title = (TextView)convertView.findViewById(R.id.posting_title);
             TextView date = (TextView)convertView.findViewById(R.id.posting_date);
+            TextView index = (TextView)convertView.findViewById(R.id.posting_index);
+
 
 
             holder.name = name;
             holder.title = title;
             holder.date = date;
+            holder.index = index;
+
 
 
             convertView.setTag(holder);
@@ -56,17 +66,19 @@ public class Adapter extends BaseAdapter {
         holder.name.setText(posting.getName());
         holder.title.setText(posting.getTitle());
         holder.date.setText(posting.getDate());
+        holder.index.setText(posting.getIndex());
 
 
         return convertView;
     }
 
-    public void addItem(String date, String name, String title) {
+    public void addItem(String date, String name, String title,String index) {
         PostingF posting = new PostingF();
 
         posting.setName(name);
         posting.setTitle(title);
         posting.setDate(date);
+        posting.setIndex(index);
 
         listviewitem.add(posting);
     }
@@ -86,12 +98,11 @@ public class Adapter extends BaseAdapter {
 
         }
         else {
-
             listviewitem.remove(listviewitem.size()-1);
         }
     }
 
     static class ViewHolder {
-        TextView name, date, title;
+        TextView name, date, title,index;
     }
 }
