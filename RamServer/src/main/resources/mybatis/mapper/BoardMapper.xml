@@ -4,22 +4,25 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.ramserver.mapper.BoardMapper">
-    <select id="boardList" parameterType="int" resultType="com.example.ramserver.vo.BoardViewVo">
-        select * from boardView where (boardId>=(#{index}*10) ) order by boardId;
+    <select id="boardList" parameterType="int" resultType="com.example.ramserver.vo.BoardVo">
+        select * from boardView where (boardId>=(#{index}*10) or 0>boardID) order by boardId;
     </select>
-    <select id="boardDetail" parameterType="int" resultType="com.example.ramserver.vo.BoardViewVo">
+    <select id="boardDetail" parameterType="int" resultType="com.example.ramserver.vo.BoardVo">
         select * from boardView where boardId = #{boardId};
     </select>
     <insert id="register" parameterType="com.example.ramserver.vo.BoardVo">
-        insert into board values ((select max(boardId) from board)+1, #{id}, #{title}, #{price}, 0, #{content}, #{img});
+        insert into board values (#{boardId}, #{id}, #{title}, #{price}, 0, #{content}, #{img},#{boardTime});
     </insert>
     <update id="modify" parameterType="com.example.ramserver.vo.BoardVo">
-        update board set title=#{title}, price=#{price}, content=#{content}, img=#{img} where boardId = #{id} limit 1;
+        update board set title=#{title}, price=#{price}, content=#{content}, img=#{img}, boardTime=#{boardTime} where boardId = #{boardId} limit 1;
     </update>
     <delete id="delete" parameterType="int">
         delete from board where boarddId=#{boardId};
     </delete>
     <select id="check" parameterType="com.example.ramserver.vo.BoardCheckVo" resultType="int">
-        select count(*) from board where userId=#{userId} and boardId=#{boardId};
+        select count(*) from board where id=#{userId} and boardId=#{boardId};
+    </select>
+    <select id="max" resultType="int">
+        select max(boardId) from board;
     </select>
 </mapper>

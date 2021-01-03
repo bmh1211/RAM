@@ -3,11 +3,9 @@ package com.example.ramserver.controller;
 import com.example.ramserver.Response.BoardListResponse;
 import com.example.ramserver.Response.BoardResponse;
 import com.example.ramserver.Response.MsgResponse;
-import com.example.ramserver.model.MainBoardPost;
 import com.example.ramserver.model.User;
 import com.example.ramserver.service.BoardService;
 import com.example.ramserver.vo.BoardCheckVo;
-import com.example.ramserver.vo.BoardViewVo;
 import com.example.ramserver.vo.BoardVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +25,7 @@ public class BoardController {
     public BoardListResponse list(@RequestParam("index") int index)
     {
         BoardListResponse response = new BoardListResponse();
-        List<BoardViewVo> result = boardService.boardList(index);
+        List<BoardVo> result = boardService.boardList(index);
         if(result==null)
             response.setMsg("failed");
         else
@@ -41,7 +39,7 @@ public class BoardController {
     public BoardResponse detail(@RequestParam("boardId") int boardId)
     {
         BoardResponse response = new BoardResponse();
-        BoardViewVo result = boardService.boardDetail(boardId);
+        BoardVo result = boardService.boardDetail(boardId);
 
         if(result==null)
             response.setMsg("failed");
@@ -55,6 +53,8 @@ public class BoardController {
     @PostMapping("/register")
     public MsgResponse register(@RequestBody BoardVo boardVo)
     {
+        int maxCount = boardService.max();
+        boardVo.setBoardId(maxCount+1);
         int result = boardService.register(boardVo);
         MsgResponse response = new MsgResponse();
         if(result == 0)

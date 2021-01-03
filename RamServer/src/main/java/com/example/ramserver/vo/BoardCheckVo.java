@@ -8,7 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BoardCheckVo {
-
     private String userId;
     private int boardId;
 }

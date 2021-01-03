@@ -2,7 +2,6 @@ package com.example.ramserver.service;
 
 import com.example.ramserver.mapper.BoardMapper;
 import com.example.ramserver.vo.BoardCheckVo;
-import com.example.ramserver.vo.BoardViewVo;
 import com.example.ramserver.vo.BoardVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,12 +14,12 @@ public class BoardService {
     @Autowired
     public BoardMapper boardMapper;
 
-    public List<BoardViewVo> boardList(int index)
+    public List<BoardVo> boardList(int index)
     {
         return boardMapper.boardList(index);
     }
 
-    public BoardViewVo boardDetail(int boardId)
+    public BoardVo boardDetail(int boardId)
     {
         return boardMapper.boardDetail(boardId);
     }
@@ -44,4 +43,6 @@ public class BoardService {
     {
         return boardMapper.delete(boardId);
     }
+
+    public int max() { return boardMapper.max(); }
 }

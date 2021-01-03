@@ -1,6 +1,6 @@
 package com.example.ramserver.Response;
 
-import com.example.ramserver.vo.BoardViewVo;
+import com.example.ramserver.vo.BoardVo;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,5 +12,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BoardResponse {
     private String msg;
-    private BoardViewVo post;
+    private BoardVo post;
 }
