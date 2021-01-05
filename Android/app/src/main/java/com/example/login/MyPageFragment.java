@@ -3,8 +3,10 @@ package com.example.login;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +20,19 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.login.network.NetworkTask;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.concurrent.ExecutionException;
+
 public class MyPageFragment extends Fragment {
     private Toolbar tb_myPage;
+    private TextView tv_name;
+    private TextView tv_nickname;
+    private TextView tv_email;
     private ListView lv_recentSell;
     private ListView lv_recentBuy;
     private ListView lv_favorite;
@@ -27,8 +40,10 @@ public class MyPageFragment extends Fragment {
     Fragment fragment1;
     Fragment fragment_change_profile;
     Button btn_changeProfile;
+    
+    // 연결 테스트용 버튼
+    Button btn_connection;
 
-    //private PopupWindow pw_sellerInfo;
     private PopupWindow ll_sellerInfo;
     private TextView tv_sellerName;
     private TextView tv_price;
@@ -47,6 +62,42 @@ public class MyPageFragment extends Fragment {
         fragment1 = new BoardFragment();
         fragment_change_profile = new ChangeProfileFragment();
         btn_changeProfile=(Button)view.findViewById(R.id.btn_changeProfile);
+
+        // 리스트들 통신 테스트
+        //this.LoadTest();
+
+        // 연결 테스트용
+        tv_name = (TextView) view.findViewById(R.id.tv_name);
+        tv_nickname = (TextView) view.findViewById(R.id.tv_nickname);
+        tv_email = (TextView) view.findViewById(R.id.tv_email);
+
+        btn_connection=(Button)view.findViewById(R.id.btn_connection);
+        btn_connection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/myPage/info","GET");
+                try{
+                    JSONObject resultObject = new JSONObject(networkTask.execute().get());
+                    if(resultObject == null){
+                        Log.w("연결결과","연결실패");
+                    }
+                    else{
+                        Toast.makeText(getActivity(), resultObject.getString("msg"), Toast.LENGTH_SHORT).show();
+
+                        // 받아온 string 데이터로 기존의 텍스트뷰 내용 바꾸기
+                        tv_name.setText(resultObject.getString("userName"));
+                        tv_nickname.setText(resultObject.getString("nickName"));
+                        tv_email.setText("● 이메일 : "+resultObject.getString("id"));
+                    }
+                }catch(InterruptedException e){
+                    e.printStackTrace();
+                }catch(ExecutionException e){
+                    e.printStackTrace();
+                }catch(JSONException e){
+                    e.printStackTrace();
+                }
+            }
+        });
 
 //        setSupportActionBar(tb_myPage);
 //        getSupportActionBar().setTitle("My Page");
@@ -93,15 +144,12 @@ public class MyPageFragment extends Fragment {
 
                 // 팝업창이 들어갈 뷰를 하나 생성해주고, 해당 뷰의 레이아웃을 LinearLayout 으로 지정
                 View popupView = getLayoutInflater().inflate(R.layout.popupwindow_seller_info,null);
-                //pw_sellerInfo=new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
                 ll_sellerInfo=new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 
                 // 외부영역 선택시 PopUp창 사라짐
-                //pw_sellerInfo.setFocusable(true);
                 ll_sellerInfo.setFocusable(true);
 
                 // 팝업창의 위치를 디스플레이의 중앙에 위치시킴
-                //pw_sellerInfo.showAtLocation(popupView, Gravity.CENTER,0,0);
                 ll_sellerInfo.showAtLocation(popupView, Gravity.CENTER,0,0);
 
                 // 팝업창에 들어갈 TextView 객체 선언
@@ -135,6 +183,35 @@ public class MyPageFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void LoadTest()   //fragment 불릴때 게시글 목록 생성
+            // TODO : 목록 불러오기
+    {
+        NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/","GET");
+
+        try{
+            JSONArray resultObject = new JSONArray(networkTask.execute().get());
+
+            if(resultObject==null){
+                Log.w("연결결과","연결 실패");
+            }
+            else{
+                for(int i = 0; i < resultObject.length(); i++){
+                    // JSONArray에 있는 i번째 JSONObject
+                    // tempObject.getString("key이름")으로 스트링값 받아옴
+                    JSONObject tempObject = resultObject.getJSONObject(i);
+                    
+                    LIST_MENU[i]=tempObject.getString("title");
+                }
+            }
+        }catch(ExecutionException e){
+            e.printStackTrace();
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
     }
 
 //    @Override

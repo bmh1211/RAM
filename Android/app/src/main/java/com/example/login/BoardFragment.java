@@ -1,8 +1,10 @@
 package com.example.login;
 
 import android.content.Context;
+import android.net.Network;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -17,75 +19,31 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.login.network.NetworkTask;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
-
-// todo 필요없으면 다음 스프린트 때 삭제함
-//public class BoardFragment extends Fragment {
-//    private ListView lv_board;
-//    //ArrayList<String> LIST_MENU;
-//    //static final String[] LIST_MENU={"1","2","3","4","5","6","7","8","9","10"};
-//    private Button btn_write;
-//    Fragment postingFragment;
-//    ArrayAdapter board_adapter;
-//    SwipeRefreshLayout swipe_layout_board;
-//
-//
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        View view = inflater.inflate(R.layout.fragment_1, container, false);
-//
-//        lv_board = (ListView)view.findViewById(R.id.lv_board);
-//        postingFragment = new PostingFragment();
-//        btn_write=(Button)view.findViewById(R.id.btn_write);
-//        //LIST_MENU=new ArrayList<>();
-//        board_adapter = new ArrayAdapter(getActivity().getApplicationContext(),android.R.layout.simple_list_item_1,LIST_MENU);
-//        swipe_layout_board = (SwipeRefreshLayout)view.findViewById(R.id.swipe_layout_board);
-//
-//        // TODO : 기존에 가지고 있는 게시판 리스트가 있다면 불러오기(DB에서??)
-////        if(getArguments() != null){
-////            // 번들을 통해서 온 데이터가 있는 경우
-////            String test=getArguments().getString("et_title","");
-////            LIST_MENU.add(test);
-////            board_adapter.notifyDataSetChanged();
-////        }
-//
-//        lv_board.setAdapter(board_adapter);
-//
-//        lv_board.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                String strText = (String) parent.getItemAtPosition(position) ;
-//                Toast.makeText(container.getContext(), strText+"번째 아이템, id : "+id, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        // 게시물 작성 버튼 클릭시
-//        btn_write.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,postingFragment).commit();
-//            }
-//        });
-
-
+//todo 서버에서 게시글 목록 받아올때 (날짜 이름 제목 id) 받아오기
 public class BoardFragment extends Fragment {
 
     Fragment postingFragment;
     SwipeRefreshLayout swipe_layout_board;
     public static final int REQUEST_CODE1 = 1000;  //리스트 터치
     private Adapter PostingAdapter;
-    private String name, title, date;
+    private String name, title, date,index;
     private Handler handler;
     private ListView listView;
     private Button btn_write;
+    private String TAG = "BoardFragment";
     private int adapterPosition;
+    private JSONArray PostingArray;
     Context ct;
+    MainPageActivity activity;
 
 
     @Override
@@ -94,15 +52,14 @@ public class BoardFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_board, container, false);  //https://swalloow.tistory.com/87
 
         ct = container.getContext();
-
         PostingAdapter = new Adapter();
         listView = (ListView) view.findViewById(R.id.lv_board);
         listView.setAdapter(PostingAdapter);
         postingFragment = new PostingFragment();
         btn_write=(Button)view.findViewById(R.id.btn_write);
         swipe_layout_board = (SwipeRefreshLayout)view.findViewById(R.id.swipe_layout_board);
-        LoadPosting(ct);
-
+        GetPosting(ct);
+        LoadPosting(ct,PostingArray);
 
         // 게시물 작성 버튼 클릭시
         btn_write.setOnClickListener(new View.OnClickListener() {
@@ -112,16 +69,24 @@ public class BoardFragment extends Fragment {
             }
         });
 
-        //게시글 눌렀을때 게시글 보여줌
+        //게시글 눌렀을 시
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                adapterPosition = position;
-                PostingAdapter.removeItem(position);
-                //Intent intent = new Intent(BoardFragment.this, PostingFragment.class); //게시판에서 정보 받아옴
-                //startActivityForResult(intent,REQUEST_CODE1);
+                index = PostingAdapter.getIndex(position);
+                title = "제목";
+                name = "이름";
+                String content = "내용";
+                date = "날짜";
+                Toast.makeText(ct ,name,Toast.LENGTH_LONG).show();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("index", index);
+                        bundle.putString("name", name);
+                        //bundle.putSerializable() : 객체를 보낼때 사용함
+                        activity.fragDataSend(bundle);
             }
         });
+
 
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -164,23 +129,46 @@ public class BoardFragment extends Fragment {
         // Inflate the layout for this fragment
         return view;
     }
-    private void LoadPosting(Context context)   //fragment 불릴때 게시글 목록 생성
+
+    private void GetPosting(Context context)
     {
-        String temp = PostingData.getArray(getActivity());
-        if(temp != "empty")
+        NetworkTask networkTask = new NetworkTask(context,"http://3.35.48.170:3000/board/list?index=0","GET");
+        try{
+            JSONObject PostingObject = new JSONObject(networkTask.execute().get());
+            if(PostingObject == null)
+            {
+                Log.e(TAG,"연결실패");
+            }
+            else{
+                PostingArray = PostingObject.getJSONArray("list");
+                Log.d(TAG,PostingArray.toString());
+                Log.d(TAG,PostingArray.getJSONObject(0).toString());
+                Log.d(TAG,PostingArray.getJSONObject(0).getString("id"));
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        } catch (
+                ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void LoadPosting(Context context, JSONArray PostingArray)   //fragment 불릴때 게시글 목록 생성
+    {
+        if(PostingArray.toString().length()!=0)
         {
             try{
-                JSONArray response = new JSONArray(temp);
-                for(int i = 0;i<response.length() ;i++) {
-                    JSONObject jsonObject = response.getJSONObject(i);
-                    Log.d("test 받아오기 제목",jsonObject.getString("title"));
-                    Log.d("test 받아오기 내용",jsonObject.getString("name"));
-                    Log.d("test 받아오기 날짜",jsonObject.getString("date"));
-                    Log.d("test 받아온 목록",temp);
-                    name = jsonObject.getString("name");
+                for(int i = 0;i<PostingArray.length() ;i++) {
+                    JSONObject jsonObject = PostingArray.getJSONObject(i);
+                    Log.d(TAG,PostingArray.toString());
+                    name = jsonObject.getString("nickName");
                     title = jsonObject.getString("title");
-                    date = jsonObject.getString("date");
-                    PostingAdapter.addItem(date, name,title);
+                    date = jsonObject.getString("id");
+                    index = "1";
+                    PostingAdapter.addItem(date, name, title, index);
                     PostingAdapter.notifyDataSetChanged();
                 }
             }catch(JSONException e)
@@ -193,5 +181,24 @@ public class BoardFragment extends Fragment {
             Toast.makeText((MainPageActivity)getActivity(), "게시물이 없음", Toast.LENGTH_SHORT).show();
         }
     }
+
 }
 // listview 새로고침 reference : https://medium.com/@bluesh55/android-%EB%8B%B9%EA%B2%A8%EC%84%9C-%EC%83%88%EB%A1%9C%EA%B3%A0%EC%B9%A8-%EA%B0%84%EB%8B%A8%ED%95%98%EA%B2%8C-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0-a42846c14c23
+
+//    @Override
+//    public void onAttach(@NonNull Context context) {
+//        super.onAttach(context);
+//        ct = context;
+//        PostingAdapter = new Adapter();
+//        listView = (ListView) view.findViewById(R.id.lv_board);
+//        listView.setAdapter(PostingAdapter);
+//        postingFragment = new PostingFragment();
+//        btn_write=(Button)view.findViewById(R.id.btn_write);
+//        swipe_layout_board = (SwipeRefreshLayout)view.findViewById(R.id.swipe_layout_board);
+//        LoadPosting(ct);
+//
+//    }
+
+
+
+
