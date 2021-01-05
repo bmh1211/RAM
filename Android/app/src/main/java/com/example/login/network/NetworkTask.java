@@ -2,10 +2,15 @@ package com.example.login.network;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import com.example.login.HTTPConnetction;
 
 import org.json.JSONObject;
+
+import java.io.IOException;
 
 import okhttp3.internal.http.HttpMethod;
 
@@ -15,6 +20,7 @@ public class NetworkTask extends AsyncTask<Void, Void, String> {
     JSONObject values;
     String method;
     Context context;
+    String filepath;
 
     public NetworkTask(Context context,String url, JSONObject values, String HttpMethod){
         this.url = url;
@@ -28,6 +34,13 @@ public class NetworkTask extends AsyncTask<Void, Void, String> {
         this.method=HttpMethod;
         this.context=context;
     }
+    public NetworkTask(Context context,String url, JSONObject values,String filePath, String HttpMethod){
+        this.url = url;
+        this.values = values;
+        this.method=HttpMethod;
+        this.context=context;
+        this.filepath=filePath;
+    }
 
     @Override
     protected void onPreExecute() {
@@ -35,15 +48,23 @@ public class NetworkTask extends AsyncTask<Void, Void, String> {
         //progress bar를 보여주는 등등의 행위
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected String doInBackground(Void... params) {
-        JSONObject result;
+        JSONObject result=null;
         HTTPConnetction requestHttpURLConnection = new HTTPConnetction();
         if(method.equals("POST")){
             result = requestHttpURLConnection.HttpPost(context,url, values);
         }
         else if(method.equals("GET")){
             result = requestHttpURLConnection.HttpGet(context,url);
+        }
+        else if(method.equals("FILE")){
+            try {
+                result=requestHttpURLConnection.HttpFilePost(context,url,filepath,values);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         else{
             result=null;

@@ -18,7 +18,6 @@ public class MainBoardController {
 
         return mainBoardPost;
     }
-
 //    @PostMapping("/all")
 //    public List<MainBoardPost> ShowMainBoardList(
 //            @RequestBody List<MainBoardPost> mainBoardPostList)
@@ -28,7 +27,4 @@ public class MainBoardController {
 //
 //        return mainBoardPostList;
 //    }
-
-
-
 }

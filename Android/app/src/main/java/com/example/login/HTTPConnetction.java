@@ -1,16 +1,32 @@
 package com.example.login;
 
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+
+import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -18,9 +34,11 @@ import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 public class HTTPConnetction { //ddddd
@@ -107,6 +125,64 @@ public class HTTPConnetction { //ddddd
         return result;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static JSONObject HttpFilePost(Context context, String URL, String filePath, JSONObject jsonObject) throws IOException {
+        JSONObject result = null;
+        File file=new File(filePath);
+
+        try{
+            URL url = new URL(URL);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            String boundary= UUID.randomUUID().toString();
+            connection.setRequestProperty("content-type", "multipart/form-data;boundary="+boundary);
+            connection.setRequestProperty("Accept","application/json");
+            connection.setRequestMethod("POST");
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            connection.setUseCaches(false);
+            //connection.setConnectTimeout(15000);
+            setCookieHeader(connection,context);
+
+            DataOutputStream request=new DataOutputStream(connection.getOutputStream());
+            request.writeBytes("--" + boundary + "\r\n");
+            request.writeBytes("Content-Disposition: form-data; name=\"description\"\r\n\r\n");
+            request.writeBytes("fileContent" + "\r\n");
+
+            request.writeBytes("--" + boundary + "\r\n");
+            request.writeBytes("Content-Disposition: form-data; name=\"file\"; filename=\"" + file.getName() + "\"\r\n\r\n");
+            //byte[] imageBytes= Files.readAllBytes(file.toPath());
+            request.write(FileUtils.readFileToByteArray(file));
+            request.writeBytes("\r\n");
+
+            request.writeBytes("--" + boundary + "--\r\n");
+            request.flush();
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+                getCookieHeader(connection,context);
+                result = new JSONObject(response.toString());
+            } else {
+                return null;
+            }
+
+        } catch (ConnectException e) {
+            Log.e("test", "ConnectException");
+            e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
 
     //쿠키 설정
     private static void setCookieHeader(HttpURLConnection con,Context context){
@@ -141,5 +217,7 @@ public class HTTPConnetction { //ddddd
         edit.putString("sessionid",sessionID);
         edit.apply(); //비동기 처리
     }
+
+
 
 }

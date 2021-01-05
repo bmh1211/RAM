@@ -4,11 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.biometric.BiometricPrompt;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -66,7 +69,9 @@ public class LogInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
-
+        if(!CheckPermission()){
+            Log.e("Error","Permission 요청 에러");
+        }
 
 
         // ======================= 사용할 객체들 =====================//
@@ -114,8 +119,8 @@ public class LogInActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                //NetworkTask networkTask=new NetworkTask(getApplicationContext(),"http://192.168.56.1:3000/signin/submit",jsonObject,"POST");
-                NetworkTask networkTask=new NetworkTask(getApplicationContext(),"http://3.35.48.170:3000/signin/submit",jsonObject,"POST");
+                NetworkTask networkTask=new NetworkTask(getApplicationContext(),"http://192.168.56.1:3000/signin/submit",jsonObject,"POST");
+                //NetworkTask networkTask=new NetworkTask(getApplicationContext(),"http://3.35.48.170:3000/signin/submit",jsonObject,"POST");
                 try {
                     JSONObject resultObject=new JSONObject(networkTask.execute().get());
                     if(resultObject==null){
@@ -281,4 +286,45 @@ public class LogInActivity extends AppCompatActivity {
         // 지문인식 창 띄우기
         biometricPrompt.authenticate(promptInfo);
     }
+    public boolean CheckPermission(){
+        String[] PERMISSIONS= {android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if(hasPermissions(getApplicationContext(),PERMISSIONS)){
+            return true;
+        }
+        return false;
+    }
+    public boolean hasPermissions(Context context, String... permissions){
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M&&context!=null&&permissions!=null){
+            for(String permission: permissions){
+                if(ActivityCompat.checkSelfPermission(context,permission)!= PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(LogInActivity.this,permissions,100);
+                }
+            }
+        }
+        return true;
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,@NonNull String[] permissions,@NonNull int[] grantResults){
+        switch (requestCode) {
+            case 1: {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    Toast.makeText(getApplicationContext(), "permission was granted", Toast.LENGTH_SHORT).show();
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(getApplicationContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
+    }
+
 }
