@@ -44,7 +44,6 @@ public class MyPageFragment extends Fragment {
     // 연결 테스트용 버튼
     Button btn_connection;
 
-    //private PopupWindow pw_sellerInfo;
     private PopupWindow ll_sellerInfo;
     private TextView tv_sellerName;
     private TextView tv_price;
@@ -65,7 +64,7 @@ public class MyPageFragment extends Fragment {
         btn_changeProfile=(Button)view.findViewById(R.id.btn_changeProfile);
 
         // 리스트들 통신 테스트
-        this.LoadTest();
+        //this.LoadTest();
 
         // 연결 테스트용
         tv_name = (TextView) view.findViewById(R.id.tv_name);
@@ -145,15 +144,12 @@ public class MyPageFragment extends Fragment {
 
                 // 팝업창이 들어갈 뷰를 하나 생성해주고, 해당 뷰의 레이아웃을 LinearLayout 으로 지정
                 View popupView = getLayoutInflater().inflate(R.layout.popupwindow_seller_info,null);
-                //pw_sellerInfo=new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
                 ll_sellerInfo=new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
 
                 // 외부영역 선택시 PopUp창 사라짐
-                //pw_sellerInfo.setFocusable(true);
                 ll_sellerInfo.setFocusable(true);
 
                 // 팝업창의 위치를 디스플레이의 중앙에 위치시킴
-                //pw_sellerInfo.showAtLocation(popupView, Gravity.CENTER,0,0);
                 ll_sellerInfo.showAtLocation(popupView, Gravity.CENTER,0,0);
 
                 // 팝업창에 들어갈 TextView 객체 선언
@@ -190,6 +186,7 @@ public class MyPageFragment extends Fragment {
     }
 
     private void LoadTest()   //fragment 불릴때 게시글 목록 생성
+            // TODO : 목록 불러오기
     {
         NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/","GET");
 
