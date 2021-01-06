@@ -54,61 +54,180 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_name"
-            android:layout_width="300dp"
+            android:id="@+id/tv_point"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="168dp"
-            android:text="● 이   름 : ( 이 름 )"
+            android:layout_marginTop="160dp"
+            android:text="● 평   점 : "
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintHorizontal_bias="0.146"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_nickname"
-            android:layout_width="300dp"
+            android:id="@+id/tv_point_real"
+            android:layout_width="184dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="45dp"
-            android:text="● 닉네임 : ( 닉 네 임 )"
+            android:layout_marginTop="160dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.142"
+            app:layout_constraintStart_toEndOf="@+id/tv_point"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="● 이   름 : "
+            app:layout_constraintEnd_toEndOf="@+id/tv_point"
+            app:layout_constraintHorizontal_bias="0.155"
+            app:layout_constraintStart_toStartOf="@+id/tv_point"
+            app:layout_constraintTop_toBottomOf="@+id/tv_point" />
+
+        <TextView
+            android:id="@+id/tv_name_real"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.172"
+            app:layout_constraintStart_toEndOf="@+id/tv_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_point_real" />
+
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="● 닉네임 : "
             app:layout_constraintEnd_toEndOf="@+id/tv_name"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/tv_name"
             app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
         <TextView
-            android:id="@+id/tv_email"
-            android:layout_width="300dp"
+            android:id="@+id/tv_nickname_real"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="45dp"
-            android:text="● 이메일 : ( 이 메 일 )"
+            android:layout_marginTop="20dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.177"
+            app:layout_constraintStart_toEndOf="@+id/tv_nickname"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name_real" />
+
+        <TextView
+            android:id="@+id/tv_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="● 이메일 : "
             app:layout_constraintEnd_toEndOf="@+id/tv_nickname"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/tv_nickname"
             app:layout_constraintTop_toBottomOf="@+id/tv_nickname" />
 
         <TextView
-            android:id="@+id/tv_favoriteRegion"
-            android:layout_width="300dp"
+            android:id="@+id/tv_email_real"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="45dp"
-            android:text="● 선호하는 거래 장소"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="20dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.166"
+            app:layout_constraintStart_toEndOf="@+id/tv_email"
+            app:layout_constraintTop_toBottomOf="@+id/tv_nickname_real" />
+
+        <TextView
+            android:id="@+id/tv_phoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="● 휴대 전화 : "
             app:layout_constraintEnd_toEndOf="@+id/tv_email"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/tv_email"
             app:layout_constraintTop_toBottomOf="@+id/tv_email" />
 
-        <Button
-            android:id="@+id/btn_connection"
+        <TextView
+            android:id="@+id/tv_phoneNumber_real"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.216"
+            app:layout_constraintStart_toEndOf="@+id/tv_phoneNumber"
+            app:layout_constraintTop_toBottomOf="@+id/tv_email_real" />
+
+        <TextView
+            android:id="@+id/tv_favoriteRegion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="280dp"
-            android:text="연결 테스트"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.848"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginTop="20dp"
+            android:text="● 선호 지역 : "
+            app:layout_constraintEnd_toEndOf="@+id/tv_phoneNumber"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tv_phoneNumber"
+            app:layout_constraintTop_toBottomOf="@+id/tv_phoneNumber" />
 
+        <TextView
+            android:id="@+id/tv_favoriteRegion_real"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.216"
+            app:layout_constraintStart_toEndOf="@+id/tv_phoneNumber"
+            app:layout_constraintTop_toBottomOf="@+id/tv_phoneNumber_real" />
+
+        <TextView
+            android:id="@+id/tv_bank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="● 은   행 : "
+            app:layout_constraintEnd_toEndOf="@+id/tv_favoriteRegion"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tv_favoriteRegion"
+            app:layout_constraintTop_toBottomOf="@+id/tv_favoriteRegion" />
+
+        <TextView
+            android:id="@+id/tv_bank_real"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.055"
+            app:layout_constraintStart_toEndOf="@+id/tv_favoriteRegion"
+            app:layout_constraintTop_toBottomOf="@+id/tv_favoriteRegion_real" />
+
+        <TextView
+            android:id="@+id/tv_bankaccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="● 은행 계좌 : "
+            app:layout_constraintEnd_toEndOf="@+id/tv_bank"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tv_bank"
+            app:layout_constraintTop_toBottomOf="@+id/tv_bank" />
+
+        <TextView
+            android:id="@+id/tv_bankaccount_real"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.196"
+            app:layout_constraintStart_toEndOf="@+id/tv_bank"
+            app:layout_constraintTop_toBottomOf="@+id/tv_bank_real" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
 

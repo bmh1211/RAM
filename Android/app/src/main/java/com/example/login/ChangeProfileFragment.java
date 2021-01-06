@@ -19,15 +19,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ChangeProfileFragment extends Fragment {
-    private EditText et_present_password;
     private EditText et_change_password;
     private EditText et_check_password;
     private EditText et_change_nickname;
-    private TextView tv_present_password;
     private TextView tv_change_password;
     private TextView tv_check_password;
     private TextView tv_change_nickname;
-    private ImageView iv_present_password;
     private ImageView iv_change_password;
     private ImageView iv_check_password;
     private ImageView iv_change_nickname;
@@ -47,15 +44,12 @@ public class ChangeProfileFragment extends Fragment {
     }
 
     public void InitializeView(View view){
-        et_present_password=(EditText)view.findViewById(R.id.et_present_password);
         et_change_password=(EditText)view.findViewById(R.id.et_change_password);
         et_check_password=(EditText)view.findViewById(R.id.et_check_password);
         et_change_nickname=(EditText)view.findViewById(R.id.et_change_nickname);
-        tv_present_password=(TextView)view.findViewById(R.id.tv_present_password);
         tv_change_password=(TextView)view.findViewById(R.id.tv_change_password);
         tv_check_password=(TextView)view.findViewById(R.id.tv_check_password);
         tv_change_nickname=(TextView)view.findViewById(R.id.tv_change_nickname);
-        iv_present_password=(ImageView)view.findViewById(R.id.iv_present_password);
         iv_change_password=(ImageView)view.findViewById(R.id.iv_change_password);
         iv_check_password=(ImageView)view.findViewById(R.id.iv_check_password);
         iv_change_nickname=(ImageView)view.findViewById(R.id.iv_change_nickname);
@@ -79,35 +73,10 @@ public class ChangeProfileFragment extends Fragment {
                 ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_my_page).commit();
             }
         });
-
-
     }
 
     // EditText 이벤트 리스너 함수
     public void SetTextChangeListener(){
-        // TODO : 원래 비밀번호와 같은지 체크
-        et_present_password.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                boolean PW_IsCorrect=true; // 임시
-
-                if(PW_IsCorrect==true){
-                    et_change_password.setEnabled(true);
-                    et_check_password.setEnabled(true);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
         // 변경하고자 하는 비밀번호 입력
         et_change_password.addTextChangedListener(new TextWatcher() {
             @Override

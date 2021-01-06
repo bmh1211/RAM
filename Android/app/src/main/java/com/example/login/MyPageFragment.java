@@ -7,6 +7,9 @@ import androidx.fragment.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,6 +18,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -31,11 +36,16 @@ import java.util.concurrent.ExecutionException;
 
 public class MyPageFragment extends Fragment {
     private Toolbar tb_myPage;
-    private TextView tv_name;
-    private TextView tv_nickname;
-    private TextView tv_email;
+    private ImageView iv_profile;
+    private TextView tv_name_real;
+    private TextView tv_nickname_real;
+    private TextView tv_email_real;
+    private TextView tv_favoriteRegion_real;
+    private TextView tv_phoneNumber_real;
+    private TextView tv_bank_real;
+    private TextView tv_bankaccount_real;
+    private TextView tv_point_real;
 
-    static final String[] LIST_MENU={"LIST_1","LIST_2","LIST_3"};
     Fragment fragment1;
     Fragment fragment_change_profile;
     Button btn_changeProfile;
@@ -49,8 +59,9 @@ public class MyPageFragment extends Fragment {
     Fragment fragment_sell_list;
     Fragment fragment_pick_list;
 
-    // 연결 테스트용 버튼
-    Button btn_connection;
+    private PopupWindow pw_checkPW;
+    private Button btn_check;
+    private EditText et_present_password;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,41 +74,21 @@ public class MyPageFragment extends Fragment {
         btn_changeProfile=(Button)view.findViewById(R.id.btn_changeProfile);
         btn_list_trade_pick=(Button)view.findViewById(R.id.btn_list_trade_pick);
 
-        // 리스트들 통신 테스트
-        //this.LoadTest();
+        iv_profile = (ImageView) view.findViewById(R.id.iv_profile);
+        tv_name_real = (TextView) view.findViewById(R.id.tv_name_real);
+        tv_nickname_real = (TextView) view.findViewById(R.id.tv_nickname_real);
+        tv_email_real = (TextView) view.findViewById(R.id.tv_email_real);
+        tv_favoriteRegion_real = (TextView) view.findViewById(R.id.tv_favoriteRegion_real);
+        tv_phoneNumber_real = (TextView) view.findViewById(R.id.tv_phoneNumber_real);
+        tv_bank_real = (TextView) view.findViewById(R.id.tv_bank_real);
+        tv_bankaccount_real = (TextView) view.findViewById(R.id.tv_bankaccount_real);
+        tv_point_real = (TextView) view.findViewById(R.id.tv_point_real);
 
-        // 연결 테스트용
-        tv_name = (TextView) view.findViewById(R.id.tv_name);
-        tv_nickname = (TextView) view.findViewById(R.id.tv_nickname);
-        tv_email = (TextView) view.findViewById(R.id.tv_email);
+        // 마이페이지에 유저 데이터 출력
+        this.GetUserData();
 
-        btn_connection=(Button)view.findViewById(R.id.btn_connection);
-        btn_connection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/myPage/info","GET");
-                try{
-                    JSONObject resultObject = new JSONObject(networkTask.execute().get());
-                    if(resultObject == null){
-                        Log.w("연결결과","연결실패");
-                    }
-                    else{
-                        Toast.makeText(getActivity(), resultObject.getString("msg"), Toast.LENGTH_SHORT).show();
-
-                        // 받아온 string 데이터로 기존의 텍스트뷰 내용 바꾸기
-                        tv_name.setText(resultObject.getString("userName"));
-                        tv_nickname.setText(resultObject.getString("nickName"));
-                        tv_email.setText("● 이메일 : "+resultObject.getString("id"));
-                    }
-                }catch(InterruptedException e){
-                    e.printStackTrace();
-                }catch(ExecutionException e){
-                    e.printStackTrace();
-                }catch(JSONException e){
-                    e.printStackTrace();
-                }
-            }
-        });
+        // 마이페이지에 유저 프로필 사진 출력
+        // todo : this.함수();
 
         btn_list_trade_pick.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,36 +107,40 @@ public class MyPageFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(container.getContext(), "정보수정", Toast.LENGTH_SHORT).show();
-                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_change_profile).commit();
+                //((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_change_profile).commit();
+                pwCheckPopUp();
             }
         });
 
         return view;
     }
 
-    private void LoadTest()   //fragment 불릴때 게시글 목록 생성
-            // TODO : 목록 불러오기
-    {
-        NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/","GET");
-
+    public void GetUserData(){
+        NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/myPage/info","GET");
         try{
-            JSONArray resultObject = new JSONArray(networkTask.execute().get());
+            JSONObject resultObject = new JSONObject(networkTask.execute().get());
+            JSONObject userObject = resultObject.optJSONObject("user");
 
-            if(resultObject==null){
-                Log.w("연결결과","연결 실패");
+            if(resultObject == null){
+                Log.w("연결결과","연결실패");
             }
             else{
-                for(int i = 0; i < resultObject.length(); i++){
-                    // JSONArray에 있는 i번째 JSONObject
-                    // tempObject.getString("key이름")으로 스트링값 받아옴
-                    JSONObject tempObject = resultObject.getJSONObject(i);
-                    
-                    LIST_MENU[i]=tempObject.getString("title");
-                }
+                Toast.makeText(getActivity(), resultObject.getString("msg"), Toast.LENGTH_SHORT).show();
+                Log.w("resultObject : ",userObject.toString());
+
+                // userObject => {"id":"bmh1211@gmail.com","password":"1234","userName":"Bang","phoneNumber":"010-5014-3278","nickName":"Mino","bank":"HANA","account":"74813243423","point":13,"region":"INCHEON"}
+                tv_name_real.setText(userObject.getString("userName"));
+                tv_nickname_real.setText(userObject.getString("nickName"));
+                tv_email_real.setText(userObject.getString("id"));
+                tv_favoriteRegion_real.setText(userObject.getString("region"));
+                tv_phoneNumber_real.setText(userObject.getString("phoneNumber"));
+                tv_bank_real.setText(userObject.getString("bank"));
+                tv_bankaccount_real.setText(userObject.getString("account"));
+                tv_point_real.setText(Integer.toString(userObject.getInt("point")));
             }
-        }catch(ExecutionException e){
-            e.printStackTrace();
         }catch(InterruptedException e){
+            e.printStackTrace();
+        }catch(ExecutionException e){
             e.printStackTrace();
         }catch(JSONException e){
             e.printStackTrace();
@@ -191,6 +186,62 @@ public class MyPageFragment extends Fragment {
                 pw_chooser.dismiss();
             }
         });
+    }
+
+    public void pwCheckPopUp(){
+        NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/myPage/info","GET");
+        try{
+            JSONObject resultObject = new JSONObject(networkTask.execute().get());
+            JSONObject userObject = resultObject.optJSONObject("user");
+
+            if(resultObject == null){
+                Log.w("연결결과","연결실패");
+            }
+            else{
+                Toast.makeText(getActivity(), resultObject.getString("msg"), Toast.LENGTH_SHORT).show();
+                Log.w("resultObject : ",userObject.toString());
+
+                // userObject => {"id":"bmh1211@gmail.com","password":"1234","userName":"Bang","phoneNumber":"010-5014-3278","nickName":"Mino","bank":"HANA","account":"74813243423","point":13,"region":"INCHEON"}
+                View popupView = getLayoutInflater().inflate(R.layout.popupwindow_check_password,null);
+                pw_checkPW = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+                pw_checkPW.setFocusable(true);
+                pw_checkPW.showAtLocation(popupView, Gravity.CENTER,0,0);
+
+                et_present_password = (EditText)pw_checkPW.getContentView().findViewById(R.id.et_present_password);
+                btn_check = (Button)pw_checkPW.getContentView().findViewById(R.id.btn_check);
+
+                btn_check.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try{
+                            Log.w("입력한 비밀번호",et_present_password.getText().toString());
+                            Log.w("가져온 비밀번호",userObject.getString("password"));
+
+                            if(et_present_password.getText().toString().equals(userObject.getString("password"))){
+                                // 비밀번호가 일치하면 정보수정 프레그먼트로 이동
+                                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_change_profile).commit();
+
+                                pw_checkPW.dismiss();
+                            }
+                            else{
+                                // 비밀번호가 일치하지 않으면 써놓은 비밀번호 지우기
+                                Toast.makeText(getActivity(), "비밀번호가 일치하지 않습니다", Toast.LENGTH_SHORT).show();
+                                et_present_password.setText(null);
+                            }
+                        }
+                        catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }catch(ExecutionException e){
+            e.printStackTrace();
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
     }
 
 //    @Override

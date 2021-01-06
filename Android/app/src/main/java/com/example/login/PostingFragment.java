@@ -199,6 +199,28 @@ public class PostingFragment extends Fragment {
         }
     }
 
+    // todo : file path 가져와서 서버로 파일 전송
+    public void sendImageFile(String path){
+//        String path="";
+//        // 사진의 절대경로
+//        path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/mino.jpg";
+        NetworkTask fileNetworkTask = new NetworkTask(((MainPageActivity)getActivity()).getApplicationContext(),"http://3.35.48.170:3000/chat/profileImage",null,path,"FILE");
+
+        try {
+            JSONObject resultFileObject = new JSONObject(fileNetworkTask.execute().get());
+
+            if(resultFileObject == null){
+                Log.w("실패 알림","연결 실패");
+            }
+        }catch(ExecutionException e){
+            e.printStackTrace();
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+    }
+
     private void saveText(String title, String name, String date){
         String temp = PostingData.getArray(getActivity());
         JSONObject jsonObject = new JSONObject();
