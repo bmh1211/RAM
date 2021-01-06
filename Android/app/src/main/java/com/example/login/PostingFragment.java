@@ -30,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import com.example.login.Data.PostingData;
 import com.example.login.network.NetworkTask;
 
 import org.json.JSONArray;
