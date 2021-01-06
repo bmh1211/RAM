@@ -2,10 +2,12 @@ package com.example.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,8 +16,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.login.network.NetworkTask;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.concurrent.ExecutionException;
 
 
 public class SignUpActivity extends AppCompatActivity {
@@ -25,6 +31,8 @@ public class SignUpActivity extends AppCompatActivity {
     public Boolean check3 = false;
     public Boolean check4 = true;
     public Boolean check5 = false;
+    public Context context;
+    public String TAG = "SignUpActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +79,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(et_name.getText().toString().length() > 5 || et_name.getText().toString().length() == 0)
+                if(et_name.getText().toString().length() > 4 || et_name.getText().toString().length() == 0)
                 {
                     tv_1.setText("4자 이내로 작성해주세요");
                     iv_err1.setVisibility(View.VISIBLE);
@@ -174,7 +182,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(et_nickname.getText().toString().length() > 10)
+                if(et_nickname.getText().toString().length() < 10)
                 {
                     tv_5.setText("사용할 수 있는 닉네임입니다.");
                     iv_err5.setVisibility(View.VISIBLE);
@@ -206,18 +214,43 @@ public class SignUpActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject();
 
                     try {
-                        jsonObject.put("name",et_name.getText() );                      //회원가입 정보 json객체 생성
+                        jsonObject.put("id", et_email.getText());//회원가입 정보 json객체 생성
                         jsonObject.put("password", et_pw.getText());
-                        jsonObject.put("email", et_email.getText());
-                        jsonObject.put("nickname", et_nickname.getText());
+                        jsonObject.put("userName",et_name.getText() );
+                        jsonObject.put("phoneNumber", "01051955793");
+                        jsonObject.put("nickName", et_nickname.getText());
+                        jsonObject.put("bank", "KB");
+                        jsonObject.put("account", "288002");
+                        jsonObject.put("region", "seoul");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
-                    Toast.makeText(SignUpActivity.this, "완료되었습니다!", Toast.LENGTH_SHORT).show();
-                    Toast.makeText(SignUpActivity.this, "이메일을 인증해주세요!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(), LogInActivity.class);
-                    startActivity(intent);
+                    Log.d(TAG,jsonObject.toString());
+                    NetworkTask networkTask=new NetworkTask(getApplicationContext(),"http://3.35.48.170:3000/signup/submit",jsonObject,"POST");
+                    try {
+                        JSONObject resultObject=new JSONObject(networkTask.execute().get());
+                        if(resultObject==null){
+                            Log.d(TAG,"연결 실패");
+                            return;
+                        }
+                        String resultString=resultObject.getString("msg");
+                        Log.d(TAG,resultString);
+                        if(resultString.equals("Join Success")){
+                            Toast.makeText(SignUpActivity.this, "완료되었습니다!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUpActivity.this, "이메일을 인증해주세요!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), LogInActivity.class);
+                            startActivity(intent);
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(), "회원가입 실패", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
                 else
                 {
