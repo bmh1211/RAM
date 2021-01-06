@@ -2,36 +2,27 @@ package com.example.login;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 //import android.support.v7.app.ActionBar
-import android.os.Environment;
-import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.example.login.Data.PostingData;
+import com.example.login.Data.PostingData;
 import com.example.login.network.NetworkTask;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.concurrent.ExecutionException;
 
 public class MainPageActivity extends AppCompatActivity {
@@ -43,6 +34,7 @@ public class MainPageActivity extends AppCompatActivity {
     Fragment fragment_my_page;
     Toolbar toolbar;
     Bundle mBundle;
+    String TAG = "MainPageActivity";
 
 
     @Override
@@ -128,5 +120,30 @@ public class MainPageActivity extends AppCompatActivity {
     }
     public void fragDataSend(Bundle bundle) {
         this.mBundle = bundle;
+    }
+
+    //게시판목록 미리 받아놓기
+    private void getPostingData(Context context)
+    {
+        NetworkTask networkTask = new NetworkTask(context,"http://3.35.48.170:3000/board/list?index=0","GET");
+        try{
+            JSONObject PostingObject = new JSONObject(networkTask.execute().get());
+            if(PostingObject == null)
+            {
+                Log.e(TAG,"연결실패");
+            }
+            else{
+                PostingData.setArray(context,PostingObject.getJSONArray("list"));
+                Log.d(TAG,PostingObject.getJSONArray("list").toString());
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        } catch (
+                ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
