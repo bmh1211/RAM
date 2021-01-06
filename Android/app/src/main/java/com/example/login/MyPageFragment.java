@@ -2,6 +2,7 @@ package com.example.login;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
 import android.content.Intent;
@@ -33,23 +34,23 @@ public class MyPageFragment extends Fragment {
     private TextView tv_name;
     private TextView tv_nickname;
     private TextView tv_email;
-    private ListView lv_recentSell;
-    private ListView lv_recentBuy;
-    private ListView lv_favorite;
+
     static final String[] LIST_MENU={"LIST_1","LIST_2","LIST_3"};
     Fragment fragment1;
     Fragment fragment_change_profile;
     Button btn_changeProfile;
-    
+    Button btn_list_trade_pick;
+
+    private PopupWindow pw_chooser;
+    private Button btn_buy_list;
+    private Button btn_sell_list;
+    private Button btn_pick_list;
+    Fragment fragment_buy_list;
+    Fragment fragment_sell_list;
+    Fragment fragment_pick_list;
+
     // 연결 테스트용 버튼
     Button btn_connection;
-
-    //private PopupWindow pw_sellerInfo;
-    private PopupWindow ll_sellerInfo;
-    private TextView tv_sellerName;
-    private TextView tv_price;
-    private TextView tv_location;
-    private TextView tv_evalPoint;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,15 +58,13 @@ public class MyPageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_my_page, container, false);
 
 //        tb_myPage = (Toolbar)view.findViewById(R.id.tb_myPage);
-        lv_recentSell=(ListView)view.findViewById(R.id.lv_recentSell);
-        lv_recentBuy=(ListView)view.findViewById(R.id.lv_recentBuy);
-        lv_favorite=(ListView)view.findViewById(R.id.lv_favorite);
         fragment1 = new BoardFragment();
         fragment_change_profile = new ChangeProfileFragment();
         btn_changeProfile=(Button)view.findViewById(R.id.btn_changeProfile);
+        btn_list_trade_pick=(Button)view.findViewById(R.id.btn_list_trade_pick);
 
         // 리스트들 통신 테스트
-        this.LoadTest();
+        //this.LoadTest();
 
         // 연결 테스트용
         tv_name = (TextView) view.findViewById(R.id.tv_name);
@@ -100,83 +99,18 @@ public class MyPageFragment extends Fragment {
             }
         });
 
+        btn_list_trade_pick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setPopupChooser();
+            }
+        });
+
 //        setSupportActionBar(tb_myPage);
 //        getSupportActionBar().setTitle("My Page");
 //        getSupportActionBar().setDisplayShowCustomEnabled(true);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //자동으로 뒤로가기 버튼을 만들어줌
 //        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_dialog_close_dark); //뒤로가기버튼 모양
-
-        // 리스트에 들어갈 내용은 나중에 변경시켜줄 예정
-        ArrayAdapter sell_adapter = new ArrayAdapter(container.getContext(),android.R.layout.simple_list_item_1,LIST_MENU);
-        ArrayAdapter buy_adapter = new ArrayAdapter(container.getContext(),android.R.layout.simple_list_item_1,LIST_MENU);
-        ArrayAdapter favorite_adapter = new ArrayAdapter(container.getContext(),android.R.layout.simple_list_item_1,LIST_MENU);
-
-        lv_recentSell.setAdapter(sell_adapter);
-        lv_recentBuy.setAdapter(buy_adapter);
-        lv_favorite.setAdapter(favorite_adapter);
-
-        lv_recentSell.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String strText = (String) parent.getItemAtPosition(position) ;
-                Toast.makeText(container.getContext(), strText, Toast.LENGTH_SHORT).show();
-
-                // 프래그먼트로 이동 -> 현재는 테스트용으로 fragment1 으로 지정해놓음
-                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment1).commit();
-            }
-        });
-
-        lv_favorite.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String strText = (String) parent.getItemAtPosition(position) ;
-                Toast.makeText(container.getContext(), strText, Toast.LENGTH_SHORT).show();
-
-                // 프래그먼트로 이동 -> 현재는 테스트용으로 fragment1 으로 지정해놓음
-                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment1).commit();
-            }
-        });
-
-        lv_recentBuy.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String strText = (String) parent.getItemAtPosition(position) ;
-                Toast.makeText(container.getContext(), strText, Toast.LENGTH_SHORT).show();
-
-                // 팝업창이 들어갈 뷰를 하나 생성해주고, 해당 뷰의 레이아웃을 LinearLayout 으로 지정
-                View popupView = getLayoutInflater().inflate(R.layout.popupwindow_seller_info,null);
-                //pw_sellerInfo=new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-                ll_sellerInfo=new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-
-                // 외부영역 선택시 PopUp창 사라짐
-                //pw_sellerInfo.setFocusable(true);
-                ll_sellerInfo.setFocusable(true);
-
-                // 팝업창의 위치를 디스플레이의 중앙에 위치시킴
-                //pw_sellerInfo.showAtLocation(popupView, Gravity.CENTER,0,0);
-                ll_sellerInfo.showAtLocation(popupView, Gravity.CENTER,0,0);
-
-                // 팝업창에 들어갈 TextView 객체 선언
-                tv_sellerName=(TextView)ll_sellerInfo.getContentView().findViewById(R.id.tv_sellerName);
-                tv_price=(TextView)ll_sellerInfo.getContentView().findViewById(R.id.tv_price);
-                tv_location=(TextView)ll_sellerInfo.getContentView().findViewById(R.id.tv_location);
-                tv_evalPoint=(TextView)ll_sellerInfo.getContentView().findViewById(R.id.tv_evalPoint);
-
-                // 팝업창에 들어갈 TextView 들의 Text 를 지정해줌
-                tv_sellerName.setText("거래 상대 : "+ "상대이름");
-                tv_price.setText("가격 : "+ "가격(원)");
-                tv_location.setText("거래 위치 : "+"거래위치");
-                tv_evalPoint.setText("5.0(평점)");
-            }
-        });
-
-        lv_favorite.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String strText = (String) parent.getItemAtPosition(position) ;
-                Toast.makeText(container.getContext(), strText, Toast.LENGTH_SHORT).show();
-            }
-        });
 
         btn_changeProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,6 +124,7 @@ public class MyPageFragment extends Fragment {
     }
 
     private void LoadTest()   //fragment 불릴때 게시글 목록 생성
+            // TODO : 목록 불러오기
     {
         NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/","GET");
 
@@ -215,6 +150,47 @@ public class MyPageFragment extends Fragment {
         }catch(JSONException e){
             e.printStackTrace();
         }
+    }
+
+    public void setPopupChooser(){
+        View popupView = getLayoutInflater().inflate(R.layout.popupwindow_chooser_buy_sell_pick,null);
+        pw_chooser = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        pw_chooser.setFocusable(true);
+        pw_chooser.showAtLocation(popupView, Gravity.CENTER,0,0);
+
+        btn_buy_list = (Button)pw_chooser.getContentView().findViewById(R.id.btn_buy_list);
+        btn_sell_list = (Button)pw_chooser.getContentView().findViewById(R.id.btn_sell_list);
+        btn_pick_list = (Button)pw_chooser.getContentView().findViewById(R.id.btn_pick_list);
+
+        btn_buy_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment_buy_list = new BuyListFragment();
+                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_buy_list).commit();
+
+                pw_chooser.dismiss();
+            }
+        });
+
+        btn_sell_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment_sell_list = new SellListFragment();
+                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_sell_list).commit();
+
+                pw_chooser.dismiss();
+            }
+        });
+
+        btn_pick_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment_pick_list = new PickListFragment();
+                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_pick_list).commit();
+
+                pw_chooser.dismiss();
+            }
+        });
     }
 
 //    @Override

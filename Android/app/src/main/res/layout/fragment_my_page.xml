@@ -27,32 +27,10 @@
             android:layout_width="117dp"
             android:layout_height="137dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.105"
+            app:layout_constraintHorizontal_bias="0.19"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/applemango" />
-
-        <TextView
-            android:id="@+id/tv_name"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="28dp"
-            android:text="이   름 : ( 이 름 )"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.159"
-            app:layout_constraintStart_toEndOf="@+id/iv_profile"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_nickname"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="24dp"
-            android:text="닉네임 : ( 닉 네 임 )"
-            app:layout_constraintEnd_toEndOf="@+id/tv_name"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/tv_name"
-            app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
         <Button
             android:id="@+id/btn_changeProfile"
@@ -61,108 +39,64 @@
             android:layout_marginTop="16dp"
             android:text="@string/item_change_profile"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.95"
+            app:layout_constraintHorizontal_bias="0.635"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="24dp"
-            android:background="?android:attr/listDivider"
+        <Button
+            android:id="@+id/btn_list_trade_pick"
+            android:layout_width="82dp"
+            android:layout_height="104dp"
+            android:layout_marginTop="16dp"
+            android:text="거래 내역\n및\n찜 목록"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/btn_changeProfile"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="168dp"
+            android:text="● 이   름 : ( 이 름 )"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_profile" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
+            android:text="● 닉네임 : ( 닉 네 임 )"
+            app:layout_constraintEnd_toEndOf="@+id/tv_name"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/tv_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
         <TextView
             android:id="@+id/tv_email"
-            android:layout_width="276dp"
-            android:layout_height="44dp"
-            android:layout_marginTop="220dp"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
             android:text="● 이메일 : ( 이 메 일 )"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.237"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="@+id/tv_nickname"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tv_nickname"
+            app:layout_constraintTop_toBottomOf="@+id/tv_nickname" />
 
         <TextView
             android:id="@+id/tv_favoriteRegion"
-            android:layout_width="205dp"
-            android:layout_height="41dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
             android:text="● 선호하는 거래 장소"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tv_email"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/tv_email"
             app:layout_constraintTop_toBottomOf="@+id/tv_email" />
-
-        <TextView
-            android:id="@+id/tv_recentSell"
-            android:layout_width="85dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="32dp"
-            android:text="● 판매 내역"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.124"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_favoriteRegion" />
-
-        <ListView
-            android:id="@+id/lv_recentSell"
-            android:layout_width="390dp"
-            android:layout_height="210dp"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/rectangle"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.544"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_recentSell" />
-
-        <TextView
-            android:id="@+id/tv_recentBuy"
-            android:layout_width="85dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="80dp"
-            android:text="● 구매 내역"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.128"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lv_recentSell" />
-
-        <ListView
-            android:id="@+id/lv_recentBuy"
-            android:layout_width="390dp"
-            android:layout_height="210dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/rectangle"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.544"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_recentBuy" />
-
-        <TextView
-            android:id="@+id/tv_favorite"
-            android:layout_width="85dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="100dp"
-            android:text="● 찜 목록"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.129"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lv_recentBuy" />
-
-        <ListView
-            android:id="@+id/lv_favorite"
-            android:layout_width="390dp"
-            android:layout_height="210dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/rectangle"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.566"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_favorite"/>
 
         <Button
             android:id="@+id/btn_connection"
@@ -175,19 +109,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-        <!--    <TextView-->
-        <!--        android:id="@+id/textView2"-->
-        <!--        android:layout_width="wrap_content"-->
-        <!--        android:layout_height="wrap_content"-->
-        <!--        android:layout_marginTop="272dp"-->
-        <!--        android:text="여기는 마이페이지가 생길 액티비티입니다"-->
-        <!--        android:textSize="35sp"-->
-        <!--        android:gravity="center"-->
-        <!--        app:layout_constraintEnd_toEndOf="parent"-->
-        <!--        app:layout_constraintHorizontal_bias="0.0"-->
-        <!--        app:layout_constraintStart_toStartOf="parent"-->
-        <!--        app:layout_constraintTop_toTopOf="parent" />-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
 

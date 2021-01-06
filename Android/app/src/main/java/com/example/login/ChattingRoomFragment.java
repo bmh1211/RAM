@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -30,16 +31,20 @@ import com.example.login.service.SocketService;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 public class ChattingRoomFragment extends Fragment {
     private Messenger mServiceMessenger=null;
     private static final String TAG = "TAG";
     View view;
+    Button testbtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
 
         NetworkTask networkTask=new NetworkTask(getActivity().getApplicationContext(),"http://192.168.56.1:3000/chat/AllRoom","GET");
         try {
@@ -64,7 +69,27 @@ public class ChattingRoomFragment extends Fragment {
         ChatRoomAdapter chatRoomAdapter=new ChatRoomAdapter(getActivity().getApplicationContext());
 
         view=inflater.inflate(R.layout.fragment_chattingroom, container, false);
-
+        testbtn=view.findViewById(R.id.testbtn);
+        testbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NetworkTask fileNetworkTask=new NetworkTask(getActivity().getApplicationContext(),"http://192.168.56.1:3000/chat/profileImage",null,"/sdcard/Download/hyeonsuk.jpg","FILE");
+                try {
+                    JSONObject resultFileObject=new JSONObject(fileNetworkTask.execute().get());
+                    if(resultFileObject==null){
+                        Log.d("fail","연결 실패");
+                    }
+                    else{
+                        System.out.println(resultFileObject);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }});
 
 
         ListView listView=view.findViewById(R.id.chatRoomView);
