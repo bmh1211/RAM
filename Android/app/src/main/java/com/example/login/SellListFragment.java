@@ -1,9 +1,11 @@
 package com.example.login;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.example.login.network.NetworkTask;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.concurrent.ExecutionException;
 
 public class SellListFragment extends Fragment {
     private ListView lv_recentSell;
@@ -29,6 +39,9 @@ public class SellListFragment extends Fragment {
         fragment_board = new BoardFragment();
         fragment_mypage = new MyPageFragment();
         lv_recentSell=(ListView)view.findViewById(R.id.lv_recentSell);
+
+        // 게시판 데이터 까기 테스트
+        this.GetSellPost();
 
         ArrayAdapter sell_adapter = new ArrayAdapter(container.getContext(),android.R.layout.simple_list_item_1,LIST_MENU);
         lv_recentSell.setAdapter(sell_adapter);
@@ -52,5 +65,35 @@ public class SellListFragment extends Fragment {
         });
 
         return view;
+    }
+
+    public void GetSellPost()
+    {
+        Log.w("GetPosting","함수 실행");
+        NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/trade/list?type=false","GET"); // true가 구매리스트, false가 판매리스트
+        try{
+            JSONObject resultObject = new JSONObject(networkTask.execute().get());
+            //JSONArray array_sell = resultObject.getJSONArray("tradeVo");
+
+            Log.w("resultObject",resultObject.toString());
+            //{"msg":"조회 성공","tradeVo":{"tradeId":1,"buyerId":"bmh1211@gmail.com","sellerId":"jae961217@naver.com","boardId":"1","tradeTime":"2020-12-23T00:00:00.000+00:00","boardTitle":null}}
+
+            //Log.w("array_sell",array_sell.toString());
+
+            if(resultObject == null)
+            {
+                Log.e("연결결과","연결실패");
+            }
+            else{
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        } catch (
+                ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
