@@ -143,6 +143,8 @@ public class PostingFragment extends Fragment {
                         sendPosting(send_title, send_posting, date_posting);
 //                        saveText(et_title.getText().toString(), et_posting.getText().toString(), date_posting);        //핸드폰 sharedpreference에 저장
                         // todo 서버로 넘겨주는 기능 추가하기. (현재는 로컬만)
+
+                        // todo : 이미지를 서버로 올리는 함수가 들어가야함함
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -200,7 +202,7 @@ public class PostingFragment extends Fragment {
         }
     }
 
-    // todo : file path 가져와서 서버로 파일 전송
+    // todo : file path 가져와서 서버로 파일 전송하기
     public void sendImageFile(String path){
 //        String path="";
 //        // 사진의 절대경로
@@ -222,41 +224,43 @@ public class PostingFragment extends Fragment {
         }
     }
 
-    private void saveText(String title, String name, String date){
-        String temp = PostingData.getArray(getActivity());
-        JSONObject jsonObject = new JSONObject();
-        if(temp != "empty")
-        {
-            try{
-                JSONArray jsonTemp = new JSONArray(temp);
-                try{
-                    jsonObject.put("name",name);
-                    jsonObject.put("title",title);
-                    jsonObject.put("date",date);
-                    jsonTemp.put(jsonObject);
-                    Log.d("test 게시글 작성",jsonTemp.toString());
-                }catch(JSONException e)
-                {
-                    e.printStackTrace();
-                }
-            }catch(JSONException e)
-            {
-                e.printStackTrace();
-            }
-        }
-        else
-        {
-            JSONArray jsonTemp = new JSONArray();
-            try{
-                jsonObject.put("name",name);
-                jsonObject.put("title",title);
-                jsonObject.put("date",date);
-                jsonTemp.put(jsonObject);
-            }catch(JSONException e)
-            {
-                e.printStackTrace();
-            }}
-    }
+//    private void saveText(String title, String name, String date){
+//        String temp = PostingData.getArray(getActivity());
+//        JSONObject jsonObject = new JSONObject();
+//        if(temp != "empty")
+//        {
+//            try{
+//                JSONArray jsonTemp = new JSONArray(temp);
+//                try{
+//                    jsonObject.put("name",name);
+//                    jsonObject.put("title",title);
+//                    jsonObject.put("date",date);
+//                    jsonTemp.put(jsonObject);
+//                    Log.d("test 게시글 작성",jsonTemp.toString());
+//                    PostingData.setArray(getActivity(),jsonTemp.toString());
+//                }catch(JSONException e)
+//                {
+//                    e.printStackTrace();
+//                }
+//            }catch(JSONException e)
+//            {
+//                e.printStackTrace();
+//            }
+//        }
+//        else
+//        {
+//            JSONArray jsonTemp = new JSONArray();
+//            try{
+//                jsonObject.put("name",name);
+//                jsonObject.put("title",title);
+//                jsonObject.put("date",date);
+//                jsonTemp.put(jsonObject);
+//                PostingData.setArray(getActivity(),jsonTemp.toString());
+//            }catch(JSONException e)
+//            {
+//                e.printStackTrace();
+//            }}
+//    }
 
     public void checkPermissions() {
         String permission_camera = Manifest.permission.CAMERA;

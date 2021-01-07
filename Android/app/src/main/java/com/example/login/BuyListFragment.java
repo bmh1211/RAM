@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,13 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.login.network.NetworkTask;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.concurrent.ExecutionException;
 
 public class BuyListFragment extends Fragment {
     private ListView lv_recentBuy;
@@ -38,6 +46,8 @@ public class BuyListFragment extends Fragment {
         btn_mypage = (Button)view.findViewById(R.id.btn_mypage);
         lv_recentBuy=(ListView)view.findViewById(R.id.lv_recentBuy);
         fragment_mypage = new MyPageFragment();
+
+        this.GetBuyPost();
 
         ArrayAdapter buy_adapter = new ArrayAdapter(container.getContext(),android.R.layout.simple_list_item_1,LIST_MENU);
         lv_recentBuy.setAdapter(buy_adapter);
@@ -84,5 +94,31 @@ public class BuyListFragment extends Fragment {
         tv_price.setText("가격 : "+ "가격(원)");
         tv_location.setText("거래 위치 : "+"거래위치");
         tv_evalPoint.setText("5.0(평점)");
+    }
+
+    public void GetBuyPost()
+    {
+        Log.w("GetPosting","함수 실행");
+        NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/trade/list?type=true","GET"); // true가 구매리스트, false가 판매리스트
+        try{
+            //{"msg":"조회 성공","tradeVo":{"tradeId":1,"buyerId":"bmh1211@gmail.com","sellerId":"jae961217@naver.com","boardId":"1","tradeTime":"2020-12-23T00:00:00.000+00:00","boardTitle":null}}
+            JSONObject resultObject = new JSONObject(networkTask.execute().get());
+            Log.w("resultObject",resultObject.toString());
+
+            if(resultObject == null)
+            {
+                Log.e("연결결과","연결실패");
+            }
+            else{
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        } catch (
+                ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
