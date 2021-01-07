@@ -1,7 +1,7 @@
-package com.example.login;
+package com.example.login.Data;
 
 public class PostingF {
-    private String date, title, name,index;
+    private String date, title, name, index, status, region;
 
     public String getDate() {
         return date;
@@ -33,6 +33,22 @@ public class PostingF {
 
     public void setIndex(String index) {
         this.index = index;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 

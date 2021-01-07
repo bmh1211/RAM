@@ -35,7 +35,7 @@ public class BoardFragment extends Fragment {
     SwipeRefreshLayout swipe_layout_board;
     public static final int REQUEST_CODE1 = 1000;  //리스트 터치
     private Adapter PostingAdapter;
-    private String name, title, date,index;
+    private String name, title, date, index, region, status;
     private Handler handler;
     private ListView listView;
     private Button btn_write;
@@ -166,9 +166,18 @@ public class BoardFragment extends Fragment {
                     Log.d(TAG,PostingArray.toString());
                     name = jsonObject.getString("nickName");
                     title = jsonObject.getString("title");
-                    date = jsonObject.getString("id");
+                    date = "2020년 1월 7일 21:58";  //데이터 없어서 임시로 넣음
                     index = "1";
-                    PostingAdapter.addItem(date, name, title, index);
+                    region = jsonObject.getString("region");
+                    if(jsonObject.getString("status")=="false")
+                    {
+                        status = "판매중";
+                    }
+                    else
+                    {
+                        status = "판매완료";
+                    }
+                    PostingAdapter.addItem(date, name, title, index, region, status);
                     PostingAdapter.notifyDataSetChanged();
                 }
             }catch(JSONException e)

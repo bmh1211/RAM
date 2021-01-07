@@ -1,12 +1,12 @@
 package com.example.login;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.example.login.Data.PostingF;
 
 import java.util.ArrayList;
 
@@ -42,14 +42,18 @@ public class Adapter extends BaseAdapter {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.posting_item_theme, parent, false);
 
-            TextView name = (TextView)convertView.findViewById(R.id.posting_name);
+            TextView name = (TextView)convertView.findViewById(R.id.posting_nickName);
             TextView title = (TextView)convertView.findViewById(R.id.posting_title);
             TextView date = (TextView)convertView.findViewById(R.id.posting_date);
+            TextView region = (TextView)convertView.findViewById(R.id.posting_region);
+            TextView status = (TextView)convertView.findViewById(R.id.posting_status);
             TextView index = (TextView)convertView.findViewById(R.id.posting_index);
 
 
 
             holder.name = name;
+            holder.region = region;
+            holder.status = status;
             holder.title = title;
             holder.date = date;
             holder.index = index;
@@ -67,18 +71,22 @@ public class Adapter extends BaseAdapter {
         holder.title.setText(posting.getTitle());
         holder.date.setText(posting.getDate());
         holder.index.setText(posting.getIndex());
+        holder.region.setText(posting.getRegion());
+        holder.status.setText(posting.getStatus());
 
 
         return convertView;
     }
 
-    public void addItem(String date, String name, String title,String index) {
+    public void addItem(String date, String name, String title, String index, String region, String status) {
         PostingF posting = new PostingF();
 
         posting.setName(name);
         posting.setTitle(title);
         posting.setDate(date);
         posting.setIndex(index);
+        posting.setRegion(region);
+        posting.setStatus(status);
 
         listviewitem.add(posting);
     }
@@ -103,6 +111,6 @@ public class Adapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        TextView name, date, title,index;
+        TextView name, date, title, index, region, status;
     }
 }

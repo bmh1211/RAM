@@ -235,7 +235,6 @@ public class PostingFragment extends Fragment {
                     jsonObject.put("date",date);
                     jsonTemp.put(jsonObject);
                     Log.d("test 게시글 작성",jsonTemp.toString());
-                    PostingData.setArray(getActivity(),jsonTemp.toString());
                 }catch(JSONException e)
                 {
                     e.printStackTrace();
@@ -253,7 +252,6 @@ public class PostingFragment extends Fragment {
                 jsonObject.put("title",title);
                 jsonObject.put("date",date);
                 jsonTemp.put(jsonObject);
-                PostingData.setArray(getActivity(),jsonTemp.toString());
             }catch(JSONException e)
             {
                 e.printStackTrace();
