@@ -219,7 +219,7 @@ public class PostingFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        NetworkTask fileNetworkTask = new NetworkTask(((MainPageActivity)getActivity()).getApplicationContext(),"http://192.168.56.1:3000/SellingRegister/Register",jsonObject,path,"FILE");
+        NetworkTask fileNetworkTask = new NetworkTask(((MainPageActivity)getActivity()).getApplicationContext(),"http://3.35.48.170:3000/SellingRegister/Register",jsonObject,path,"FILE");
 
         try {
             JSONObject resultFileObject = new JSONObject(fileNetworkTask.execute().get());
