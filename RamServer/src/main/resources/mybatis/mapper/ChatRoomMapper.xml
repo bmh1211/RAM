@@ -10,4 +10,12 @@
 where A.chatroomid=B.chatroomid and A.userid!=B.userid) ChatRoom
 where ChatRoom.id1=#{value};
     </select>
+    <select id="MakeResponse" parameterType="string" resultType="com.example.ramserver.vo.ImageVo">
+select userimage.id,userimage.data from userimage,
+        (select ChatRoom.id2 from
+(SELECT  A.chatroomid, A.userid as id1,B.userid as id2 FROM rotten.chatroom_user A, rotten.chatroom_user B
+where A.chatroomid=B.chatroomid and A.userid!=B.userid) ChatRoom
+where ChatRoom.id1=#{value}) C
+where C.id2=userimage.id;
+    </select>
 </mapper>

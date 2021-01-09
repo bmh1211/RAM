@@ -41,6 +41,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
+import okhttp3.MultipartBody;
+
 public class HTTPConnetction { //ddddd
 
     public static JSONObject  HttpGet(Context context,String Url) {
@@ -51,6 +53,7 @@ public class HTTPConnetction { //ddddd
 
             connection.setRequestProperty("key", "value");
             connection.setRequestMethod("GET");
+            //.setRequestProperty("Accept","multipart/form-data");
             connection.setDoInput(true);
             connection.setUseCaches(false);
             connection.setConnectTimeout(15000); //통신 타임아웃
@@ -149,6 +152,11 @@ public class HTTPConnetction { //ddddd
             request.writeBytes("Content-Disposition: form-data; name=\"description\"\r\n\r\n");
             request.writeBytes("fileContent" + "\r\n");
 
+            if(jsonObject!=null){
+                request.writeBytes("--" + boundary + "\r\n");
+                request.writeBytes("Content-Disposition: form-data; name=\"jsonData\";\r\n\r\n");
+                request.write(jsonObject.toString().getBytes("utf-8"));
+            }
             request.writeBytes("--" + boundary + "\r\n");
             request.writeBytes("Content-Disposition: form-data; name=\"file\"; filename=\"" + file.getName() + "\"\r\n\r\n");
             //byte[] imageBytes= Files.readAllBytes(file.toPath());
@@ -168,6 +176,7 @@ public class HTTPConnetction { //ddddd
                 }
                 in.close();
                 getCookieHeader(connection,context);
+                //result= new MultipartBody();
                 result = new JSONObject(response.toString());
             } else {
                 return null;

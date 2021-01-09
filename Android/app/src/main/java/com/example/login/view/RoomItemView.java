@@ -1,6 +1,7 @@
 package com.example.login.view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
@@ -38,8 +39,14 @@ public class RoomItemView extends LinearLayout {
     public void setMobile(String mobile){
         textView2.setText(mobile);
     }
-    public void setImage(int resId){
-        imageView.setImageResource(resId);
+    public void setBitmap(Bitmap bitmap){
+        imageView.post(new Runnable() {
+            @Override
+            public void run() {
+                imageView.setImageBitmap(Bitmap.createScaledBitmap(bitmap,imageView.getWidth(),imageView.getHeight(),false));
+
+            }
+        });
     }
 
 }
