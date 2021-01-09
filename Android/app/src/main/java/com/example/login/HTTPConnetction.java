@@ -150,12 +150,14 @@ public class HTTPConnetction { //ddddd
             DataOutputStream request=new DataOutputStream(connection.getOutputStream());
             request.writeBytes("--" + boundary + "\r\n");
             request.writeBytes("Content-Disposition: form-data; name=\"description\"\r\n\r\n");
-            request.writeBytes("fileContent" + "\r\n");
+            request.writeBytes("File content" + "\r\n");
 
             if(jsonObject!=null){
                 request.writeBytes("--" + boundary + "\r\n");
-                request.writeBytes("Content-Disposition: form-data; name=\"jsonData\";\r\n\r\n");
-                request.write(jsonObject.toString().getBytes("utf-8"));
+                request.writeBytes("Content-Disposition: form-data; name=\"file\"; filename=\"" + "json"+ "\"\r\n\r\n");
+                request.write(jsonObject.toString().getBytes());
+                request.writeBytes("\r\n");
+
             }
             request.writeBytes("--" + boundary + "\r\n");
             request.writeBytes("Content-Disposition: form-data; name=\"file\"; filename=\"" + file.getName() + "\"\r\n\r\n");
