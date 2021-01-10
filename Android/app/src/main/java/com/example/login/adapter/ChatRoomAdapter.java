@@ -57,7 +57,18 @@ public class ChatRoomAdapter extends BaseAdapter {
         roomItemView.setName(item.getName());
         roomItemView.setMobile(item.getMobile());
         roomItemView.setBitmap(item.getBitmap());
+
+
         return roomItemView;
     }
 
 }
+
+
+
+
+
+
+
+
+

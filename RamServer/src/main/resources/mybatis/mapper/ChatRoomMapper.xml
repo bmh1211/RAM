@@ -18,4 +18,8 @@ where A.chatroomid=B.chatroomid and A.userid!=B.userid) ChatRoom
 where ChatRoom.id1=#{value}) C
 where C.id2=userimage.id;
     </select>
+    <select id="GetMessage" parameterType="com.example.ramserver.vo.FindMessageVo" resultType="com.example.ramserver.Response.EnterChatResponse">
+        select chatroom_id,sender_id,receiver_id,message,send_time from rotten.chatmessage
+        where sender_id={#senderId} and receiver_id={#receiverId}
+    </select>
 </mapper>

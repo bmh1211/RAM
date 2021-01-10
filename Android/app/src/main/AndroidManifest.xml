@@ -39,6 +39,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ChattingActivity"/>
         <service android:name=".service.SocketService"></service>
 
         <provider

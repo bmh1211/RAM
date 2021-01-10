@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -45,15 +46,18 @@ public class ChattingRoomFragment extends Fragment {
     private static final String TAG = "TAG";
     View view;
     Button testbtn;
-
+    ChatRoomAdapter chatRoomAdapter;
+    Fragment ChattingFragment;
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        ChatRoomAdapter chatRoomAdapter=new ChatRoomAdapter(getActivity().getApplicationContext());
+        ChattingFragment=new ChattingFragment();
+        chatRoomAdapter=new ChatRoomAdapter(getActivity().getApplicationContext());
         view=inflater.inflate(R.layout.fragment_chattingroom, container, false);
         NetworkTask networkTask=new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/chat/AllRoom","GET");
+        //NetworkTask networkTask=new NetworkTask(getActivity().getApplicationContext(),"http://192.168.56.1:3000/chat/AllRoom","GET");
+
         try {
             JSONObject resultObject=new JSONObject(networkTask.execute().get());
             if(resultObject==null){
@@ -74,11 +78,8 @@ public class ChattingRoomFragment extends Fragment {
                 }
 
                 ListView listView=view.findViewById(R.id.chatRoomView);
-               /* chatRoomAdapter.addItem(new RoomItem("김재연","백엔드 정복완료",R.drawable.applemango));
-                chatRoomAdapter.addItem(new RoomItem("방민호","게시판? 다했지",R.drawable.confirm));
-                chatRoomAdapter.addItem(new RoomItem("이준영","아 안드로이드 지겹지~",R.drawable.datebg));*/
-
                 listView.setAdapter(chatRoomAdapter);
+                listView.setOnItemClickListener(listener);
             }
            /// String resultString=resultObject.getString("msg");
         } catch (JSONException e) {
@@ -88,11 +89,6 @@ public class ChattingRoomFragment extends Fragment {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-
-
-
-
 
         testbtn=view.findViewById(R.id.testbtn);
         testbtn.setOnClickListener(new View.OnClickListener() {
@@ -116,14 +112,16 @@ public class ChattingRoomFragment extends Fragment {
                 }
             }});
 
-
-       /* ListView listView=view.findViewById(R.id.chatRoomView);
-        chatRoomAdapter.addItem(new RoomItem("김재연","백엔드 정복완료",R.drawable.applemango));
-        chatRoomAdapter.addItem(new RoomItem("방민호","게시판? 다했지",R.drawable.confirm));
-        chatRoomAdapter.addItem(new RoomItem("이준영","아 안드로이드 지겹지~",R.drawable.datebg));
-
-        listView.setAdapter(chatRoomAdapter);*/
         return view;
     }
+    AdapterView.OnItemClickListener listener=new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            RoomItem item=(RoomItem) parent.getItemAtPosition(position);
+            Intent intent=new Intent(getActivity(),ChattingActivity.class);
+            intent.putExtra("id",item.getName());
+            startActivity(intent);
+        }
+    };
 
 }

@@ -1,12 +1,15 @@
 package com.example.ramserver.controller;
 
 import com.example.ramserver.Response.ChatRoomResponse;
+import com.example.ramserver.Response.EnterChatResponse;
 import com.example.ramserver.Response.MsgResponse;
+import com.example.ramserver.model.ChatterInfo;
 import com.example.ramserver.model.User;
 import com.example.ramserver.service.ChatRoomService;
 import com.example.ramserver.service.InsertImgService;
 import com.example.ramserver.service.LoginService;
 import com.example.ramserver.vo.ChatRoomVo;
+import com.example.ramserver.vo.FindMessageVo;
 import com.example.ramserver.vo.ImageVo;
 import org.apache.catalina.webresources.FileResource;
 import org.apache.commons.io.FileUtils;
@@ -16,10 +19,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -87,6 +87,17 @@ public class ChatController {
         MsgResponse response=new MsgResponse();
         response.setMsg("success");
         return response;
+    }
+
+    @GetMapping(value="/enterChattingRoom")
+    //받은 정보 채팅방 입장한 아이디, 상대방 아이디
+    //return 할 정보 : 입장한 사람 아이디, 상대방 아이디,현재까지의 채팅 내용,
+    public List<EnterChatResponse> EnterChat(HttpServletRequest request,@RequestParam("id") String otherId){
+        HttpSession session=request.getSession();
+        User info=(User)session.getAttribute("login");
+        String enterId=info.getId();
+        FindMessageVo findMessageVo=new FindMessageVo(enterId,otherId);
+        return chatRoomService.GetMessage(findMessageVo);
     }
 
 }
