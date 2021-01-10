@@ -140,10 +140,11 @@ public class PostingFragment extends Fragment {
                         jsonObject.put("title",et_title.getText() );
                         jsonObject.put("body", et_posting.getText());
                         String date_posting = format.format(time.getTime());
-                        sendPosting(send_title, send_posting, date_posting);
+                        //sendPosting(send_title, send_posting, date_posting);
 //                        saveText(et_title.getText().toString(), et_posting.getText().toString(), date_posting);        //핸드폰 sharedpreference에 저장
                         // todo 서버로 넘겨주는 기능 추가하기. (현재는 로컬만)
-
+                        String tmpPath=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/mino.jpg";
+                        sendImageFile(send_title,send_posting,date_posting,10000,tmpPath);
                         // todo : 이미지를 서버로 올리는 함수가 들어가야함함
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -203,15 +204,26 @@ public class PostingFragment extends Fragment {
     }
 
     // todo : file path 가져와서 서버로 파일 전송하기
-    public void sendImageFile(String path){
-//        String path="";
+    public void sendImageFile(String title, String body, String date,int price,String path){
+        //String path="";
 //        // 사진의 절대경로
 //        path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/mino.jpg";
-        NetworkTask fileNetworkTask = new NetworkTask(((MainPageActivity)getActivity()).getApplicationContext(),"http://3.35.48.170:3000/chat/profileImage",null,path,"FILE");
+        //NetworkTask fileNetworkTask = new NetworkTask(((MainPageActivity)getActivity()).getApplicationContext(),"http://3.35.48.170:3000/chat/profileImage",null,path,"FILE");
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("title", title);
+            jsonObject.put("body", body);
+            jsonObject.put("price",price);
+            jsonObject.put("date", date);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        NetworkTask fileNetworkTask = new NetworkTask(((MainPageActivity)getActivity()).getApplicationContext(),"http://3.35.48.170:3000/SellingRegister/Register",jsonObject,path,"FILE");
 
         try {
             JSONObject resultFileObject = new JSONObject(fileNetworkTask.execute().get());
-
+            System.out.println(resultFileObject);
             if(resultFileObject == null){
                 Log.w("실패 알림","연결 실패");
             }
@@ -261,6 +273,43 @@ public class PostingFragment extends Fragment {
 //                e.printStackTrace();
 //            }}
 //    }
+    private void saveText(String title, String name, String date){
+        String temp = PostingData.getArray(getActivity());
+        JSONObject jsonObject = new JSONObject();
+        if(temp != "empty")
+        {
+            try{
+                JSONArray jsonTemp = new JSONArray(temp);
+                try{
+                    jsonObject.put("name",name);
+                    jsonObject.put("title",title);
+                    jsonObject.put("date",date);
+                    jsonTemp.put(jsonObject);
+                    Log.d("test 게시글 작성",jsonTemp.toString());
+                    //PostingData.setArray(getActivity(),jsonTemp.toString());
+                }catch(JSONException e)
+                {
+                    e.printStackTrace();
+                }
+            }catch(JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            JSONArray jsonTemp = new JSONArray();
+            try{
+                jsonObject.put("name",name);
+                jsonObject.put("title",title);
+                jsonObject.put("date",date);
+                jsonTemp.put(jsonObject);
+                //PostingData.setArray(getActivity(),jsonTemp.toString());
+            }catch(JSONException e)
+            {
+                e.printStackTrace();
+            }}
+    }
 
     public void checkPermissions() {
         String permission_camera = Manifest.permission.CAMERA;
