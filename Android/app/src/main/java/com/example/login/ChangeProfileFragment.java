@@ -391,4 +391,8 @@ public class ChangeProfileFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
+    public void GetProfileImage(){
+        // todo : 프로필 이미지 사진을 받아와야함
+    }
 }

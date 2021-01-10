@@ -3,6 +3,7 @@ package com.example.login;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.Gravity;
@@ -18,18 +19,25 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.login.Data.ListItem;
+import com.example.login.adapter.TradeListAdapter;
 import com.example.login.network.NetworkTask;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 public class BuyListFragment extends Fragment {
     private ListView lv_recentBuy;
     static final String[] LIST_MENU={"구매 내역 리스트","LIST_1","LIST_2","LIST_3"};
+    static final ArrayList<ListItem> itemlist = new ArrayList<ListItem>();
     private Button btn_mypage;
     Fragment fragment_mypage;
+    SwipeRefreshLayout swipe_layout_board;
+    private TradeListAdapter buy_adapter;
 
     // 구매내역에서 판매자정보 팝업윈도우에 필요한 데이터들
     private PopupWindow ll_sellerInfo;
@@ -46,11 +54,14 @@ public class BuyListFragment extends Fragment {
         btn_mypage = (Button)view.findViewById(R.id.btn_mypage);
         lv_recentBuy=(ListView)view.findViewById(R.id.lv_recentBuy);
         fragment_mypage = new MyPageFragment();
+        //swipe_layout_board = (SwipeRefreshLayout)view.findViewById(R.id.swipe_layout_board);
 
-        this.GetBuyPost();
-
-        ArrayAdapter buy_adapter = new ArrayAdapter(container.getContext(),android.R.layout.simple_list_item_1,LIST_MENU);
+//        ArrayAdapter buy_adapter = new ArrayAdapter(container.getContext(),android.R.layout.simple_list_item_1,LIST_MENU);
+        buy_adapter = new TradeListAdapter(container.getContext(),itemlist);
         lv_recentBuy.setAdapter(buy_adapter);
+
+        // 구매 내역 받아옴
+        this.GetBuyPost();
 
         lv_recentBuy.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -90,6 +101,7 @@ public class BuyListFragment extends Fragment {
         tv_evalPoint=(TextView)ll_sellerInfo.getContentView().findViewById(R.id.tv_evalPoint);
 
         // 팝업창에 들어갈 TextView 들의 Text 를 지정해줌
+        // todo : 판매자 정보 가져오는 작업 필요
         tv_sellerName.setText("거래 상대 : "+ "상대이름");
         tv_price.setText("가격 : "+ "가격(원)");
         tv_location.setText("거래 위치 : "+"거래위치");
@@ -105,11 +117,30 @@ public class BuyListFragment extends Fragment {
             JSONObject resultObject = new JSONObject(networkTask.execute().get());
             Log.w("resultObject",resultObject.toString());
 
+            // list일 경우
+            //JSONArray buyArray = resultObject.getJSONArray("list");
+
             if(resultObject == null)
             {
                 Log.e("연결결과","연결실패");
+                return;
             }
-            else{
+
+            String resultString = resultObject.getString("msg");
+
+            if(resultString.equals("거래내역이 없습니다")){
+                Toast.makeText(getActivity(),resultString, Toast.LENGTH_SHORT).show();
+            }
+            else if(resultString.equals("조회 성공")){
+                String title, tradeTime, userID;
+                //title = resultObject.getString("boardTitle");
+                title="";
+                tradeTime = resultObject.getString("tradeTime");
+                userID = resultObject.getString("sellerId");
+
+                // 생성된 아이템 목록에 추가
+                buy_adapter.addItem(title,userID,tradeTime);
+                buy_adapter.notifyDataSetChanged();
             }
         }
         catch (JSONException e) {
