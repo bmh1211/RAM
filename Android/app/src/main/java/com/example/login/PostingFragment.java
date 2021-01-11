@@ -236,43 +236,6 @@ public class PostingFragment extends Fragment {
         }
     }
 
-//    private void saveText(String title, String name, String date){
-//        String temp = PostingData.getArray(getActivity());
-//        JSONObject jsonObject = new JSONObject();
-//        if(temp != "empty")
-//        {
-//            try{
-//                JSONArray jsonTemp = new JSONArray(temp);
-//                try{
-//                    jsonObject.put("name",name);
-//                    jsonObject.put("title",title);
-//                    jsonObject.put("date",date);
-//                    jsonTemp.put(jsonObject);
-//                    Log.d("test 게시글 작성",jsonTemp.toString());
-//                    PostingData.setArray(getActivity(),jsonTemp.toString());
-//                }catch(JSONException e)
-//                {
-//                    e.printStackTrace();
-//                }
-//            }catch(JSONException e)
-//            {
-//                e.printStackTrace();
-//            }
-//        }
-//        else
-//        {
-//            JSONArray jsonTemp = new JSONArray();
-//            try{
-//                jsonObject.put("name",name);
-//                jsonObject.put("title",title);
-//                jsonObject.put("date",date);
-//                jsonTemp.put(jsonObject);
-//                PostingData.setArray(getActivity(),jsonTemp.toString());
-//            }catch(JSONException e)
-//            {
-//                e.printStackTrace();
-//            }}
-//    }
     private void saveText(String title, String name, String date){
         String temp = PostingData.getArray(getActivity());
         JSONObject jsonObject = new JSONObject();
