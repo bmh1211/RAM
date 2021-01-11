@@ -122,7 +122,7 @@ public class ChattingFragment extends Fragment {
         }
     }));
     public void GetListView(){
-        chatMessageAdapter=new ChatMessageAdapter(getActivity().getApplicationContext(),R.layout.chatting_message);
+        //chatMessageAdapter=new ChatMessageAdapter(getActivity().getApplicationContext(),R.layout.chatting_message,);
         ListView listView=(ListView)view.findViewById(R.id.listView12);
         listView.setAdapter(chatMessageAdapter);
         listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);

@@ -35,7 +35,9 @@ public class ChattingActivity extends AppCompatActivity {
     private boolean mIsBound;
     private Messenger mServiceMessenger=null;
     private Intent thisIntent;
+    private String SenderName;
     private String OtherName;
+
 
 
 
@@ -55,12 +57,15 @@ public class ChattingActivity extends AppCompatActivity {
 
         NetworkTask fileNetworkTask=new NetworkTask(getApplicationContext(),"http://192.168.56.1:3000/chat/enterChattingRoom?id="+OtherName,null,"GET");
         try {
-            JSONObject resultFileObject=new JSONObject(fileNetworkTask.execute().get());
-            if(resultFileObject==null){
-                Log.d("fail","연결 실패");
+            JSONObject resultObject=null;
+            Object result=fileNetworkTask.execute().get();
+            if(result==null){
+                System.out.println("실패");
             }
             else{
-                System.out.println(resultFileObject);
+                resultObject=new JSONObject((String)result);
+                System.out.println(resultObject);
+                SenderName=resultObject.get("enterId").toString();
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -81,7 +86,7 @@ public class ChattingActivity extends AppCompatActivity {
     }
 
     public void GetListView(){
-        chatMessageAdapter=new ChatMessageAdapter(getApplicationContext(),R.layout.chatting_message);
+        chatMessageAdapter=new ChatMessageAdapter(getApplicationContext(),R.layout.chatting_message,SenderName);
         ListView listView=(ListView)findViewById(R.id.listView12);
         listView.setAdapter(chatMessageAdapter);
         listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
@@ -97,8 +102,11 @@ public class ChattingActivity extends AppCompatActivity {
     }
     //서비스 시작
     private void setStartService(){
-        startService(new Intent(getApplicationContext(), SocketService.class));
-       bindService(new Intent(getApplicationContext(), SocketService.class),mConnection, Context.BIND_AUTO_CREATE);
+        Intent intent=new Intent(getApplicationContext(),SocketService.class);
+        intent.putExtra("sender",SenderName);
+        intent.putExtra("receiver",OtherName);
+        startService(intent);
+       bindService(intent,mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
     }
 
@@ -129,9 +137,20 @@ public class ChattingActivity extends AppCompatActivity {
             Log.i("test receive","act :what "+msg.what);
             switch(msg.what){
                 case SocketService.MSG_SEND_TO_ACTIVITY:
-                    String value2=msg.getData().getString("test");
+                    //String value2=msg.getData().getString("test");
+                    String value2=msg.getData().getString("msgInfo");
+                    JSONObject resObj=null;
+                    try {
+                        resObj=new JSONObject(value2);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     Log.i("test","act : value2 "+value2);
-                    chatMessageAdapter.add(new ChatMessage(value2));
+                    try {
+                        chatMessageAdapter.add(new ChatMessage(resObj.getString("author"),resObj.getString("msg")));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
             return false;
@@ -142,7 +161,8 @@ public class ChattingActivity extends AppCompatActivity {
         EditText etMsg=(EditText)findViewById(R.id.etMessage);
         String strMsg=(String)etMsg.getText().toString();
 
-        chatMessageAdapter.add(new ChatMessage(strMsg));
+        //chatMessageAdapter.add(new ChatMessage(strMsg));
+        chatMessageAdapter.add(new ChatMessage(SenderName,strMsg));
         sendMessageToservice(strMsg);
     }
     //서비스로 메시지 전송
@@ -159,4 +179,6 @@ public class ChattingActivity extends AppCompatActivity {
             }
         }
     }
+
+
 }

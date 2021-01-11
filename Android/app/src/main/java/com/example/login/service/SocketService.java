@@ -38,6 +38,8 @@ public class SocketService extends Service {
     private Messenger mClient = null;
 
     private StompClient mStompClient;
+    private String senderId;
+    private String receiverId;
     ChatMessageAdapter chatMessageAdapter;
     @Nullable
     @Override
@@ -67,7 +69,8 @@ public class SocketService extends Service {
     }));
     private JSONObject MakeJsonObject(String str) throws JSONException {
         JSONObject object=new JSONObject();
-        object.put("author", "방민호");
+        object.put("author", senderId);
+        object.put("receiver",receiverId);
         object.put("msg",str);
         long now=System.currentTimeMillis();
         Date date=new Date(now);
@@ -85,6 +88,13 @@ public class SocketService extends Service {
         StompClientRegister();
         Log.d("test","서비스 onCreate");
 
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        senderId=intent.getStringExtra("sender");
+        receiverId=intent.getStringExtra("receiver");
+        return super.onStartCommand(intent, flags, startId);
 
     }
 
@@ -102,9 +112,10 @@ public class SocketService extends Service {
         mStompClient.topic("/topic/roomid").subscribe(topicMessage->{
             Log.d("received message",topicMessage.getPayload());
             JSONObject obj=new JSONObject(topicMessage.getPayload());
-            if(obj.getString("author").equals("방민호")){
+            if(!obj.getString("author").equals(senderId)){
                 String s= obj.getString("msg");
-                sendMsgToActivity(s);
+                //sendMsgToActivity(s);
+                sendMsgToActivity(obj);
             }
         });
     }
@@ -121,5 +132,17 @@ public class SocketService extends Service {
         msg.setData(bundle);
         mClient.send(msg);
     }
+
+    //activity로 메시지 전달
+    private void sendMsgToActivity(JSONObject object) throws RemoteException {
+        Bundle bundle=new Bundle();
+        bundle.putString("msgInfo",object.toString());
+        Message msg=Message.obtain(null,MSG_SEND_TO_ACTIVITY);
+        msg.setData(bundle);
+        mClient.send(msg);
+    }
+
+
+
 
 }

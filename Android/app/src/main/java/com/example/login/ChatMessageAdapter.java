@@ -18,8 +18,10 @@ import java.util.List;
 public class ChatMessageAdapter extends ArrayAdapter {
     boolean message_left=true;
     List msgs=new ArrayList();
-    public ChatMessageAdapter(Context context,int textViewResourceId){
+    private String senderId;
+    public ChatMessageAdapter(Context context,int textViewResourceId,String senderId){
         super(context,textViewResourceId);
+        this.senderId=senderId;
     }
 
     //@Override
@@ -53,12 +55,18 @@ public class ChatMessageAdapter extends ArrayAdapter {
         TextView msgText=(TextView)row.findViewById(R.id.chatmessage);
         msgText.setText(msg.getMessage());
         msgText.setTextColor(Color.parseColor("#000000"));
+        if(msg.getSender().equals(senderId)){
+            msgText.setBackground(this.getContext().getResources().getDrawable(R.drawable.inbox2));
+        }
+        else{
+            msgText.setBackground(this.getContext().getResources().getDrawable(R.drawable.outbox2));
 
+        }
 
-        msgText.setBackground(this.getContext().getResources().getDrawable((message_left?R.drawable.inbox2:R.drawable.outbox2)));
+        //msgText.setBackground(this.getContext().getResources().getDrawable((message_left?R.drawable.inbox2:R.drawable.outbox2)));
 
         LinearLayout chatMessageContainer=(LinearLayout)row.findViewById(R.id.chatmessage_container);
-        int align;
+        /*int align;
         if(message_left){
             align= Gravity.LEFT;
             message_left=false;
@@ -66,7 +74,7 @@ public class ChatMessageAdapter extends ArrayAdapter {
         else{
             align=Gravity.RIGHT;
             message_left=true;
-        }
+        }*/
         return row;
     }
 }

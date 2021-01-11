@@ -2,6 +2,7 @@ package com.example.ramserver.controller;
 
 import com.example.ramserver.Response.ChatRoomResponse;
 import com.example.ramserver.Response.EnterChatResponse;
+import com.example.ramserver.Response.EnterChatSet;
 import com.example.ramserver.Response.MsgResponse;
 import com.example.ramserver.model.ChatterInfo;
 import com.example.ramserver.model.User;
@@ -92,12 +93,15 @@ public class ChatController {
     @GetMapping(value="/enterChattingRoom")
     //받은 정보 채팅방 입장한 아이디, 상대방 아이디
     //return 할 정보 : 입장한 사람 아이디, 상대방 아이디,현재까지의 채팅 내용,
-    public List<EnterChatResponse> EnterChat(HttpServletRequest request,@RequestParam("id") String otherId){
+    public EnterChatSet EnterChat(HttpServletRequest request,@RequestParam("id") String otherId){
         HttpSession session=request.getSession();
         User info=(User)session.getAttribute("login");
         String enterId=info.getId();
         FindMessageVo findMessageVo=new FindMessageVo(enterId,otherId);
-        return chatRoomService.GetMessage(findMessageVo);
+        //List<EnterChatResponse> result=chatRoomService.GetMessage(findMessageVo);
+        EnterChatSet result=new EnterChatSet(enterId,chatRoomService.GetMessage(findMessageVo));
+
+        return result;
     }
 
 }
