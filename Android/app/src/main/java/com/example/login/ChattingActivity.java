@@ -23,9 +23,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.login.network.NetworkTask;
 import com.example.login.service.SocketService;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.concurrent.ExecutionException;
 
 public class ChattingActivity extends AppCompatActivity {
@@ -56,11 +58,11 @@ public class ChattingActivity extends AppCompatActivity {
         });
 
         NetworkTask fileNetworkTask=new NetworkTask(getApplicationContext(),"http://192.168.56.1:3000/chat/enterChattingRoom?id="+OtherName,null,"GET");
+        JSONObject resultObject=null;
         try {
-            JSONObject resultObject=null;
             Object result=fileNetworkTask.execute().get();
             if(result==null){
-                System.out.println("실패");
+                System.out.println("데이터 없음");
             }
             else{
                 resultObject=new JSONObject((String)result);
@@ -77,6 +79,15 @@ public class ChattingActivity extends AppCompatActivity {
 
         setStartService();
         GetListView();
+        /*if(resultObject!=null){
+            try {
+               // setChatting(resultObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }*/
     }
 
     @Override
@@ -99,6 +110,14 @@ public class ChattingActivity extends AppCompatActivity {
                 listView.setSelection(chatMessageAdapter.getCount()-1);
             }
         });
+    }
+    private void setChatting(JSONObject jsonObject) throws JSONException, ParseException {
+       JSONArray chatArray= jsonObject.getJSONArray("messageSet");
+       for(int i=0;i<chatArray.length();i++){
+           JSONObject tmpObj=chatArray.getJSONObject(i);
+           ChatMessage msg=new ChatMessage(tmpObj.getString("enterId"),tmpObj.getString("message"),tmpObj.getString("date"));
+           chatMessageAdapter.add(msg);
+       }
     }
     //서비스 시작
     private void setStartService(){

@@ -2,9 +2,7 @@ package com.example.ramserver.service;
 
 import com.example.ramserver.Response.EnterChatResponse;
 import com.example.ramserver.mapper.ChatRoomMapper;
-import com.example.ramserver.vo.ChatRoomVo;
-import com.example.ramserver.vo.FindMessageVo;
-import com.example.ramserver.vo.ImageVo;
+import com.example.ramserver.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +21,18 @@ public class ChatRoomService {
 
     public List<EnterChatResponse> GetMessage(FindMessageVo findMessageVo){
         return chatRoomMapper.GetMessage(findMessageVo);
+    }
+
+    public int GetMessageCount(){
+        return chatRoomMapper.GetMessageCount();
+    }
+
+    public List<Integer> GetChatRoomId(FindChatRoomVo findChatRoomVo){
+        return chatRoomMapper.GetChatRoomId(findChatRoomVo);
+    }
+
+    public void InsertChatMessage(ChatInsertVo chatInsertVo){
+        chatRoomMapper.InsertChatMessage(chatInsertVo);
     }
 
 }

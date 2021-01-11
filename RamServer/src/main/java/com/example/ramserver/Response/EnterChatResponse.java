@@ -8,6 +8,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 public class EnterChatResponse {
+    private int roomId;
     private String enterId;
     private String otherId;
     private String message;

@@ -74,7 +74,7 @@ public class SocketService extends Service {
         object.put("msg",str);
         long now=System.currentTimeMillis();
         Date date=new Date(now);
-        SimpleDateFormat sdfNow=new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat sdfNow=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formatDate=sdfNow.format(date);
         object.put("Date",formatDate);
 
