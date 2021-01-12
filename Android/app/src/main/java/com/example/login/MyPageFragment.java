@@ -58,6 +58,7 @@ public class MyPageFragment extends Fragment {
     Fragment fragment_buy_list;
     Fragment fragment_sell_list;
     Fragment fragment_pick_list;
+    private String password_check;
 
     private PopupWindow pw_checkPW;
     private Button btn_check;
@@ -137,6 +138,9 @@ public class MyPageFragment extends Fragment {
                 tv_bank_real.setText(userObject.getString("bank"));
                 tv_bankaccount_real.setText(userObject.getString("account"));
                 tv_point_real.setText(Integer.toString(userObject.getInt("point")));
+
+                // 정보수정 창으로 들어갈 때 체크를 위한 비밀번호 받아놓기
+                password_check = userObject.getString("password");
             }
         }catch(InterruptedException e){
             e.printStackTrace();
@@ -189,59 +193,32 @@ public class MyPageFragment extends Fragment {
     }
 
     public void pwCheckPopUp(){
-        NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/myPage/info","GET");
-        try{
-            JSONObject resultObject = new JSONObject(networkTask.execute().get());
-            JSONObject userObject = resultObject.optJSONObject("user");
+        View popupView = getLayoutInflater().inflate(R.layout.popupwindow_check_password,null);
+        pw_checkPW = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        pw_checkPW.setFocusable(true);
+        pw_checkPW.showAtLocation(popupView, Gravity.CENTER,0,0);
 
-            if(resultObject == null){
-                Log.w("연결결과","연결실패");
+        et_present_password = (EditText)pw_checkPW.getContentView().findViewById(R.id.et_present_password);
+        btn_check = (Button)pw_checkPW.getContentView().findViewById(R.id.btn_check);
+
+        btn_check.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.w("입력한 비밀번호", et_present_password.getText().toString());
+                Log.w("가져온 비밀번호", password_check);
+
+                if (et_present_password.getText().toString().equals(password_check)) {
+                    // 비밀번호가 일치하면 정보수정 프레그먼트로 이동
+                    ((MainPageActivity) getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment_change_profile).commit();
+
+                    pw_checkPW.dismiss();
+                } else {
+                    // 비밀번호가 일치하지 않으면 써놓은 비밀번호 지우기
+                    Toast.makeText(getActivity(), "비밀번호가 일치하지 않습니다", Toast.LENGTH_SHORT).show();
+                    et_present_password.setText(null);
+                }
             }
-            else{
-                Toast.makeText(getActivity(), resultObject.getString("msg"), Toast.LENGTH_SHORT).show();
-                Log.w("resultObject : ",userObject.toString());
-
-                // userObject => {"id":"bmh1211@gmail.com","password":"1234","userName":"Bang","phoneNumber":"010-5014-3278","nickName":"Mino","bank":"HANA","account":"74813243423","point":13,"region":"INCHEON"}
-                View popupView = getLayoutInflater().inflate(R.layout.popupwindow_check_password,null);
-                pw_checkPW = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-                pw_checkPW.setFocusable(true);
-                pw_checkPW.showAtLocation(popupView, Gravity.CENTER,0,0);
-
-                et_present_password = (EditText)pw_checkPW.getContentView().findViewById(R.id.et_present_password);
-                btn_check = (Button)pw_checkPW.getContentView().findViewById(R.id.btn_check);
-
-                btn_check.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        try{
-                            Log.w("입력한 비밀번호",et_present_password.getText().toString());
-                            Log.w("가져온 비밀번호",userObject.getString("password"));
-
-                            if(et_present_password.getText().toString().equals(userObject.getString("password"))){
-                                // 비밀번호가 일치하면 정보수정 프레그먼트로 이동
-                                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_change_profile).commit();
-
-                                pw_checkPW.dismiss();
-                            }
-                            else{
-                                // 비밀번호가 일치하지 않으면 써놓은 비밀번호 지우기
-                                Toast.makeText(getActivity(), "비밀번호가 일치하지 않습니다", Toast.LENGTH_SHORT).show();
-                                et_present_password.setText(null);
-                            }
-                        }
-                        catch (JSONException e){
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-        }catch(InterruptedException e){
-            e.printStackTrace();
-        }catch(ExecutionException e){
-            e.printStackTrace();
-        }catch(JSONException e){
-            e.printStackTrace();
-        }
+        });
     }
 
 //    @Override
