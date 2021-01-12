@@ -55,7 +55,7 @@ public class PostingFragment extends Fragment {
     private EditText et_posting;
     private ImageButton ib_add_photo;
     private String title, name, date, contents;
-    Fragment fragment1;
+    Fragment fragment_board;
     MainPageActivity activity;
     Context context;
     private Button btn_camera;
@@ -88,7 +88,7 @@ public class PostingFragment extends Fragment {
         et_title=(EditText)view.findViewById(R.id.et_title);
         et_posting=(EditText)view.findViewById(R.id.et_posting);
         ib_add_photo = (ImageButton)view.findViewById(R.id.ib_add_photo);
-        fragment1=new BoardFragment();
+        fragment_board=new BoardFragment();
         SimpleDateFormat format = new SimpleDateFormat("yyyy년 MM월 dd일 HH시mm분ss초");
         Calendar time = Calendar.getInstance();
 
@@ -112,7 +112,7 @@ public class PostingFragment extends Fragment {
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment1).commit();
+                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_board).commit();
             }
         });
 
@@ -136,16 +136,16 @@ public class PostingFragment extends Fragment {
                     JSONObject jsonObject = new JSONObject();
 
                     try {
-                        Toast.makeText((MainPageActivity)getActivity(), "작성되었습니다", Toast.LENGTH_SHORT).show();
                         jsonObject.put("title",et_title.getText() );
                         jsonObject.put("body", et_posting.getText());
                         String date_posting = format.format(time.getTime());
                         //sendPosting(send_title, send_posting, date_posting);
 //                        saveText(et_title.getText().toString(), et_posting.getText().toString(), date_posting);        //핸드폰 sharedpreference에 저장
-                        // todo 서버로 넘겨주는 기능 추가하기. (현재는 로컬만)
-                        String tmpPath=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/mino.jpg";
-                        sendImageFile(send_title,send_posting,date_posting,10000,tmpPath);
-                        // todo : 이미지를 서버로 올리는 함수가 들어가야함함
+//                        String tmpPath=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/mino.jpg";
+//                        sendImageFile(send_title,send_posting,date_posting,10000,tmpPath);
+                        sendImageFile(send_title,send_posting,date_posting,10000,str_CurrentPhotoPath);
+
+                        ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_board).commit();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -189,7 +189,7 @@ public class PostingFragment extends Fragment {
             }
             String resultString = resultObject.getString("msg");
             if (resultString.equals("Posting Success")) {
-                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment1).commit();
+                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_board).commit();
             } else {
                 Toast.makeText((MainPageActivity)getActivity(), "게시글 등록 실패", Toast.LENGTH_SHORT).show();
             }
@@ -203,13 +203,7 @@ public class PostingFragment extends Fragment {
         }
     }
 
-    // todo : file path 가져와서 서버로 파일 전송하기
     public void sendImageFile(String title, String body, String date,int price,String path){
-        //String path="";
-//        // 사진의 절대경로
-//        path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/mino.jpg";
-        //NetworkTask fileNetworkTask = new NetworkTask(((MainPageActivity)getActivity()).getApplicationContext(),"http://3.35.48.170:3000/chat/profileImage",null,path,"FILE");
-
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("title", title);
@@ -223,8 +217,13 @@ public class PostingFragment extends Fragment {
 
         try {
             JSONObject resultFileObject = new JSONObject(fileNetworkTask.execute().get());
+            // resultFileObjet = "{"msg":"Register success"}"
             System.out.println(resultFileObject);
-            if(resultFileObject == null){
+
+            if (resultFileObject.getString("msg").equals("Register success")){
+                Toast.makeText(getActivity(), resultFileObject.getString("msg"), Toast.LENGTH_SHORT).show();
+            }
+            else if(resultFileObject == null){
                 Log.w("실패 알림","연결 실패");
             }
         }catch(ExecutionException e){
@@ -427,6 +426,8 @@ public class PostingFragment extends Fragment {
         cursor_album.moveToFirst();
 
         String imgPath = cursor_album.getString(column_index);
+
+        str_CurrentPhotoPath = imgPath;
 
         return imgPath;
     }
