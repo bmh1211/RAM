@@ -44,6 +44,44 @@ import java.util.concurrent.ExecutionException;
 import okhttp3.MultipartBody;
 
 public class HTTPConnetction { //ddddd
+    public static JSONObject  HttpTest(Context context,String Url) {
+        JSONObject result = null;
+        try {
+            URL url = new URL(Url);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            connection.setRequestProperty("key", "value");
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Accept","multipart/form-data");
+            connection.setDoInput(true);
+            connection.setUseCaches(false);
+            connection.setConnectTimeout(15000); //통신 타임아웃
+            setCookieHeader(connection,context);
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+                //result=new JSONObject(response.toString());
+                System.out.println(response.toString());
+            } else {
+                return null;
+            }
+        } catch (ConnectException e) {
+            Log.e("test", "ConnectionException");
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
 
     public static JSONObject  HttpGet(Context context,String Url) {
         JSONObject result = null;

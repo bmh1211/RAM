@@ -1,35 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChattingFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ChattingFragment"
+    android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->
-    <!--<TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello Third View" />-->
-    <ListView
-        android:id="@+id/listView12"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        tools:ignore="Suspicious0dp">
+        <TextView
+            android:id="@+id/otherName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Hello Third View"
+            android:textSize="25dp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="629dp"
-        android:background="@drawable/rectangle"
-        android:isScrollContainer="true" />
+        android:layout_height="0dp"
+        android:layout_weight="40"
+        tools:ignore="Suspicious0dp">
+        <ListView
+            android:id="@+id/listView12"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rectangle"
+            android:isScrollContainer="true" />
+    </LinearLayout>
 
-    <EditText
-        android:id="@+id/etMessage"
-        android:layout_width="300dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="left|bottom"
-        android:layout_marginBottom="50dp"/>
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <EditText
+            android:id="@+id/etMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|bottom"
+            android:layout_weight="5"
+            />
 
-    <Button
-        android:id="@+id/btn_send"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|bottom"
-        android:text="SEND"
-        android:layout_marginBottom="50dp"/>
+        <Button
+            android:id="@+id/btn_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:text="SEND"/>
 
-</FrameLayout>
+    </LinearLayout>
+
+
+
+</LinearLayout>

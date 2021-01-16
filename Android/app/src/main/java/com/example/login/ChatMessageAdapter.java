@@ -56,10 +56,10 @@ public class ChatMessageAdapter extends ArrayAdapter {
         msgText.setText(msg.getMessage());
         msgText.setTextColor(Color.parseColor("#000000"));
         if(msg.getSender().equals(senderId)){
-            msgText.setBackground(this.getContext().getResources().getDrawable(R.drawable.inbox2));
+            msgText.setBackground(this.getContext().getResources().getDrawable(R.drawable.outbox2));
         }
         else{
-            msgText.setBackground(this.getContext().getResources().getDrawable(R.drawable.outbox2));
+            msgText.setBackground(this.getContext().getResources().getDrawable(R.drawable.inbox2));
 
         }
 

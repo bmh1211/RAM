@@ -24,17 +24,17 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.*;
-import java.io.Console;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,22 +57,37 @@ public class ChatController {
         List<ImageVo> result=chatRoomService.MakeResponse(info.getId());
         List<ChatRoomResponse> responseList=new ArrayList<ChatRoomResponse>();
         for(int i=0;i<result.size();i++){
-          /*  ChatRoomResponse tmp=new ChatRoomResponse(result.get(i).getId(),result.get(i).ByteToBase64());
-            responseList.add(tmp);*/
-           /* File file=new File(result.get(i).getId());
-            Path path= Paths.get(file.toURI());
-            Files.write(path,result.get(i).getImg());*/
-            //form.add("id",result.get(i).getId());
-            //form.add("file",result.get(i).getImg());
             System.out.println(result.get(i).getImg());
             form.add("id",result.get(i).getId());
             form.add("data",result.get(i).ByteToBase64());
-
         }
         httpServletResponse.setContentType(MediaType.MULTIPART_FORM_DATA_VALUE);
         //return result;
         return form;
     }
+    @GetMapping(value="/AllRoomTest")
+    public MultiValueMap<String,Object> getRoomInfoTest(HttpServletRequest request, HttpServletResponse httpServletResponse) throws IOException {
+        HttpSession session=request.getSession();
+        User info=(User)session.getAttribute("login");
+
+        MultiValueMap<String,Object> form=new LinkedMultiValueMap<>();
+        List<ImageVo> result=chatRoomService.MakeResponse(info.getId());
+        List<ChatRoomResponse> responseList=new ArrayList<ChatRoomResponse>();
+        for(int i=0;i<result.size();i++){
+            form.add("id",result.get(i).getId());
+            //form.add("data",result.get(i).ByteToBase64());
+            ByteArrayInputStream bis=new ByteArrayInputStream(result.get(i).getImg());
+            BufferedImage image= ImageIO.read(bis);
+            File outputFile=new File("test.png");
+            ImageIO.write(image,"png",outputFile);
+            System.out.println(outputFile.getName());
+            form.add("data",outputFile);
+        }
+        httpServletResponse.setContentType(MediaType.MULTIPART_FORM_DATA_VALUE);
+        //return result;
+        return form;
+    }
+
 
     @PostMapping(value = "/profileImage",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public MsgResponse getRoomInfoWithImgage(HttpServletRequest request) throws IOException {
