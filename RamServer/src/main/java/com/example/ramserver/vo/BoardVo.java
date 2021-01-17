@@ -1,26 +1,42 @@
 package com.example.ramserver.vo;
 
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import java.awt.*;
 import java.util.Date;
 
 @Data
 @Setter
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class BoardVo {
     private int boardId;
     private String id;
     private String title;
     private int price;
     private int status;
-    private Date boardTime;
     private String content;
-    private String img;
-    //private Image img; 이미지 해결되면 수정예정
+    private byte[] img;
+    private Date boardTime;
     private String nickName;
     private String region;
+
+    public BoardVo(int boardId, String id, String title, int price, int status, String content, byte[] img, Date boardTime)
+    {
+        this.boardId=boardId;
+        this.id=id;
+        this.title=title;
+        this.price=price;
+        this.status=status;
+        this.content=content;
+        this.img=img;
+        this.boardTime=boardTime;
+    }
+
+    public BoardVo(int boardId, String id)
+    {
+        this.boardId=boardId;
+        this.id=id;
+    }
 }
