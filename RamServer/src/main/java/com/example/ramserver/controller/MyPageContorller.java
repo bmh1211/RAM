@@ -24,11 +24,11 @@ public class MyPageContorller {
         User result = myPageService.myPage(info.getId());
         UserResponse response = new UserResponse();
         if(result == null) {
-            response.setMsg("Info Failed");
+            response.setMsg("failed");
         }
         else
         {
-            response.setMsg("Info Success");
+            response.setMsg("success");
         }
         response.setUser(result);
         return response;
@@ -40,9 +40,9 @@ public class MyPageContorller {
         int result = myPageService.myPageUpdate(user);
         MsgResponse response = new MsgResponse();
         if(result==0)
-            response.setMsg("Update Failed");
+            response.setMsg("failed");
         else
-            response.setMsg("Update Success");
+            response.setMsg("success");
 
         return response;
     }
