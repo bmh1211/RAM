@@ -21,4 +21,6 @@ public class JoinService {
     {
         return joinMapper.checkId(id);
     }
+
+    public int checkNickName(String nickName) { return joinMapper.checkNickName(nickName);}
 }
