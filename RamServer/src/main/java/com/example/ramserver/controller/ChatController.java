@@ -127,17 +127,27 @@ public class ChatController {
             //form.add("data",result.get(i).ByteToBase64());
             ByteArrayInputStream bis=new ByteArrayInputStream(result.get(i).getImg());
             BufferedImage image= ImageIO.read(bis);
+            String path="userImage";
             File outputFile=null;
+            File dir=new File(path);
+            System.out.println(dir.getAbsolutePath());
+            if(!dir.exists()){
+                System.out.println("존재하지 않습니다.");
+                dir.mkdir();
+            }
+            else{
+                System.out.println("존재합니다");
+            }
             if(result.get(i).getId().equals("bmh1211@gmail.com")){
-                outputFile=new File("mino.png");
+                outputFile=new File("userImage/mino.png");
             }
             else if(result.get(i).getId().equals("jae961217@naver.com")){
-                outputFile=new File("jaeyarn.png");
+                outputFile=new File("userImage/jaeyarn.png");
             }
             else if(result.get(i).getId().equals("nemesis747@gmail.com")){
-                outputFile=new File("junyang.png");
+                outputFile=new File("userImage/junyang.png");
             }else if(result.get(i).getId().equals("philippe10@naver.com")){
-                outputFile=new File("hyeonsuk.png");
+                outputFile=new File("userImage/hyeonsuk.png");
 
             }
 
