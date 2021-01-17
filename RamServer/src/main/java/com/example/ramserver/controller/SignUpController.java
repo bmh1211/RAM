@@ -20,9 +20,9 @@ public class SignUpController {
         int result = joinService.join(joinVo);
         MsgResponse response = new MsgResponse();
         if(result == 0)
-            response.setMsg("Join Failed");
+            response.setMsg("failed");
         else
-            response.setMsg("Join Success");
+            response.setMsg("success");
 
 
 
@@ -36,9 +36,22 @@ public class SignUpController {
         int result = joinService.checkId(id);
         MsgResponse response = new MsgResponse();
         if(result == 0)
-            response.setMsg("New Id");
+            response.setMsg("success");
         else
-            response.setMsg("Existing Id");
+            response.setMsg("failed");
+        return response;
+    }
+
+
+    @GetMapping("/checkNickName")
+    public MsgResponse CheckNickName(@RequestParam("nickName") String nickName)
+    {
+        int result = joinService.checkNickName(nickName);
+        MsgResponse response = new MsgResponse();
+        if(result == 0)
+            response.setMsg("success");
+        else
+            response.setMsg("failed");
         return response;
     }
 }
