@@ -119,4 +119,35 @@ public class ChatController {
         return result;
     }
 
+
+    @GetMapping(value="/fileMove")
+    public void FileMove() throws IOException {
+        List<ImageVo> result=chatRoomService.GetAllImageInfo();
+        for(int i=0;i<result.size();i++){
+            //form.add("data",result.get(i).ByteToBase64());
+            ByteArrayInputStream bis=new ByteArrayInputStream(result.get(i).getImg());
+            BufferedImage image= ImageIO.read(bis);
+            File outputFile=null;
+            if(result.get(i).getId().equals("bmh1211@gmail.com")){
+                outputFile=new File("mino.png");
+            }
+            else if(result.get(i).getId().equals("jae961217@naver.com")){
+                outputFile=new File("jaeyarn.png");
+            }
+            else if(result.get(i).getId().equals("nemesis747@gmail.com")){
+                outputFile=new File("junyang.png");
+            }else if(result.get(i).getId().equals("philippe10@naver.com")){
+                outputFile=new File("hyeonsuk.png");
+
+            }
+
+            FileOutputStream fileOutputStream=new FileOutputStream(outputFile);
+            fileOutputStream.write(result.get(i).getImg());
+            fileOutputStream.close();
+            System.out.println(outputFile.getAbsolutePath());
+            /*ImageIO.write(image,"png",outputFile);
+            System.out.println(outputFile.getName());*/
+        }
+    }
+
 }

@@ -44,4 +44,10 @@ message,
 send_time)
 VALUES (#{messageId},#{chatRoomId},#{author},#{receiver},#{msg},#{Date})
     </insert>
+    
+    
+    
+    <select id="GetAllImageInfo" resultType="com.example.ramserver.vo.ImageVo">
+        select * from userimage
+    </select>
 </mapper>

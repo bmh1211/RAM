@@ -35,4 +35,8 @@ public class ChatRoomService {
         chatRoomMapper.InsertChatMessage(chatInsertVo);
     }
 
+    public List<ImageVo> GetAllImageInfo(){
+        return chatRoomMapper.GetAllImageInfo();
+    }
+
 }

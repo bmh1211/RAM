@@ -14,4 +14,5 @@ public interface ChatRoomMapper {
     int GetMessageCount();
     List<Integer> GetChatRoomId(FindChatRoomVo findChatRoomVo);
     void InsertChatMessage(ChatInsertVo chatInsertVo);
+    List<ImageVo> GetAllImageInfo();
 }
