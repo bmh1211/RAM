@@ -8,7 +8,7 @@
         select * from user where ID=#{id};
     </select>
     <update id="myPageUpdate" parameterType="com.example.ramserver.model.User">
-        update user set password=#{password}, nickName=#{nickName}, bank=#{bank}, account=#{account}, region=#{region} where ID=#{id} limit 1;
+        update user set password=#{password}, userName=#{userName}, phoneNumber=#{phoneNumber}, region=#{region}, bank=#{bank}, account=#{account} where ID=#{id} limit 1;
     </update>
 </mapper>
 
