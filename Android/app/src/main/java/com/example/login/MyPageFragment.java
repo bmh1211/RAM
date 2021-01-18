@@ -2,33 +2,24 @@ package com.example.login;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.login.network.NetworkTask;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,15 +40,15 @@ public class MyPageFragment extends Fragment {
     Fragment fragment1;
     Fragment fragment_change_profile;
     Button btn_changeProfile;
-    Button btn_list_trade_pick;
+    Button btn_list_sell_buy_trade;
 
     private PopupWindow pw_chooser;
     private Button btn_buy_list;
     private Button btn_sell_list;
-    private Button btn_pick_list;
+    private Button btn_trade_list;
     Fragment fragment_buy_list;
     Fragment fragment_sell_list;
-    Fragment fragment_pick_list;
+    Fragment fragment_trade_list;
     private String password_check;
 
     private PopupWindow pw_checkPW;
@@ -75,7 +66,7 @@ public class MyPageFragment extends Fragment {
         fragment1 = new BoardFragment();
         fragment_change_profile = new ChangeProfileFragment();
         btn_changeProfile=(Button)view.findViewById(R.id.btn_changeProfile);
-        btn_list_trade_pick=(Button)view.findViewById(R.id.btn_list_trade_pick);
+        btn_list_sell_buy_trade=(Button)view.findViewById(R.id.btn_list_buy_sell_trade);
 
         iv_profile = (ImageView) view.findViewById(R.id.iv_profile);
         tv_name_real = (TextView) view.findViewById(R.id.tv_name_real);
@@ -102,7 +93,7 @@ public class MyPageFragment extends Fragment {
         // 마이페이지에 유저 프로필 사진 출력
         // todo : this.함수();
 
-        btn_list_trade_pick.setOnClickListener(new View.OnClickListener() {
+        btn_list_sell_buy_trade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setPopupChooser();
@@ -163,14 +154,14 @@ public class MyPageFragment extends Fragment {
     }
 
     public void setPopupChooser(){
-        View popupView = getLayoutInflater().inflate(R.layout.popupwindow_chooser_buy_sell_pick,null);
+        View popupView = getLayoutInflater().inflate(R.layout.popupwindow_chooser_buy_sell_trade,null);
         pw_chooser = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
         pw_chooser.setFocusable(true);
         pw_chooser.showAtLocation(popupView, Gravity.CENTER,0,0);
 
         btn_buy_list = (Button)pw_chooser.getContentView().findViewById(R.id.btn_buy_list);
         btn_sell_list = (Button)pw_chooser.getContentView().findViewById(R.id.btn_sell_list);
-        btn_pick_list = (Button)pw_chooser.getContentView().findViewById(R.id.btn_pick_list);
+        btn_trade_list = (Button)pw_chooser.getContentView().findViewById(R.id.btn_trade_list);
 
         btn_buy_list.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,11 +183,11 @@ public class MyPageFragment extends Fragment {
             }
         });
 
-        btn_pick_list.setOnClickListener(new View.OnClickListener() {
+        btn_trade_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragment_pick_list = new PickListFragment();
-                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_pick_list).commit();
+                fragment_trade_list = new TradeListFragment();
+                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_trade_list).commit();
 
                 pw_chooser.dismiss();
             }

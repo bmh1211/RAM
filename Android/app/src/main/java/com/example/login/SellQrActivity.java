@@ -85,7 +85,7 @@ public class SellQrActivity extends AppCompatActivity {
     }
 
     public void QRcheck(){
-        qrScan.setPrompt("QR코드를 스캔해주세요0");
+        qrScan.setPrompt("QR코드를 스캔해주세요");
         qrScan.setOrientationLocked(false);
         qrScan.setBeepEnabled(false);
         qrScan.initiateScan();

@@ -57,11 +57,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/btn_list_trade_pick"
+            android:id="@+id/btn_list_buy_sell_trade"
             android:layout_width="82dp"
             android:layout_height="104dp"
             android:layout_marginTop="16dp"
-            android:text="거래 내역\n및\n찜 목록"
+            android:text="거래 중\n및\n거래 완료"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btn_changeProfile"
             app:layout_constraintTop_toTopOf="parent" />
