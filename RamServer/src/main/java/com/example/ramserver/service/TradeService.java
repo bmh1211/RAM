@@ -11,11 +11,11 @@ public class TradeService {
     @Autowired
     public TradeMapper tradeMapper;
 
-    public TradeVo list(String id, boolean type)
+    public TradeVo list(TradeVo tradeVo, boolean type)
     {
         if(type==true)
-            return tradeMapper.buyList(id);
+            return tradeMapper.buyList(tradeVo);
         else
-            return tradeMapper.sellList(id);
+            return tradeMapper.sellList(tradeVo);
     }
 }

@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +40,7 @@ public class ChattingActivity extends AppCompatActivity {
     private Intent thisIntent;
     private String SenderName;
     private String OtherName;
+    private TextView otherNameTextView;
 
 
 
@@ -49,6 +51,8 @@ public class ChattingActivity extends AppCompatActivity {
         thisIntent=getIntent();
         OtherName=thisIntent.getStringExtra("id");
         setContentView(R.layout.fragment_chatting);
+        otherNameTextView=(TextView)findViewById(R.id.otherName);
+        otherNameTextView.setText(OtherName);
         messageSendBtn=(Button)findViewById(R.id.btn_send);
         messageSendBtn.setOnClickListener(new View.OnClickListener(){
             @Override

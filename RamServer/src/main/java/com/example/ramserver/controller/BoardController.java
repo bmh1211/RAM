@@ -5,13 +5,22 @@ import com.example.ramserver.Response.BoardResponse;
 import com.example.ramserver.Response.MsgResponse;
 import com.example.ramserver.model.User;
 import com.example.ramserver.service.BoardService;
-import com.example.ramserver.vo.BoardCheckVo;
+import com.example.ramserver.vo.BoardListVo;
 import com.example.ramserver.vo.BoardVo;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -25,7 +34,7 @@ public class BoardController {
     public BoardListResponse list(@RequestParam("index") int index)
     {
         BoardListResponse response = new BoardListResponse();
-        List<BoardVo> result = boardService.boardList(index);
+        List<BoardListVo> result = boardService.boardList(index);
         if(result==null)
             response.setMsg("failed");
         else
@@ -65,14 +74,48 @@ public class BoardController {
         return response;
     }
 
+    @PostMapping(value = "/Register",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public MsgResponse Register(HttpServletRequest request) throws IOException, ParseException, java.text.ParseException {
+        HttpSession session=request.getSession();
+        User info=(User)session.getAttribute("login");
+        MultipartHttpServletRequest multipartHttpServletRequest=(MultipartHttpServletRequest)request;
+        List<MultipartFile> files=multipartHttpServletRequest.getFiles("file");
+
+        JSONObject jsonObject=null;
+        byte[] imgBytes=null;
+        for(int i=0;i<files.size();i++){
+            byte[] data =files.get(i).getBytes();
+            if(files.get(i).getOriginalFilename().equals("json")){
+                JSONParser parser=new JSONParser();
+                Object obj=parser.parse(new String(data));
+                jsonObject=(JSONObject)obj;
+            }else{
+                imgBytes=data;
+            }
+        }
+        String Regdate01=StringToDate(jsonObject.get("date").toString()).format(new Date());
+        Date Regdate=StringToDate(jsonObject.get("date").toString()).parse(Regdate01);
+        BoardVo boardVo=new BoardVo(boardService.max()+1,info.getId(),jsonObject.get("title").toString(),
+                Integer.parseInt(jsonObject.get("price").toString()) ,0,jsonObject.get("body").toString(),
+                imgBytes,Regdate);
+
+
+        int registerResult = boardService.register(boardVo);
+        MsgResponse response=new MsgResponse();
+        if(registerResult == 0)
+            response.setMsg("failed");
+        else
+            response.setMsg("success");
+        return response;
+    }
+
+
     @PostMapping("/modify")
     public MsgResponse modify(@RequestBody BoardVo boardVo)
     {
-        BoardCheckVo boardCheckVo = new BoardCheckVo();
-        boardCheckVo.setBoardId(boardVo.getBoardId());
-        boardCheckVo.setUserId(boardVo.getId());
+        BoardVo boardCheck = new BoardVo(boardVo.getBoardId(), boardVo.getId());
 
-        int check = boardService.check(boardCheckVo);
+        int check = boardService.check(boardCheck);
         MsgResponse response = new MsgResponse();
         if(check == 0)
             response.setMsg("failed");
@@ -93,10 +136,8 @@ public class BoardController {
     {
         HttpSession session = request.getSession();
         User info = (User)session.getAttribute("login");
-        BoardCheckVo boardCheckVo = new BoardCheckVo();
-        boardCheckVo.setUserId(info.getId());
-        boardCheckVo.setBoardId(boardId);
-        int check = boardService.check(boardCheckVo);
+        BoardVo boardCheck = new BoardVo(boardId, info.getId());
+        int check = boardService.check(boardCheck);
         MsgResponse response = new MsgResponse();
         if(check == 0)
             response.setMsg("failed"); //권한 x
@@ -108,8 +149,10 @@ public class BoardController {
             else
                 response.setMsg("success");
         }
-
-
         return response;
+    }
+
+    private SimpleDateFormat StringToDate(String date){
+        return new SimpleDateFormat(date);
     }
 }

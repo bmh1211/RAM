@@ -4,10 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.ramserver.mapper.TradeMapper">
-    <select id="buyList" parameterType="string" resultType="com.example.ramserver.vo.TradeVo">
-        select * from tradeView where buyerId = #{id};
+    <select id="buyList" parameterType="com.example.ramserver.vo.TradeVo" resultType="com.example.ramserver.vo.TradeVo">
+        select * from tradeView where buyerId = #{buyerId} and tradeTime > #{tradeTime} order by tradeTime;
     </select>
     <select id="sellList" parameterType="string" resultType="com.example.ramserver.vo.TradeVo">
-        select * from tradeView where sellerId = #{id};
+        select * from tradeView where sellerId = #{sellerId} and tradeTime > #{tradeTime} order by tradeTime;
     </select>
 </mapper>

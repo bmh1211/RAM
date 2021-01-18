@@ -10,4 +10,6 @@ public interface JoinMapper {
     int checkId(String id);
 
     int join(JoinVo joinVo);
+
+    int checkNickName(String nickName);
 }

@@ -66,6 +66,9 @@ public class NetworkTask extends AsyncTask<Void, Void, String> {
                 e.printStackTrace();
             }
         }
+        else if(method.equals("GETTest")){
+            result = requestHttpURLConnection.HttpTest(context,url);
+        }
         else{
             result=null;
         }

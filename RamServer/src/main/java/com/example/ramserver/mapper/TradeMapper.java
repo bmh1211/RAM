@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface TradeMapper {
-    TradeVo buyList(String id);
+    TradeVo buyList(TradeVo tradeVo);
 
-    TradeVo sellList(String id);
+    TradeVo sellList(TradeVo tradeVo);
 }

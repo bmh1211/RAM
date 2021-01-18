@@ -5,9 +5,12 @@
 
 <mapper namespace="com.example.ramserver.mapper.JoinMapper">
     <insert id="join"  parameterType="com.example.ramserver.vo.JoinVo">
-        insert into user values (#{id}, #{password}, #{userName}, #{phoneNumber}, #{nickName}, #{bank}, #{account}, 0, #{region});
+        insert into user values (#{id},#{password},#{userName},#{phoneNumber},#{nickName},#{bank},#{account},0,#{region});
     </insert>
     <select id="checkId" parameterType="string" resultType="int">
         select count(*) from user where ID=#{id};
+    </select>
+    <select id="checkNickName" parameterType="string" resultType="int">
+        select count(*) from user where nickName=#{nickName};
     </select>
 </mapper>

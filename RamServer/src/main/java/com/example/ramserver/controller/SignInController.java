@@ -31,11 +31,11 @@ public class SignInController {
         if(result==null){
             session.invalidate();//세션 삭제
             //loginResponse.setMsg("Login Failed");
-            response.setMsg("Login Failed");
+            response.setMsg("failed");
         }
         else {
             session.setAttribute("login",result);
-            response.setMsg("Login Success");
+            response.setMsg("success");
         }
         return response;
         //return loginService.findAll(loginVo);

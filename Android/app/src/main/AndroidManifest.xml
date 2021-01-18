@@ -46,7 +46,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ChattingActivity"/>
+        <activity android:name=".ChattingActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <service android:name=".service.SocketService"></service>
 
         <provider

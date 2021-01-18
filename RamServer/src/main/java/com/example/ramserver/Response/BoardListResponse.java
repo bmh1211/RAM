@@ -1,6 +1,6 @@
 package com.example.ramserver.Response;
 
-import com.example.ramserver.vo.BoardVo;
+import com.example.ramserver.vo.BoardListVo;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,5 +14,5 @@ import java.util.List;
 @NoArgsConstructor
 public class BoardListResponse {
     private String msg;
-    private List<BoardVo> list;
+    private List<BoardListVo> list;
 }
