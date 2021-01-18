@@ -64,6 +64,8 @@ public class MyPageFragment extends Fragment {
     private Button btn_check;
     private EditText et_present_password;
 
+    private Button btn_sell;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -84,6 +86,15 @@ public class MyPageFragment extends Fragment {
         tv_bank_real = (TextView) view.findViewById(R.id.tv_bank_real);
         tv_bankaccount_real = (TextView) view.findViewById(R.id.tv_bankaccount_real);
         tv_point_real = (TextView) view.findViewById(R.id.tv_point_real);
+
+        btn_sell = (Button)view.findViewById(R.id.btn_sell);
+        btn_sell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent qr_intent = new Intent(getContext(),SellQrActivity.class);
+                startActivity(qr_intent);
+            }
+        });
 
         // 마이페이지에 유저 데이터 출력
         this.GetUserData();
