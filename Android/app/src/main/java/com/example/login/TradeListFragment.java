@@ -1,7 +1,9 @@
 package com.example.login;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -44,6 +46,7 @@ public class TradeListFragment extends Fragment {
     final static int REQUEST_TAKE_PHOTO = 99;
     private Button btn_submit;
     private EditText et_password_submit;
+    private SharedPreferences sharedPreferences_qr;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,6 +57,11 @@ public class TradeListFragment extends Fragment {
         ib_take_picture = (ImageButton) view.findViewById(R.id.ib_take_pictrue);
         et_password_submit = (EditText) view.findViewById(R.id.et_password_submit);
         btn_submit = (Button)view.findViewById(R.id.btn_submit);
+
+        sharedPreferences_qr = getActivity().getSharedPreferences("setting", Context.MODE_PRIVATE);
+
+        // 현재 기기에 저장된 sharedPreferences_qr의 boolean 값 체크
+        Log.w("TradeListFragment",String.valueOf(sharedPreferences_qr.getBoolean("flag_qr",false)));
 
         // 권한 요청 받기
         this.checkPermissions();

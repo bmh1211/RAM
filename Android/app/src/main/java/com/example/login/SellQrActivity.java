@@ -1,6 +1,7 @@
 package com.example.login;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,8 @@ public class SellQrActivity extends AppCompatActivity {
     private String resultString="";
     private String TAG="SellQrActivity";
     private Fragment fragment_trade_list;
+    private SharedPreferences sharedPreferences_qr;
+    private SharedPreferences.Editor sharedPreferences_qr_editor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,10 @@ public class SellQrActivity extends AppCompatActivity {
         // 처음 qr코드 인식 관련
         fragment_trade_list = new TradeListFragment();
         qrScan = new IntentIntegrator(this);
+
+        // SharedPreferences로 qr찍었을 때와 마이페이지에서 접근할 때 구분
+        sharedPreferences_qr = getSharedPreferences("setting",MODE_PRIVATE);
+        sharedPreferences_qr_editor = sharedPreferences_qr.edit(); // sharedPreferences_qr을 제어할 editor 설정
 
         // qr코드 스캔
         this.QRcheck();
@@ -65,6 +72,11 @@ public class SellQrActivity extends AppCompatActivity {
 
                                     if(resultString.equals("MINO")){
                                         Log.w(TAG,"QR 스캔 성공");
+
+                                        // qr 스캔 성공하면 sharedPreferences_qr을 true로 잡아줘서 아이템 클릭시 이미지와 비밀번호 서버에 전송할 수 있도록
+                                        sharedPreferences_qr_editor.putBoolean("flag_qr",true);
+                                        sharedPreferences_qr_editor.commit();
+
                                         getSupportFragmentManager().beginTransaction().replace(R.id.QR_container,fragment_trade_list).commit();
                                     }
                                 }

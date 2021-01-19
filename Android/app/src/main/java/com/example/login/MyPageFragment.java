@@ -3,7 +3,9 @@ package com.example.login;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -37,11 +39,13 @@ public class MyPageFragment extends Fragment {
     private TextView tv_bankaccount_real;
     private TextView tv_point_real;
 
+    // 팝업 chooser 기본틀
     Fragment fragment1;
     Fragment fragment_change_profile;
     Button btn_changeProfile;
     Button btn_list_sell_buy_trade;
 
+    // 팝업 chooser에 들어가는 요소들
     private PopupWindow pw_chooser;
     private Button btn_buy_list;
     private Button btn_sell_list;
@@ -51,9 +55,12 @@ public class MyPageFragment extends Fragment {
     Fragment fragment_trade_list;
     private String password_check;
 
+    // 정보 수정 버튼 클릭 시 비밀번호 체크에 들어가는 요소
     private PopupWindow pw_checkPW;
     private Button btn_check;
     private EditText et_present_password;
+
+    private SharedPreferences.Editor sharedPreferences_qr_editor;
 
     private Button btn_sell;
 
@@ -77,6 +84,8 @@ public class MyPageFragment extends Fragment {
         tv_bank_real = (TextView) view.findViewById(R.id.tv_bank_real);
         tv_bankaccount_real = (TextView) view.findViewById(R.id.tv_bankaccount_real);
         tv_point_real = (TextView) view.findViewById(R.id.tv_point_real);
+
+        sharedPreferences_qr_editor = getActivity().getSharedPreferences("setting", Context.MODE_PRIVATE).edit();
 
         btn_sell = (Button)view.findViewById(R.id.btn_sell);
         btn_sell.setOnClickListener(new View.OnClickListener() {
@@ -186,6 +195,10 @@ public class MyPageFragment extends Fragment {
         btn_trade_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 마이페이지로 거래목록 접근 시 sharedPreferences_qr을 false로 잡아줘서 아이템 클릭시 게시판에서 일치하는 게시물로 이동하도록
+                sharedPreferences_qr_editor.putBoolean("flag_qr",false);
+                sharedPreferences_qr_editor.commit();
+
                 fragment_trade_list = new TradeListFragment();
                 ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_trade_list).commit();
 
