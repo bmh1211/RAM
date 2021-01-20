@@ -6,45 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".TradeListFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_layout_board"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="505dp">
 
-        <ImageButton
-            android:id="@+id/ib_take_pictrue"
-            android:layout_width="205dp"
-            android:layout_height="301dp"
-            android:layout_marginTop="56dp"
-            android:src="@android:drawable/ic_menu_camera"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <ListView
+            android:id="@+id/lv_tradeList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:isScrollContainer="true"
+            tools:listitem="@layout/list_item_theme" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-<!--        직접 비밀번호 설정해서 전송할 시-->
-        <EditText
-            android:id="@+id/et_password_submit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:ems="10"
-            android:hint="비밀번호 설정"
-            android:inputType="textPassword"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.512"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ib_take_pictrue" />
-
-        <Button
-            android:id="@+id/btn_submit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="56dp"
-            android:text="사진 및 비밀번호 전송"
-            app:layout_constraintEnd_toEndOf="@+id/et_password_submit"
-            app:layout_constraintHorizontal_bias="0.533"
-            app:layout_constraintStart_toStartOf="@+id/et_password_submit"
-            app:layout_constraintTop_toBottomOf="@+id/et_password_submit"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+    <Button
+        android:id="@+id/btn_mypage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="마이페이지"
+        android:layout_gravity="right|bottom"
+        android:layout_marginBottom="50dp"/>
 </FrameLayout>

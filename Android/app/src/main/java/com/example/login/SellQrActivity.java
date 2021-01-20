@@ -73,12 +73,12 @@ public class SellQrActivity extends AppCompatActivity {
                                     if(resultString.equals("MINO")){
                                         Log.w(TAG,"QR 스캔 성공");
 
-                                        // qr 스캔 성공하면 sharedPreferences_qr을 true로 잡아줘서 아이템 클릭시 이미지와 비밀번호 서버에 전송할 수 있도록
                                         sharedPreferences_qr_editor.putBoolean("flag_qr",true);
                                         sharedPreferences_qr_editor.commit();
-
-                                        getSupportFragmentManager().beginTransaction().replace(R.id.QR_container,fragment_trade_list).commit();
                                     }
+                                }
+                                else{
+                                    Log.w(TAG,"QR 스캔 실패");
                                 }
                             }catch(JSONException e){
                                 e.printStackTrace();
@@ -88,8 +88,8 @@ public class SellQrActivity extends AppCompatActivity {
                     else{
                         super.onActivityResult(requestCode,resultCode,intent);
                     }
-
-                    break;
+//                    finish();
+//                    onBackPressed();
             }
         }catch(Exception e){
             e.printStackTrace();

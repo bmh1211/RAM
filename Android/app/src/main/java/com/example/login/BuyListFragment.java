@@ -111,7 +111,7 @@ public class BuyListFragment extends Fragment {
     public void GetBuyPost()
     {
         Log.w("GetPosting","함수 실행");
-        NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/trade/list?type=true","GET"); // true가 구매리스트, false가 판매리스트
+        NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/trade/list?type=true&tradeTime=2020-01-01","GET"); // true가 구매리스트, false가 판매리스트
         try{
             //{"msg":"조회 성공","tradeVo":{"tradeId":1,"buyerId":"bmh1211@gmail.com","sellerId":"jae961217@naver.com","boardId":"1","tradeTime":"2020-12-23T00:00:00.000+00:00","boardTitle":null}}
             JSONObject resultObject = new JSONObject(networkTask.execute().get());
@@ -128,10 +128,10 @@ public class BuyListFragment extends Fragment {
 
             String resultString = resultObject.getString("msg");
 
-            if(resultString.equals("거래내역이 없습니다")){
+            if(resultString.equals("failed")){
                 Toast.makeText(getActivity(),resultString, Toast.LENGTH_SHORT).show();
             }
-            else if(resultString.equals("조회 성공")){
+            else if(resultString.equals("success")){
                 String title, tradeTime, userID;
                 //title = resultObject.getString("boardTitle");
                 title="";
