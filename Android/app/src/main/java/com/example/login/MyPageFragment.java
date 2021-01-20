@@ -62,7 +62,10 @@ public class MyPageFragment extends Fragment {
 
     private SharedPreferences.Editor sharedPreferences_qr_editor;
 
+    // 테스트용
     private Button btn_sell;
+    private Button btn_buy;
+    private Fragment fragment_buy;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,12 +90,21 @@ public class MyPageFragment extends Fragment {
 
         sharedPreferences_qr_editor = getActivity().getSharedPreferences("setting", Context.MODE_PRIVATE).edit();
 
+        // 테스트용
         btn_sell = (Button)view.findViewById(R.id.btn_sell);
         btn_sell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent qr_intent = new Intent(getContext(),SellQrActivity.class);
                 startActivity(qr_intent);
+            }
+        });
+        btn_buy = (Button)view.findViewById(R.id.btn_buy);
+        fragment_buy = new BuyFragment();
+        btn_buy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_buy).commit();
             }
         });
 
