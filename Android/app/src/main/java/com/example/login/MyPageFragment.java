@@ -2,33 +2,26 @@ package com.example.login;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Environment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.login.network.NetworkTask;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,23 +39,33 @@ public class MyPageFragment extends Fragment {
     private TextView tv_bankaccount_real;
     private TextView tv_point_real;
 
+    // 팝업 chooser 기본틀
     Fragment fragment1;
     Fragment fragment_change_profile;
     Button btn_changeProfile;
-    Button btn_list_trade_pick;
+    Button btn_list_sell_buy_trade;
 
+    // 팝업 chooser에 들어가는 요소들
     private PopupWindow pw_chooser;
     private Button btn_buy_list;
     private Button btn_sell_list;
-    private Button btn_pick_list;
+    private Button btn_trade_list;
     Fragment fragment_buy_list;
     Fragment fragment_sell_list;
-    Fragment fragment_pick_list;
+    Fragment fragment_trade_list;
     private String password_check;
 
+    // 정보 수정 버튼 클릭 시 비밀번호 체크에 들어가는 요소
     private PopupWindow pw_checkPW;
     private Button btn_check;
     private EditText et_present_password;
+
+    private SharedPreferences.Editor sharedPreferences_qr_editor;
+
+    // 테스트용
+    private Button btn_sell;
+    private Button btn_buy;
+    private Fragment fragment_buy;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,7 +76,7 @@ public class MyPageFragment extends Fragment {
         fragment1 = new BoardFragment();
         fragment_change_profile = new ChangeProfileFragment();
         btn_changeProfile=(Button)view.findViewById(R.id.btn_changeProfile);
-        btn_list_trade_pick=(Button)view.findViewById(R.id.btn_list_trade_pick);
+        btn_list_sell_buy_trade=(Button)view.findViewById(R.id.btn_list_buy_sell_trade);
 
         iv_profile = (ImageView) view.findViewById(R.id.iv_profile);
         tv_name_real = (TextView) view.findViewById(R.id.tv_name_real);
@@ -85,13 +88,33 @@ public class MyPageFragment extends Fragment {
         tv_bankaccount_real = (TextView) view.findViewById(R.id.tv_bankaccount_real);
         tv_point_real = (TextView) view.findViewById(R.id.tv_point_real);
 
+        sharedPreferences_qr_editor = getActivity().getSharedPreferences("setting", Context.MODE_PRIVATE).edit();
+
+        // 테스트용
+        btn_sell = (Button)view.findViewById(R.id.btn_sell);
+        btn_sell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent qr_intent = new Intent(getContext(),SellQrActivity.class);
+                startActivity(qr_intent);
+            }
+        });
+        btn_buy = (Button)view.findViewById(R.id.btn_buy);
+        fragment_buy = new BuyFragment();
+        btn_buy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_buy).commit();
+            }
+        });
+
         // 마이페이지에 유저 데이터 출력
         this.GetUserData();
 
         // 마이페이지에 유저 프로필 사진 출력
         // todo : this.함수();
 
-        btn_list_trade_pick.setOnClickListener(new View.OnClickListener() {
+        btn_list_sell_buy_trade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setPopupChooser();
@@ -152,14 +175,14 @@ public class MyPageFragment extends Fragment {
     }
 
     public void setPopupChooser(){
-        View popupView = getLayoutInflater().inflate(R.layout.popupwindow_chooser_buy_sell_pick,null);
+        View popupView = getLayoutInflater().inflate(R.layout.popupwindow_chooser_buy_sell_trade,null);
         pw_chooser = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
         pw_chooser.setFocusable(true);
         pw_chooser.showAtLocation(popupView, Gravity.CENTER,0,0);
 
         btn_buy_list = (Button)pw_chooser.getContentView().findViewById(R.id.btn_buy_list);
         btn_sell_list = (Button)pw_chooser.getContentView().findViewById(R.id.btn_sell_list);
-        btn_pick_list = (Button)pw_chooser.getContentView().findViewById(R.id.btn_pick_list);
+        btn_trade_list = (Button)pw_chooser.getContentView().findViewById(R.id.btn_trade_list);
 
         btn_buy_list.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,11 +204,15 @@ public class MyPageFragment extends Fragment {
             }
         });
 
-        btn_pick_list.setOnClickListener(new View.OnClickListener() {
+        btn_trade_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragment_pick_list = new PickListFragment();
-                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_pick_list).commit();
+                // 마이페이지로 거래목록 접근 시 sharedPreferences_qr을 false로 잡아줘서 아이템 클릭시 게시판에서 일치하는 게시물로 이동하도록
+                sharedPreferences_qr_editor.putBoolean("flag_qr",false);
+                sharedPreferences_qr_editor.commit();
+
+                fragment_trade_list = new TradeListFragment();
+                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_trade_list).commit();
 
                 pw_chooser.dismiss();
             }

@@ -129,7 +129,7 @@ public class LogInActivity extends AppCompatActivity {
                     }
                     String resultString=resultObject.getString("msg");
 
-                    if(resultString.equals("Login Success")){
+                    if(resultString.equals("success")){
                         startActivity(intent_mainPage);
                     }
                     else{

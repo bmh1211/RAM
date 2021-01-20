@@ -29,10 +29,10 @@
             android:text="판매 목록" />
 
         <Button
-            android:id="@+id/btn_pick_list"
+            android:id="@+id/btn_trade_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="찜 목록" />
+            android:text="거래 중 목록" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
