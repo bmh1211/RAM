@@ -13,5 +13,5 @@ public class TradeVo {
     private String sellerId;
     private String boardId;
     private Date tradeTime;
-    private String boardTitle;
+    private String title;
 }
