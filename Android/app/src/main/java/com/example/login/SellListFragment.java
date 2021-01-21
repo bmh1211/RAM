@@ -1,6 +1,5 @@
 package com.example.login;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -20,12 +18,10 @@ import com.example.login.Data.ListItem;
 import com.example.login.adapter.TradeListAdapter;
 import com.example.login.network.NetworkTask;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 public class SellListFragment extends Fragment {
@@ -49,11 +45,11 @@ public class SellListFragment extends Fragment {
         lv_recentSell=(ListView)view.findViewById(R.id.lv_recentSell);
         //swipe_layout_board = (SwipeRefreshLayout)view.findViewById(R.id.swipe_layout_board);
 
-        // 게시판 데이터 까기 테스트
-        this.GetSellPost();
-
         sell_adapter = new TradeListAdapter(container.getContext(),itemlist);
         lv_recentSell.setAdapter(sell_adapter);
+
+        // 게시판 데이터 까기 테스트
+        this.GetSellPost();
 
         lv_recentSell.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -82,11 +78,8 @@ public class SellListFragment extends Fragment {
 
         NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/trade/list?type=false&tradeTime=2020-01-01","GET"); // true가 구매리스트, false가 판매리스트
         try{
-            //{"msg":"조회 성공","tradeVo":{"tradeId":1,"buyerId":"bmh1211@gmail.com","sellerId":"jae961217@naver.com","boardId":"1","tradeTime":"2020-12-23T00:00:00.000+00:00","boardTitle":null}}
+            //{"msg":"success","tradeVo":{"tradeId":1,"buyerId":"bmh1211@gmail.com","sellerId":"jae961217@naver.com","boardId":"1","tradeTime":"2020-12-23T00:00:00.000+00:00","boardTitle":null}}
             JSONObject resultObject = new JSONObject(networkTask.execute().get());
-
-            // list일 경우
-            //JSONArray buyArray = resultObject.getJSONArray("list");
 
             if(resultObject == null)
             {
@@ -100,10 +93,15 @@ public class SellListFragment extends Fragment {
                 Toast.makeText(getActivity(),resultString, Toast.LENGTH_SHORT).show();
             }
             else if(resultString.equals("success")){
+                Toast.makeText(getActivity(),resultString, Toast.LENGTH_SHORT).show();
+
+                JSONObject sellObject = resultObject.getJSONObject("tradeVo");
+                Log.w("SellListFragment",sellObject.toString());
+
                 String title, tradeTime, userID;
-                title = resultObject.getString("boardTitle");
-                tradeTime = resultObject.getString("tradeTime");
-                userID = resultObject.getString("buyerId");
+                title = sellObject.getString("boardTitle");
+                tradeTime = sellObject.getString("tradeTime");
+                userID = sellObject.getString("buyerId");
 
                 // 생성된 아이템 목록에 추가
                 sell_adapter.addItem(title,userID,tradeTime);

@@ -36,6 +36,7 @@ import com.example.login.Data.ListItem;
 import com.example.login.adapter.TradeListAdapter;
 import com.example.login.network.NetworkTask;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -55,7 +56,7 @@ public class TradeListFragment extends Fragment {
     private SharedPreferences sharedPreferences_qr;
     private String TAG="TradeListFragment";
 
-    private TradeListAdapter sell_adapter;
+    private TradeListAdapter trade_adapter;
     static final ArrayList<ListItem> itemlist = new ArrayList<ListItem>();
     private ListView lv_tradeList;
     private Button btn_mypage;
@@ -75,8 +76,8 @@ public class TradeListFragment extends Fragment {
         btn_mypage = (Button) view.findViewById(R.id.btn_mypage);
         fragment_mypage = new MyPageFragment();
 
-        sell_adapter = new TradeListAdapter(container.getContext(),itemlist);
-        lv_tradeList.setAdapter(sell_adapter);
+        trade_adapter = new TradeListAdapter(container.getContext(),itemlist);
+        lv_tradeList.setAdapter(trade_adapter);
 
         sharedPreferences_qr = getActivity().getSharedPreferences("setting", Context.MODE_PRIVATE);
         Boolean flag_qr = sharedPreferences_qr.getBoolean("flag_qr",false);
@@ -207,15 +208,13 @@ public class TradeListFragment extends Fragment {
         }
     }
 
+    // todo : url 임시 - 수정필요
     public void GetTradeList(){
         Log.w(TAG,"GetTradeList() 함수 실행");
-        NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/trade/list?type=false&tradeTime=2020-01-01","GET"); // true가 구매리스트, false가 판매리스트
+        NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/trade/list?type=true&tradeTime=2020-01-01","GET"); // true가 구매리스트, false가 판매리스트
         try{
             //{"msg":"success","tradeVo":{"tradeId":1,"buyerId":"bmh1211@gmail.com","sellerId":"jae961217@naver.com","boardId":"1","tradeTime":"2020-12-23T00:00:00.000+00:00","boardTitle":null}}
             JSONObject resultObject = new JSONObject(networkTask.execute().get());
-
-            // list일 경우
-            //JSONArray buyArray = resultObject.getJSONArray("list");
 
             if(resultObject == null)
             {
@@ -229,14 +228,19 @@ public class TradeListFragment extends Fragment {
                 Toast.makeText(getActivity(),resultString, Toast.LENGTH_SHORT).show();
             }
             else if(resultString.equals("success")){
+                Toast.makeText(getActivity(),resultString, Toast.LENGTH_SHORT).show();
+
+                JSONObject tradeObject = resultObject.getJSONObject("tradeVo");
+                Log.w(TAG,tradeObject.toString());
+
                 String title, tradeTime, userID;
-                title = resultObject.getString("boardTitle");
-                tradeTime = resultObject.getString("tradeTime");
-                userID = resultObject.getString("buyerId");
+                title = tradeObject.getString("boardTitle");
+                tradeTime = tradeObject.getString("tradeTime");
+                userID = tradeObject.getString("buyerId");
 
                 // 생성된 아이템 목록에 추가
-                sell_adapter.addItem(title,userID,tradeTime);
-                sell_adapter.notifyDataSetChanged();
+                trade_adapter.addItem(title,userID,tradeTime);
+                trade_adapter.notifyDataSetChanged();
             }
         }
         catch (JSONException e) {

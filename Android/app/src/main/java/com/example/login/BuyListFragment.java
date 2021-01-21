@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -23,7 +22,6 @@ import com.example.login.Data.ListItem;
 import com.example.login.adapter.TradeListAdapter;
 import com.example.login.network.NetworkTask;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -113,12 +111,8 @@ public class BuyListFragment extends Fragment {
         Log.w("GetPosting","함수 실행");
         NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/trade/list?type=true&tradeTime=2020-01-01","GET"); // true가 구매리스트, false가 판매리스트
         try{
-            //{"msg":"조회 성공","tradeVo":{"tradeId":1,"buyerId":"bmh1211@gmail.com","sellerId":"jae961217@naver.com","boardId":"1","tradeTime":"2020-12-23T00:00:00.000+00:00","boardTitle":null}}
+            //{"msg":"success","tradeVo":{"tradeId":1,"buyerId":"bmh1211@gmail.com","sellerId":"jae961217@naver.com","boardId":"1","tradeTime":"2020-12-23T00:00:00.000+00:00","boardTitle":null}}
             JSONObject resultObject = new JSONObject(networkTask.execute().get());
-            Log.w("resultObject",resultObject.toString());
-
-            // list일 경우
-            //JSONArray buyArray = resultObject.getJSONArray("list");
 
             if(resultObject == null)
             {
@@ -132,11 +126,15 @@ public class BuyListFragment extends Fragment {
                 Toast.makeText(getActivity(),resultString, Toast.LENGTH_SHORT).show();
             }
             else if(resultString.equals("success")){
+                Toast.makeText(getActivity(),resultString, Toast.LENGTH_SHORT).show();
+
+                JSONObject buyObject = resultObject.getJSONObject("tradeVo");
+                Log.w("BuyListFragment",buyObject.toString());
+
                 String title, tradeTime, userID;
-                //title = resultObject.getString("boardTitle");
-                title="";
-                tradeTime = resultObject.getString("tradeTime");
-                userID = resultObject.getString("sellerId");
+                title=buyObject.getString("boardTitle");
+                tradeTime = buyObject.getString("tradeTime");
+                userID = buyObject.getString("sellerId");
 
                 // 생성된 아이템 목록에 추가
                 buy_adapter.addItem(title,userID,tradeTime);

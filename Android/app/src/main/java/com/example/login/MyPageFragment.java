@@ -43,7 +43,7 @@ public class MyPageFragment extends Fragment {
     Fragment fragment1;
     Fragment fragment_change_profile;
     Button btn_changeProfile;
-    Button btn_list_sell_buy_trade;
+    Button btn_list_buy_sell_trade;
 
     // 팝업 chooser에 들어가는 요소들
     private PopupWindow pw_chooser;
@@ -76,7 +76,7 @@ public class MyPageFragment extends Fragment {
         fragment1 = new BoardFragment();
         fragment_change_profile = new ChangeProfileFragment();
         btn_changeProfile=(Button)view.findViewById(R.id.btn_changeProfile);
-        btn_list_sell_buy_trade=(Button)view.findViewById(R.id.btn_list_buy_sell_trade);
+        btn_list_buy_sell_trade=(Button)view.findViewById(R.id.btn_list_buy_sell_trade);
 
         iv_profile = (ImageView) view.findViewById(R.id.iv_profile);
         tv_name_real = (TextView) view.findViewById(R.id.tv_name_real);
@@ -114,7 +114,7 @@ public class MyPageFragment extends Fragment {
         // 마이페이지에 유저 프로필 사진 출력
         // todo : this.함수();
 
-        btn_list_sell_buy_trade.setOnClickListener(new View.OnClickListener() {
+        btn_list_buy_sell_trade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setPopupChooser();
