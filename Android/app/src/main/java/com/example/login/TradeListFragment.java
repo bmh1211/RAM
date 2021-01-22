@@ -76,7 +76,7 @@ public class TradeListFragment extends Fragment {
         btn_mypage = (Button) view.findViewById(R.id.btn_mypage);
         fragment_mypage = new MyPageFragment();
 
-        trade_adapter = new TradeListAdapter(container.getContext(),itemlist);
+        trade_adapter = new TradeListAdapter();
         lv_tradeList.setAdapter(trade_adapter);
 
         sharedPreferences_qr = getActivity().getSharedPreferences("setting", Context.MODE_PRIVATE);

@@ -27,7 +27,6 @@ import java.util.concurrent.ExecutionException;
 public class SellListFragment extends Fragment {
     private ListView lv_recentSell;
     Fragment fragment_board;
-    static final String[] LIST_MENU={"판매 내역 리스트","LIST_1","LIST_2","LIST_3"};
     static final ArrayList<ListItem> itemlist = new ArrayList<ListItem>();
     private Button btn_mypage;
     Fragment fragment_mypage;
@@ -45,7 +44,7 @@ public class SellListFragment extends Fragment {
         lv_recentSell=(ListView)view.findViewById(R.id.lv_recentSell);
         //swipe_layout_board = (SwipeRefreshLayout)view.findViewById(R.id.swipe_layout_board);
 
-        sell_adapter = new TradeListAdapter(container.getContext(),itemlist);
+        sell_adapter = new TradeListAdapter();
         lv_recentSell.setAdapter(sell_adapter);
 
         // 게시판 데이터 까기 테스트
@@ -99,8 +98,8 @@ public class SellListFragment extends Fragment {
                 Log.w("SellListFragment",sellObject.toString());
 
                 String title, tradeTime, userID;
-                title = sellObject.getString("boardTitle");
-                tradeTime = sellObject.getString("tradeTime");
+                title = sellObject.getString("title");
+                tradeTime = sellObject.getString("tradeTime").substring(0, 10);
                 userID = sellObject.getString("buyerId");
 
                 // 생성된 아이템 목록에 추가

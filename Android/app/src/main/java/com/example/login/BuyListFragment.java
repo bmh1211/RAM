@@ -55,7 +55,7 @@ public class BuyListFragment extends Fragment {
         //swipe_layout_board = (SwipeRefreshLayout)view.findViewById(R.id.swipe_layout_board);
 
 //        ArrayAdapter buy_adapter = new ArrayAdapter(container.getContext(),android.R.layout.simple_list_item_1,LIST_MENU);
-        buy_adapter = new TradeListAdapter(container.getContext(),itemlist);
+        buy_adapter = new TradeListAdapter();
         lv_recentBuy.setAdapter(buy_adapter);
 
         // 구매 내역 받아옴

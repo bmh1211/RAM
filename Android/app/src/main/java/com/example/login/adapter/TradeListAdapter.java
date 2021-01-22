@@ -1,10 +1,9 @@
 package com.example.login.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.login.Data.ListItem;
@@ -12,11 +11,23 @@ import com.example.login.R;
 
 import java.util.ArrayList;
 
-public class TradeListAdapter extends ArrayAdapter {
+public class TradeListAdapter extends BaseAdapter {
     public ArrayList<ListItem> listviewitem = new ArrayList<ListItem>();
+    private final ArrayList<ListItem> arrayList = listviewitem;
 
-    public TradeListAdapter(Context context, ArrayList tradelist){
-        super(context,0,tradelist);
+    @Override
+    public int getCount() {
+        return arrayList.size();
+    }
+
+    @Override
+    public Object getItem(int position){
+        return arrayList.get(position);
+    }
+
+    @Override
+    public long getItemId(int position){
+        return position;
     }
 
     @Override
@@ -41,7 +52,7 @@ public class TradeListAdapter extends ArrayAdapter {
             holder = (ViewHolder)convertView.getTag();
         }
 
-        ListItem tradelist = listviewitem.get(position);
+        ListItem tradelist = arrayList.get(position);
         holder.title.setText(tradelist.getTitle());
         holder.userID.setText(tradelist.getUserID());
         holder.tradeTime.setText(tradelist.getTradeTime());
@@ -56,7 +67,7 @@ public class TradeListAdapter extends ArrayAdapter {
         listitem.setUserID(userID);
         listitem.setTradeTime(tradeTime);
 
-        listviewitem.add(listitem);
+        arrayList.add(listitem);
     }
 
     static class ViewHolder{
