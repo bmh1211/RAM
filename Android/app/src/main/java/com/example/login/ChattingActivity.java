@@ -83,15 +83,13 @@ public class ChattingActivity extends AppCompatActivity {
 
         setStartService();
         GetListView();
-        /*if(resultObject!=null){
-            try {
-               // setChatting(resultObject);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }*/
+        try {
+            setChatting(resultObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

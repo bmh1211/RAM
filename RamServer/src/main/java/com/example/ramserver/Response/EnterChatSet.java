@@ -10,4 +10,6 @@ import java.util.List;
 public class EnterChatSet {
     private String enterId;
     private List<EnterChatResponse> messageSet;
+
+
 }

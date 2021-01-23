@@ -3,6 +3,7 @@ package com.example.ramserver.Response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Data
@@ -12,6 +13,8 @@ public class EnterChatResponse {
     private String enterId;
     private String otherId;
     private String message;
-    private Date date;
+    private String date;
+
+
 
 }
