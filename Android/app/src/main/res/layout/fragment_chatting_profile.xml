@@ -64,7 +64,7 @@
         app:layout_constraintTop_toBottomOf="@+id/profile_name" />
 
     <Button
-        android:id="@+id/btn_Mypage"
+        android:id="@+id/btn_UserInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="96dp"

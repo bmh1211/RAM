@@ -1,64 +1,89 @@
 package com.example.login;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ChattingProfile#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class ChattingProfile extends Fragment {
+import com.example.login.item.RoomItem;
+import com.example.login.network.NetworkTask;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+import java.util.Base64;
+import java.util.concurrent.ExecutionException;
 
-    public ChattingProfile() {
-        // Required empty public constructor
-    }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ChattingProfile.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ChattingProfile newInstance(String param1, String param2) {
-        ChattingProfile fragment = new ChattingProfile();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+public class ChattingProfile extends AppCompatActivity {
 
+    private String UserName;
+    ImageView profileImage;
+    TextView nameText;
+    Button chattingBtn;
+    Button userInfoBtn;
+    Intent thisIntent;
+    Bitmap imageBitmap;
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+        setContentView(R.layout.fragment_chatting_profile);
+        thisIntent=getIntent();
+        UserName=thisIntent.getStringExtra("id");
+        profileImage=findViewById(R.id.profile_img);
+        nameText=findViewById(R.id.profile_name);
+        chattingBtn=findViewById(R.id.btn_chat);
+        userInfoBtn=findViewById(R.id.btn_UserInfo);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chatting_profile, container, false);
+
+        NetworkTask networkTask=new NetworkTask(getApplicationContext(),"http://192.168.56.1:3000/chat/profileImage?id="+UserName,null,"GET");
+        JSONObject resultObject=null;
+        try {
+            Object result=networkTask.execute().get();
+            if(result==null){
+                System.out.println("데이터 없음");
+            }
+            else{
+                resultObject=new JSONObject((String)result);
+                JSONArray nameArray=resultObject.getJSONArray("name");
+                JSONArray dataArray=resultObject.getJSONArray("data");
+
+                for(int i=0;i<nameArray.length();i++){
+                    nameText.setText(nameArray.get(i).toString());
+                }
+                for(int i=0;i<dataArray.length();i++){
+                    System.out.println("바이트 배열"+dataArray.get(i).toString());
+                    byte[] decodedBytes= Base64.getDecoder().decode(dataArray.get(i).toString());
+                    imageBitmap= BitmapFactory.decodeByteArray(decodedBytes,0,decodedBytes.length);
+                    profileImage.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            profileImage.setImageBitmap(Bitmap.createScaledBitmap(imageBitmap,profileImage.getWidth(),profileImage.getHeight(),false));
+                        }
+                    });
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

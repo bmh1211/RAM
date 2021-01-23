@@ -1,14 +1,12 @@
 package com.example.ramserver.controller;
 
-import com.example.ramserver.Response.ChatRoomResponse;
-import com.example.ramserver.Response.EnterChatResponse;
-import com.example.ramserver.Response.EnterChatSet;
-import com.example.ramserver.Response.MsgResponse;
+import com.example.ramserver.Response.*;
 import com.example.ramserver.model.ChatterInfo;
 import com.example.ramserver.model.User;
 import com.example.ramserver.service.ChatRoomService;
 import com.example.ramserver.service.InsertImgService;
 import com.example.ramserver.service.LoginService;
+import com.example.ramserver.service.ProfileService;
 import com.example.ramserver.vo.ChatRoomVo;
 import com.example.ramserver.vo.FindMessageVo;
 import com.example.ramserver.vo.ImagePathVo;
@@ -47,6 +45,8 @@ public class ChatController {
     ChatRoomService chatRoomService;
     @Autowired
     InsertImgService insertImgService;
+    @Autowired
+    ProfileService profileService;
 
     @GetMapping(value="/AllRoom",produces=MediaType.APPLICATION_JSON_VALUE)
     public MultiValueMap<String,String> getRoomInfo(HttpServletRequest request, HttpServletResponse httpServletResponse) throws IOException {
@@ -175,6 +175,19 @@ public class ChatController {
             form.add("data", Base64.getEncoder().encodeToString(res));
         }
         httpServletResponse.setContentType(MediaType.MULTIPART_FORM_DATA_VALUE);
+        return form;
+    }
+
+    //채팅화면에서 사진 클릭함으로써 프로필 접속시 구동되는 로직직
+   @GetMapping(value="/profileImage",produces=MediaType.APPLICATION_JSON_VALUE)
+    public MultiValueMap<String,Object> EnterProfile(HttpServletResponse request,@RequestParam("id") String userId) throws IOException {
+        ProfileResponse result=profileService.GetUserProfile(userId);
+        MultiValueMap<String,Object> form=new LinkedMultiValueMap<>();
+            FileInputStream fis=new FileInputStream(result.getImagePath());
+            byte[] res=fis.readAllBytes();
+            form.add("name",result.getName());
+            form.add("data", Base64.getEncoder().encodeToString(res));
+        request.setContentType(MediaType.MULTIPART_FORM_DATA_VALUE);
         return form;
     }
 }

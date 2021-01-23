@@ -48,6 +48,8 @@
         </activity>
         <activity android:name=".ChattingActivity"
             android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".ChattingProfile" />
+
         <service android:name=".service.SocketService"></service>
 
         <provider
