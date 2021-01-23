@@ -132,18 +132,18 @@ public class BoardController {
     }
 
     @PostMapping("/delete")
-    public MsgResponse delete(@RequestParam("boardId") int boardId, HttpServletRequest request)
+    public MsgResponse delete(@RequestBody BoardVo boardVo, HttpServletRequest request)
     {
         HttpSession session = request.getSession();
         User info = (User)session.getAttribute("login");
-        BoardVo boardCheck = new BoardVo(boardId, info.getId());
+        BoardVo boardCheck = new BoardVo(boardVo.getBoardId(), info.getId());
         int check = boardService.check(boardCheck);
         MsgResponse response = new MsgResponse();
         if(check == 0)
             response.setMsg("failed"); //권한 x
         else
         {
-            int deleteResult = boardService.delete(boardId);
+            int deleteResult = boardService.delete(boardVo.getBoardId());
             if(deleteResult == 0)
                 response.setMsg("failed");
             else

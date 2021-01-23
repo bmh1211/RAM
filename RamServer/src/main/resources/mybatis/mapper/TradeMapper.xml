@@ -7,7 +7,8 @@
     <select id="buyList" parameterType="com.example.ramserver.vo.TradeVo" resultType="com.example.ramserver.vo.TradeVo">
         select * from tradeView where buyerId = #{buyerId} and tradeTime > #{tradeTime} order by tradeTime;
     </select>
-    <select id="sellList" parameterType="string" resultType="com.example.ramserver.vo.TradeVo">
+
+    <select id="sellList" parameterType="com.example.ramserver.vo.TradeVo" resultType="com.example.ramserver.vo.TradeVo">
         select * from tradeView where sellerId = #{sellerId} and tradeTime > #{tradeTime} order by tradeTime;
     </select>
 </mapper>

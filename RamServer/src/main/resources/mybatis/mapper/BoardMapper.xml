@@ -17,7 +17,7 @@
         update board set title=#{title}, price=#{price}, content=#{content}, img=#{img}, boardTime=#{boardTime} where boardId = #{boardId} limit 1;
     </update>
     <delete id="delete" parameterType="int">
-        delete from board where boarddId=#{boardId};
+        delete from board where boardId=#{boardId};
     </delete>
     <select id="check" parameterType="com.example.ramserver.vo.BoardVo" resultType="int">
         select count(*) from board where id=#{id} and boardId=#{boardId};
