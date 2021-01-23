@@ -39,4 +39,9 @@ public class ChatRoomService {
         return chatRoomMapper.GetAllImageInfo();
     }
 
+
+    public List<ImagePathVo> GetAllImagePathInfo(String myId){
+        return chatRoomMapper.GetAllImagePathInfo(myId);
+    }
+
 }

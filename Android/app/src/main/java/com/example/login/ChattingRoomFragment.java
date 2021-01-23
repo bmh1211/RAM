@@ -57,7 +57,9 @@ public class ChattingRoomFragment extends Fragment {
         view=inflater.inflate(R.layout.fragment_chattingroom, container, false);
         //NetworkTask networkTask=new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/chat/AllRoom","GET");
         NetworkTask networkTask=new NetworkTask(getActivity().getApplicationContext(),"http://192.168.56.1:3000/chat/AllRoom","GET");
-        //NetworkTask networkTask=new NetworkTask(getActivity().getApplicationContext(),"http://192.168.56.1:3000/chat/AllRoomTest","GETTest");
+        //NetworkTask networkTask=new NetworkTask(getActivity().getApplicationContext(),"http://192.168.56.1:3000/chat/showimage","GET");
+        //NetworkTask networkTask=new NetworkTask(getActivity().getApplicationContext(),"http://192.168.56.1:3000/chat/showimage","GETTest");
+
         try {
             JSONObject resultObject=new JSONObject(networkTask.execute().get());
             if(resultObject==null){

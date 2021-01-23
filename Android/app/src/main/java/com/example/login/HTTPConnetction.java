@@ -52,7 +52,7 @@ public class HTTPConnetction { //ddddd
 
             connection.setRequestProperty("key", "value");
             connection.setRequestMethod("GET");
-            connection.setRequestProperty("Accept","multipart/form-data");
+            //connection.setRequestProperty("Accept","multipart/form-data");
             connection.setDoInput(true);
             connection.setUseCaches(false);
             connection.setConnectTimeout(15000); //통신 타임아웃
@@ -67,8 +67,7 @@ public class HTTPConnetction { //ddddd
                     response.append(inputLine);
                 }
                 in.close();
-                //result=new JSONObject(response.toString());
-                System.out.println(response.toString());
+                result=new JSONObject(response.toString());
             } else {
                 return null;
             }

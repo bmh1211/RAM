@@ -11,6 +11,7 @@ import com.example.ramserver.service.InsertImgService;
 import com.example.ramserver.service.LoginService;
 import com.example.ramserver.vo.ChatRoomVo;
 import com.example.ramserver.vo.FindMessageVo;
+import com.example.ramserver.vo.ImagePathVo;
 import com.example.ramserver.vo.ImageVo;
 import org.apache.catalina.webresources.FileResource;
 import org.apache.commons.io.FileUtils;
@@ -36,12 +37,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Blob;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @RestController
 @RequestMapping("/chat")
 public class ChatController {
-
     @Autowired
     ChatRoomService chatRoomService;
     @Autowired
@@ -65,6 +66,7 @@ public class ChatController {
         //return result;
         return form;
     }
+
     @GetMapping(value="/AllRoomTest")
     public MultiValueMap<String,Object> getRoomInfoTest(HttpServletRequest request, HttpServletResponse httpServletResponse) throws IOException {
         HttpSession session=request.getSession();
@@ -87,7 +89,6 @@ public class ChatController {
         //return result;
         return form;
     }
-
 
     @PostMapping(value = "/profileImage",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public MsgResponse getRoomInfoWithImgage(HttpServletRequest request) throws IOException {
@@ -118,7 +119,6 @@ public class ChatController {
 
         return result;
     }
-
 
     @GetMapping(value="/fileMove")
     public void FileMove() throws IOException {
@@ -160,4 +160,21 @@ public class ChatController {
         }
     }
 
+    @GetMapping(value="/showimage")
+    public MultiValueMap<String,Object> ShowImage(HttpServletRequest request, HttpServletResponse httpServletResponse) throws IOException {
+        HttpSession session=request.getSession();
+        User info=(User)session.getAttribute("login");
+
+        MultiValueMap<String,Object> form=new LinkedMultiValueMap<>();
+        List<ImagePathVo> result=chatRoomService.GetAllImagePathInfo(info.getId());
+
+        for(int i=0;i<result.size();i++){
+            FileInputStream fis=new FileInputStream(result.get(i).getFilePath());
+            byte[] res=fis.readAllBytes();
+            form.add("id",result.get(i).getId());
+            form.add("data", Base64.getEncoder().encodeToString(res));
+        }
+        httpServletResponse.setContentType(MediaType.MULTIPART_FORM_DATA_VALUE);
+        return form;
+    }
 }

@@ -141,6 +141,7 @@ public class MyPageFragment extends Fragment {
 
     public void GetUserData(){
         NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/myPage/info","GET");
+        //NetworkTask networkTask=new NetworkTask(getActivity(),"http://192.168.56.1:3000/myPage/info","GET");
         try{
             JSONObject resultObject = new JSONObject(networkTask.execute().get());
             JSONObject userObject = resultObject.optJSONObject("user");
