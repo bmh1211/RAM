@@ -67,6 +67,9 @@ public class TradeListFragment extends Fragment {
     private Button btn_submit;
     private EditText et_password_submit;
 
+    private SharedPreferences.Editor sharedPreferences_fragment_move_editor;
+    private Fragment fragment_posting;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -81,6 +84,9 @@ public class TradeListFragment extends Fragment {
 
         sharedPreferences_qr = getActivity().getSharedPreferences("setting", Context.MODE_PRIVATE);
         Boolean flag_qr = sharedPreferences_qr.getBoolean("flag_qr",false);
+
+        sharedPreferences_fragment_move_editor = getActivity().getSharedPreferences("setting", Context.MODE_PRIVATE).edit();
+        fragment_posting = new PostingFragment();
 
         // 권한 요청 받기
         this.checkPermissions();
@@ -98,11 +104,11 @@ public class TradeListFragment extends Fragment {
 
         if(flag_qr == true){
             // 리스트뷰의 아이템들을 누르면 이미지와 비밀번호를 등록하도록 나옴
-            //this.SetItemForPost();
+            this.SetItemForPost();
         }
         else if(flag_qr == false){
             // 리스트뷰의 아이템들을 누르면 해당하는 게시물로 이동
-            //this.SetItemToBoard(container);
+            this.SetItemToBoard(container);
         }
 
         btn_mypage.setOnClickListener(new View.OnClickListener() {
@@ -211,7 +217,7 @@ public class TradeListFragment extends Fragment {
     // todo : url 임시 - 수정필요
     public void GetTradeList(){
         Log.w(TAG,"GetTradeList() 함수 실행");
-        NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/trade/list?type=true&tradeTime=2020-01-01","GET"); // true가 구매리스트, false가 판매리스트
+        NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/trade/list?type=false&tradeTime=2020-01-01","GET"); // true가 구매리스트, false가 판매리스트
         try{
             //{"msg":"success","tradeVo":{"tradeId":1,"buyerId":"bmh1211@gmail.com","sellerId":"jae961217@naver.com","boardId":"1","tradeTime":"2020-12-23T00:00:00.000+00:00","boardTitle":null}}
             JSONObject resultObject = new JSONObject(networkTask.execute().get());
@@ -234,7 +240,7 @@ public class TradeListFragment extends Fragment {
                 Log.w(TAG,tradeObject.toString());
 
                 String title, tradeTime, userID;
-                title = tradeObject.getString("boardTitle");
+                title = tradeObject.getString("title");
                 tradeTime = tradeObject.getString("tradeTime");
                 userID = tradeObject.getString("buyerId");
 
@@ -256,49 +262,59 @@ public class TradeListFragment extends Fragment {
         lv_tradeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String strText = (String) parent.getItemAtPosition(position) ;
-                Toast.makeText(container.getContext(), strText, Toast.LENGTH_SHORT).show();
+//                String strText = (String) parent.getItemAtPosition(position) ;
+//                Toast.makeText(container.getContext(), strText, Toast.LENGTH_SHORT).show();
+
+                sharedPreferences_fragment_move_editor.putString("fragment_move","TradeListFragment").commit();
 
                 // 프래그먼트로 이동 -> 현재는 테스트용으로 fragment_mypage 로 지정해놓음
-                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_mypage).commit();
+                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_posting).commit();
             }
         });
     }
 
     public void SetItemForPost(){
-        // 팝업창이 들어갈 뷰를 하나 생성해주고, 해당 뷰의 레이아웃을 LinearLayout 으로 지정
-        View popupView = getLayoutInflater().inflate(R.layout.popupwindow_image_password,null);
-        popupWindow_image_password=new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        // 외부영역 선택시 PopUp창 사라짐
-        popupWindow_image_password.setFocusable(true);
-
-        // 팝업창의 위치를 디스플레이의 중앙에 위치시킴
-        popupWindow_image_password.showAtLocation(popupView, Gravity.CENTER,0,0);
-
-        // 팝업창에 들어갈 객체들 선언
-        ib_take_picture = (ImageButton) popupWindow_image_password.getContentView().findViewById(R.id.ib_take_pictrue);
-        et_password_submit = (EditText)  popupWindow_image_password.getContentView().findViewById(R.id.et_password_submit);
-        btn_submit = (Button) popupWindow_image_password.getContentView().findViewById(R.id.btn_submit);
-
-        ib_take_picture.setOnClickListener(new View.OnClickListener() {
+        lv_tradeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                // 현재는 버튼을 누르면 사진을 찍도록 되어있지만 qr을 찍어서 인식되면 바로 카메라 켜지도록 변경
-                getImageFromCamera();
-            }
-        });
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // 팝업창이 들어갈 뷰를 하나 생성해주고, 해당 뷰의 레이아웃을 LinearLayout 으로 지정
+                View popupView = getLayoutInflater().inflate(R.layout.popupwindow_image_password,null);
+                popupWindow_image_password=new PopupWindow(popupView, LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
 
-        btn_submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(str_CurrentPhotoPath.equals("")){
-                    Toast.makeText(getActivity(), "등록 할 사진이 필요합니다", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    String password_submit=et_password_submit.getText().toString();
+                // 외부영역 선택시 PopUp창 사라짐
+                popupWindow_image_password.setFocusable(true);
+
+                // 팝업창의 위치를 디스플레이의 중앙에 위치시킴
+                popupWindow_image_password.showAtLocation(popupView, Gravity.CENTER,0,0);
+
+                // 팝업창에 들어갈 객체들 선언
+                ib_take_picture = (ImageButton) popupWindow_image_password.getContentView().findViewById(R.id.ib_take_pictrue);
+                et_password_submit = (EditText)  popupWindow_image_password.getContentView().findViewById(R.id.et_password_submit);
+                btn_submit = (Button) popupWindow_image_password.getContentView().findViewById(R.id.btn_submit);
+
+                ib_take_picture.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // 현재는 버튼을 누르면 사진을 찍도록 되어있지만 qr을 찍어서 인식되면 바로 카메라 켜지도록 변경
+                        getImageFromCamera();
+                    }
+                });
+
+                btn_submit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(str_CurrentPhotoPath.equals("")){
+                            Toast.makeText(getActivity(), "등록 할 사진이 필요합니다", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(et_password_submit.getText().toString().equals("")){
+                            Toast.makeText(getActivity(), "비밀번호를 등록해주세요", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            String password_submit=et_password_submit.getText().toString();
 //                    sendImageFile(password_submit, str_CurrentPhotoPath);
-                }
+                        }
+                    }
+                });
             }
         });
     }

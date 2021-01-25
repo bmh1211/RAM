@@ -3,6 +3,7 @@ package com.example.login;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -65,6 +66,11 @@ public class PostingFragment extends Fragment {
     final static int REQUEST_TAKE_PHOTO=99;
     final static int PICK_FROM_ALBUM=100;
 
+    private SharedPreferences sharedPreferences_fragment_move;
+    private String str_fragment_move="";
+    private Fragment fragment_sell_list;
+    private Fragment fragment_trade_list;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -92,6 +98,13 @@ public class PostingFragment extends Fragment {
         SimpleDateFormat format = new SimpleDateFormat("yyyy년 MM월 dd일 HH시mm분ss초");
         Calendar time = Calendar.getInstance();
 
+        fragment_sell_list = new SellListFragment();
+        fragment_trade_list = new TradeListFragment();
+        sharedPreferences_fragment_move = getActivity().getSharedPreferences("setting", Context.MODE_PRIVATE);
+        str_fragment_move = sharedPreferences_fragment_move.getString("fragment_move","");
+        Log.w("PostingFragment",str_fragment_move);
+
+
 //        if(activity.mBundle != null) {
 //            Bundle bundle = activity.mBundle;
 //            receiveData = bundle.getString("sendData");
@@ -112,7 +125,15 @@ public class PostingFragment extends Fragment {
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_board).commit();
+                if(str_fragment_move.equals("SellListFragment")){
+                    ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_sell_list).commit();
+                }
+                else if(str_fragment_move.equals("TradeListFragment")){
+                    ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_trade_list).commit();
+                }
+                else {
+                    ((MainPageActivity) getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment_board).commit();
+                }
             }
         });
 

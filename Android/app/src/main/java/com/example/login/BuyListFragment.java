@@ -132,7 +132,7 @@ public class BuyListFragment extends Fragment {
                 Log.w("BuyListFragment",buyObject.toString());
 
                 String title, tradeTime, userID;
-                title=buyObject.getString("boardTitle");
+                title=buyObject.getString("title");
                 tradeTime = buyObject.getString("tradeTime");
                 userID = buyObject.getString("sellerId");
 
