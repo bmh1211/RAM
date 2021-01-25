@@ -66,6 +66,7 @@ public class MyPageFragment extends Fragment {
     private Button btn_sell;
     private Button btn_buy;
     private Fragment fragment_buy;
+    private Fragment fragment_sell_qr;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,11 +93,13 @@ public class MyPageFragment extends Fragment {
 
         // 테스트용
         btn_sell = (Button)view.findViewById(R.id.btn_sell);
+        fragment_sell_qr = new SellQrFragment();
         btn_sell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent qr_intent = new Intent(getContext(),SellQrActivity.class);
-                startActivity(qr_intent);
+//                Intent qr_intent = new Intent(getContext(),SellQrActivity.class);
+//                startActivity(qr_intent);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_sell_qr).commit();
             }
         });
         btn_buy = (Button)view.findViewById(R.id.btn_buy);
