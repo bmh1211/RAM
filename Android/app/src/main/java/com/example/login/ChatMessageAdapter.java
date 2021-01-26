@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.login.MessageType.MessageType;
+
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -53,6 +55,9 @@ public class ChatMessageAdapter extends ArrayAdapter {
 
         //inflater를 이용해서 생성한 View에 Chatmessage 삽입
         TextView msgText=(TextView)row.findViewById(R.id.chatmessage);
+        row.findViewById(R.id.btn_accept).setVisibility(View.GONE);
+        row.findViewById(R.id.btn_deny).setVisibility(View.GONE);
+
         msgText.setText(msg.getMessage());
         msgText.setTextColor(Color.parseColor("#000000"));
         if(msg.getSender().equals(senderId)){
@@ -60,7 +65,10 @@ public class ChatMessageAdapter extends ArrayAdapter {
         }
         else{
             msgText.setBackground(this.getContext().getResources().getDrawable(R.drawable.inbox2));
-
+            if(msg.getMsgType()== MessageType.Quest){
+                row.findViewById(R.id.btn_accept).setVisibility(View.VISIBLE);
+                row.findViewById(R.id.btn_deny).setVisibility(View.VISIBLE);
+            }
         }
 
         //msgText.setBackground(this.getContext().getResources().getDrawable((message_left?R.drawable.inbox2:R.drawable.outbox2)));

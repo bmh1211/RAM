@@ -14,6 +14,7 @@ public class EnterChatResponse {
     private String otherId;
     private String message;
     private String date;
+    private String type;
 
 
 

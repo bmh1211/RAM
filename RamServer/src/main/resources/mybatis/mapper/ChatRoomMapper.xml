@@ -21,7 +21,7 @@ where C.id2=userimage.id;
     </select>
 
     <select id="GetMessage" parameterType="com.example.ramserver.vo.FindMessageVo" resultType="com.example.ramserver.Response.EnterChatResponse">
-        select chatroom_id,sender_id,receiver_id,message,send_time from chatmessage
+        select chatroom_id,sender_id,receiver_id,message,send_time,type from chatmessage
         where sender_id=#{senderId} and receiver_id=#{receiverId}
     </select>
 
@@ -43,8 +43,9 @@ chatroom_id,
 sender_id,
 receiver_id,
 message,
-send_time)
-VALUES (#{messageId},#{chatRoomId},#{author},#{receiver},#{msg},#{Date})
+send_time,
+type)
+VALUES (#{messageId},#{chatRoomId},#{author},#{receiver},#{msg},#{Date},#{type})
     </insert>
     
     

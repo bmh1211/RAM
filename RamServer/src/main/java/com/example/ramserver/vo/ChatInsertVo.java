@@ -15,4 +15,5 @@ public class ChatInsertVo {
     private String receiver;
     private String msg;
     private java.util.Date Date;
+    private String type;
 }
