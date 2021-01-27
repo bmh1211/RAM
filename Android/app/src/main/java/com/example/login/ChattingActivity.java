@@ -112,7 +112,7 @@ public class ChattingActivity extends AppCompatActivity {
     }
 
     public void GetListView(){
-        chatMessageAdapter=new ChatMessageAdapter(getApplicationContext(),R.layout.chatting_message,SenderName);
+        chatMessageAdapter=new ChatMessageAdapter(getApplicationContext(),R.layout.chatting_message,SenderName,OtherName);
         ListView listView=(ListView)findViewById(R.id.listView12);
         listView.setAdapter(chatMessageAdapter);
         listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
@@ -212,7 +212,7 @@ public class ChattingActivity extends AppCompatActivity {
     }
     /// 구매신청 버튼 클릭시 서버와의 통신
     private void SendBuyingRequest() throws ParseException {
-        String strMsg=SenderName+" 님이 구매를 신청했습니다";
+        String strMsg=SenderName+" apply purchase";
         chatMessageAdapter.add(new ChatMessage(SenderName,strMsg,true));
         sendMessageToservice(strMsg,"req");
 

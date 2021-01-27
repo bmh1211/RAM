@@ -7,23 +7,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.login.MessageType.MessageType;
+import com.example.login.network.NetworkTask;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class ChatMessageAdapter extends ArrayAdapter {
     boolean message_left=true;
+    Context context;
     List msgs=new ArrayList();
     private String senderId;
-    public ChatMessageAdapter(Context context,int textViewResourceId,String senderId){
+    private String otherId;
+    public ChatMessageAdapter(Context context,int textViewResourceId,String senderId,String otherId){
         super(context,textViewResourceId);
+        this.context=context;
         this.senderId=senderId;
+        this.otherId=otherId;
     }
 
     //@Override
@@ -57,6 +66,26 @@ public class ChatMessageAdapter extends ArrayAdapter {
         TextView msgText=(TextView)row.findViewById(R.id.chatmessage);
         row.findViewById(R.id.btn_accept).setVisibility(View.GONE);
         row.findViewById(R.id.btn_deny).setVisibility(View.GONE);
+
+        Button acceptBtn=(Button)row.findViewById(R.id.btn_accept);
+        acceptBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                NetworkTask fileNetworkTask=new NetworkTask(context,"http://192.168.56.1:3000/trade/applyPurchase?buyer="+otherId+"&owner="+senderId,null,"GET");
+                try {
+                    Object result=fileNetworkTask.execute().get();
+                    if(result==null){
+                        System.out.println("데이터 없음");
+                    }
+                    else{
+                    }
+                }  catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         msgText.setText(msg.getMessage());
         msgText.setTextColor(Color.parseColor("#000000"));
