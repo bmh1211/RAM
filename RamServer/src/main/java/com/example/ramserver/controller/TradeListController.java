@@ -3,6 +3,8 @@ package com.example.ramserver.controller;
 import com.example.ramserver.Response.TradeResponse;
 import com.example.ramserver.model.User;
 import com.example.ramserver.service.TradeService;
+import com.example.ramserver.vo.FindRegionVo;
+import com.example.ramserver.vo.PurchaseRegionVo;
 import com.example.ramserver.vo.TradeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/trade")
@@ -52,6 +55,12 @@ public class TradeListController {
     }
 
 
+    //거래 신청시 지역 위치 푸시
+    @GetMapping("/applyPurchase")
+    public void SelectRegion(@RequestParam("buyer") String buyer, @RequestParam("owner") String owner){
+        List<PurchaseRegionVo> userRegion=tradeService.FindRegion(new FindRegionVo(buyer,owner));
+        
+    }
     private Date StringToDate(String Date) throws ParseException {
         return (new SimpleDateFormat("yyyy-MM-dd")).parse(Date);
     }

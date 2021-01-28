@@ -31,7 +31,7 @@ public class MessageHandler  {
         Date Regdate=transFormat.parse(Senddate);
         FindChatRoomVo findChatRoomVo=new FindChatRoomVo(message.getAuthor(), message.getReceiver());
         ChatInsertVo chatInsertVo=new ChatInsertVo(chatRoomService.GetMessageCount(),chatRoomService.GetChatRoomId(findChatRoomVo).get(0),
-                message.getAuthor(), message.getReceiver(), message.getMsg(), Regdate);
+                message.getAuthor(), message.getReceiver(), message.getMsg(), Regdate, message.getType());
         chatRoomService.InsertChatMessage(chatInsertVo);
         return message;
     }

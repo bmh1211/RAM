@@ -32,6 +32,7 @@ import java.text.ParseException;
 import java.util.concurrent.ExecutionException;
 
 public class ChattingActivity extends AppCompatActivity {
+    Button requestBuyingBtn;
     Button messageSendBtn;
     ChatMessageAdapter chatMessageAdapter;
     private static final String TAG = "TAG";
@@ -53,11 +54,23 @@ public class ChattingActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_chatting);
         otherNameTextView=(TextView)findViewById(R.id.otherName);
         otherNameTextView.setText(OtherName);
+
+        requestBuyingBtn=(Button)findViewById(R.id.btn_request);
         messageSendBtn=(Button)findViewById(R.id.btn_send);
         messageSendBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 SendMessage();
+            }
+        });
+        requestBuyingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    SendBuyingRequest();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -99,7 +112,7 @@ public class ChattingActivity extends AppCompatActivity {
     }
 
     public void GetListView(){
-        chatMessageAdapter=new ChatMessageAdapter(getApplicationContext(),R.layout.chatting_message,SenderName);
+        chatMessageAdapter=new ChatMessageAdapter(getApplicationContext(),R.layout.chatting_message,SenderName,OtherName);
         ListView listView=(ListView)findViewById(R.id.listView12);
         listView.setAdapter(chatMessageAdapter);
         listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
@@ -117,7 +130,13 @@ public class ChattingActivity extends AppCompatActivity {
        JSONArray chatArray= jsonObject.getJSONArray("messageSet");
        for(int i=0;i<chatArray.length();i++){
            JSONObject tmpObj=chatArray.getJSONObject(i);
-           ChatMessage msg=new ChatMessage(tmpObj.getString("enterId"),tmpObj.getString("message"),tmpObj.getString("date"));
+           ChatMessage msg=null;
+           if(tmpObj.getString("type").equals("normal")){
+               msg=new ChatMessage(tmpObj.getString("enterId"),tmpObj.getString("message"),tmpObj.getString("date"),false);
+           }
+           else{
+               msg=new ChatMessage(tmpObj.getString("enterId"),tmpObj.getString("message"),tmpObj.getString("date"),true);
+           }
            chatMessageAdapter.add(msg);
        }
     }
@@ -168,30 +187,48 @@ public class ChattingActivity extends AppCompatActivity {
                     }
                     Log.i("test","act : value2 "+value2);
                     try {
+                        if(resObj.getString("type").equals("normal")){
                         chatMessageAdapter.add(new ChatMessage(resObj.getString("author"),resObj.getString("msg")));
-                    } catch (JSONException e) {
+                        }
+                        else{
+                            chatMessageAdapter.add(new ChatMessage(resObj.getString("author"),resObj.getString("msg"),true));
+                        }
+                    } catch (JSONException | ParseException e) {
                         e.printStackTrace();
                     }
                     break;
             }
-            return false;
+                    return false;
         }
     }));
-    //버튼 클릭 이벤트
+    //send 버튼 클릭 이벤트
     public void SendMessage(){
         EditText etMsg=(EditText)findViewById(R.id.etMessage);
         String strMsg=(String)etMsg.getText().toString();
 
         //chatMessageAdapter.add(new ChatMessage(strMsg));
         chatMessageAdapter.add(new ChatMessage(SenderName,strMsg));
-        sendMessageToservice(strMsg);
+        sendMessageToservice(strMsg,"normal");
+    }
+    /// 구매신청 버튼 클릭시 서버와의 통신
+    private void SendBuyingRequest() throws ParseException {
+        String strMsg=SenderName+" apply purchase";
+        chatMessageAdapter.add(new ChatMessage(SenderName,strMsg,true));
+        sendMessageToservice(strMsg,"req");
+
     }
     //서비스로 메시지 전송
-    private void sendMessageToservice(String str){
+    private void sendMessageToservice(String str,String type){
         if(mIsBound){
             if(mServiceMessenger!=null){
                 try{
-                    Message msg=Message.obtain(null, SocketService.MSG_SEND_TO_SERVICE,str);
+                    Message msg=null;
+                    if(type.equals("normal")){
+                        msg=Message.obtain(null, SocketService.MSG_SEND_TO_SERVICE,str);
+                    }
+                    else{
+                        msg= msg=Message.obtain(null, SocketService.MSG_SEND_TO_SERVICE_REQ,str);
+                    }
                     msg.replyTo=mMessenger;
                     mServiceMessenger.send(msg);
                 } catch (RemoteException e) {
@@ -200,6 +237,8 @@ public class ChattingActivity extends AppCompatActivity {
             }
         }
     }
+
+
 
 
 }

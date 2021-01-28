@@ -1,9 +1,14 @@
 package com.example.ramserver.service;
 
+
 import com.example.ramserver.mapper.TradeMapper;
+import com.example.ramserver.vo.FindRegionVo;
+import com.example.ramserver.vo.PurchaseRegionVo;
 import com.example.ramserver.vo.TradeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class TradeService {
@@ -18,4 +23,9 @@ public class TradeService {
         else
             return tradeMapper.sellList(tradeVo);
     }
+
+    public List<PurchaseRegionVo> FindRegion(FindRegionVo findRegionVo){
+        return tradeMapper.FindRegion(findRegionVo);
+    }
+
 }

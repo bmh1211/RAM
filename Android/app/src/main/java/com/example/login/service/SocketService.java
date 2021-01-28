@@ -35,6 +35,7 @@ public class SocketService extends Service {
     //public static final int MSG_UNREGISTER_CLIENT = 2;
     public static final int MSG_SEND_TO_SERVICE = 3;
     public static final int MSG_SEND_TO_ACTIVITY = 4;
+    public static final int MSG_SEND_TO_SERVICE_REQ=5;
     private Messenger mClient = null;
 
     private StompClient mStompClient;
@@ -59,7 +60,13 @@ public class SocketService extends Service {
                     break;
                 case MSG_SEND_TO_SERVICE:
                     try {
-                        mStompClient.send("/app/hello", MakeJsonObject(msg.obj.toString()).toString()).subscribe();
+                        mStompClient.send("/app/hello", MakeJsonObject(msg.obj.toString(),MSG_SEND_TO_SERVICE).toString()).subscribe();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                case MSG_SEND_TO_SERVICE_REQ:
+                    try {
+                        mStompClient.send("/app/hello", MakeJsonObject(msg.obj.toString(),MSG_SEND_TO_SERVICE_REQ).toString()).subscribe();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -67,8 +74,13 @@ public class SocketService extends Service {
             return false;
         }
     }));
-    private JSONObject MakeJsonObject(String str) throws JSONException {
+    private JSONObject MakeJsonObject(String str,int type) throws JSONException {
         JSONObject object=new JSONObject();
+        if(type==MSG_SEND_TO_SERVICE_REQ){
+            object.put("type","buying");
+        }
+        else
+            object.put("type","normal");
         object.put("author", senderId);
         object.put("receiver",receiverId);
         object.put("msg",str);
