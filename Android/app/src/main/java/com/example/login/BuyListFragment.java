@@ -2,9 +2,13 @@ package com.example.login;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -29,13 +33,14 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 public class BuyListFragment extends Fragment {
-    private ListView lv_recentBuy;
-    static final String[] LIST_MENU={"구매 내역 리스트","LIST_1","LIST_2","LIST_3"};
-    static final ArrayList<ListItem> itemlist = new ArrayList<ListItem>();
+    private String TAG = "BuyListFragment";
     private Button btn_mypage;
     Fragment fragment_mypage;
-    SwipeRefreshLayout swipe_layout_board;
     private TradeListAdapter buy_adapter;
+    RecyclerView rv_buy_list;
+    static final ArrayList<ListItem> itemlist = new ArrayList<ListItem>();
+    static final ArrayList<ListItem> templist = new ArrayList<ListItem>();
+    private boolean isLoading = false;
 
     // 구매내역에서 판매자정보 팝업윈도우에 필요한 데이터들
     private PopupWindow ll_sellerInfo;
@@ -50,33 +55,16 @@ public class BuyListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_buy_list, container, false);
 
         btn_mypage = (Button)view.findViewById(R.id.btn_mypage);
-        lv_recentBuy=(ListView)view.findViewById(R.id.lv_recentBuy);
         fragment_mypage = new MyPageFragment();
-        //swipe_layout_board = (SwipeRefreshLayout)view.findViewById(R.id.swipe_layout_board);
-
-//        ArrayAdapter buy_adapter = new ArrayAdapter(container.getContext(),android.R.layout.simple_list_item_1,LIST_MENU);
-        buy_adapter = new TradeListAdapter();
-        lv_recentBuy.setAdapter(buy_adapter);
+        rv_buy_list=(RecyclerView) view.findViewById(R.id.rv_buy_list);
+        rv_buy_list.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // 구매 내역 받아옴
         this.GetBuyPost();
-
-        lv_recentBuy.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String strText = (String) parent.getItemAtPosition(position);
-                Toast.makeText(container.getContext(), strText, Toast.LENGTH_SHORT).show();
-
-                showSellerInfo();
-            }
-        });
-
-        btn_mypage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_mypage).commit();
-            }
-        });
+        this.initAdapter();
+        this.initScrollListener();
+        this.SetItemClick();
+        this.ToMyPage();
 
         return view;
     }
@@ -129,16 +117,35 @@ public class BuyListFragment extends Fragment {
                 Toast.makeText(getActivity(),resultString, Toast.LENGTH_SHORT).show();
 
                 JSONObject buyObject = resultObject.getJSONObject("tradeVo");
-                Log.w("BuyListFragment",buyObject.toString());
+                Log.w(TAG, buyObject.toString());
 
                 String title, tradeTime, userID;
                 title=buyObject.getString("title");
-                tradeTime = buyObject.getString("tradeTime");
+                tradeTime = buyObject.getString("tradeTime").substring(0,10);
                 userID = buyObject.getString("sellerId");
 
-                // 생성된 아이템 목록에 추가
-                buy_adapter.addItem(title,userID,tradeTime);
-                buy_adapter.notifyDataSetChanged();
+                ListItem temp = new ListItem();
+                temp.setTitle(title);
+                temp.setTradeTime(tradeTime);
+                temp.setUserID(userID);
+
+                for(int i=0;i<30;i++){
+                    // 처음 받아온 데이터 한번에 itemlist에 넣음
+                    // todo : 50은 나중에 tradeVo의 사이즈로 변경
+                    itemlist.add(temp);
+                }
+
+                // 처음 출력할 아이템
+                if(itemlist.size()<10){
+                    for(int i=0;i<itemlist.size();i++){
+                        templist.add(itemlist.get(i));
+                    }
+                }
+                else{
+                    for(int i=0;i<10;i++){
+                        templist.add(itemlist.get(i));
+                    }
+                }
             }
         }
         catch (JSONException e) {
@@ -149,5 +156,88 @@ public class BuyListFragment extends Fragment {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void initAdapter(){
+        buy_adapter = new TradeListAdapter(templist);
+        rv_buy_list.setAdapter(buy_adapter);
+    }
+
+    public void initScrollListener(){
+        rv_buy_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                Log.d(TAG, "onScrollStateChanged : " + newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                Log.d(TAG, "onScrolled : dx " + dx + ", dy " + dy);
+
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+
+                if (!isLoading) {
+                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == templist.size() - 1) {
+                        // 리스트의 마지막일 경우
+                        dataMore();
+                        isLoading = true;
+                        Toast.makeText(getActivity(), "스크롤 맨 밑 감지", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+    }
+
+    public void dataMore(){
+        Log.w(TAG, "dataMore : ");
+
+        // 로딩 아이템을 추가하고(빈칸 하나) 추가 알림
+        templist.add(null);
+        buy_adapter.notifyItemInserted(templist.size() - 1);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // 추가되어있던 로딩 아이템(null)을 하나 제거하고
+                templist.remove(templist.size() - 1);
+                // 제거 알림 => 하나를 제거했으므로 list.size()가 이전의 list.size()-1 과 같은 값을 가짐
+                buy_adapter.notifyItemRemoved(templist.size());
+
+                int currentSize = templist.size();
+                int nextLimit = currentSize + 10;
+
+                // 아이템이 하나 제거 된 위치부터 10개를 추가할 리스트에 넣어줌
+                for (int i = currentSize; i < nextLimit; i++) {
+                    if (i == itemlist.size())
+                        return;
+
+                    templist.add(itemlist.get(i));
+                }
+
+                buy_adapter.notifyDataSetChanged();
+                isLoading = false;
+            }
+        }, 2000);
+    }
+
+    public void SetItemClick(){
+        buy_adapter.setOnItemClickListener(new TradeListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+                showSellerInfo();
+            }
+        });
+    }
+
+    public void ToMyPage(){
+        btn_mypage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_mypage).commit();
+            }
+        });
     }
 }

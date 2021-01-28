@@ -14,8 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
@@ -56,17 +59,18 @@ public class TradeListFragment extends Fragment {
     private SharedPreferences sharedPreferences_qr;
     private String TAG="TradeListFragment";
 
-    private TradeListAdapter trade_adapter;
-    static final ArrayList<ListItem> itemlist = new ArrayList<ListItem>();
-    private ListView lv_tradeList;
     private Button btn_mypage;
     private Fragment fragment_mypage;
+    private RecyclerView rv_trade_list;
+    private TradeListAdapter trade_adapter;
+    boolean isLoading = false;
+    static final ArrayList<ListItem> itemlist = new ArrayList<ListItem>();
+    static final ArrayList<ListItem> templist = new ArrayList<ListItem>();
 
     private PopupWindow popupWindow_image_password;
     private ImageButton ib_take_picture;
     private Button btn_submit;
     private EditText et_password_submit;
-
     private SharedPreferences.Editor sharedPreferences_fragment_move_editor;
     private Fragment fragment_posting;
 
@@ -75,48 +79,33 @@ public class TradeListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_trade_list, container, false);
 
-        lv_tradeList = (ListView) view.findViewById(R.id.lv_tradeList);
         btn_mypage = (Button) view.findViewById(R.id.btn_mypage);
         fragment_mypage = new MyPageFragment();
-
-        trade_adapter = new TradeListAdapter();
-        lv_tradeList.setAdapter(trade_adapter);
-
         sharedPreferences_qr = getActivity().getSharedPreferences("setting", Context.MODE_PRIVATE);
         Boolean flag_qr = sharedPreferences_qr.getBoolean("flag_qr",false);
-
         sharedPreferences_fragment_move_editor = getActivity().getSharedPreferences("setting", Context.MODE_PRIVATE).edit();
         fragment_posting = new PostingFragment();
+        rv_trade_list = (RecyclerView)view.findViewById(R.id.rv_trade_list);
+        rv_trade_list.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // 권한 요청 받기
         this.checkPermissions();
 
-        // 현재 기기에 저장된 sharedPreferences_qr의 boolean 값 체크
-        Log.w(TAG,String.valueOf(flag_qr));
-        if(flag_qr == true){
-            Log.w(TAG,"QR 찍고 거래내역 출력");
-        }
-        else if(flag_qr == false){
-            Log.w(TAG,"마이페이지에서 거래내역 출력");
-        }
-
         this.GetTradeList();
+        this.initAdapter();
+        this.initScrollListener();
+        this.ToMyPage();
 
         if(flag_qr == true){
             // 리스트뷰의 아이템들을 누르면 이미지와 비밀번호를 등록하도록 나옴
+            Log.w(TAG,"QR 찍고 거래내역 출력");
             this.SetItemForPost();
         }
         else if(flag_qr == false){
             // 리스트뷰의 아이템들을 누르면 해당하는 게시물로 이동
-            this.SetItemToBoard(container);
+            Log.w(TAG,"마이페이지에서 거래내역 출력");
+            this.SetItemToBoard();
         }
-
-        btn_mypage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_mypage).commit();
-            }
-        });
 
         // Inflate the layout for this fragment
         return view;
@@ -241,12 +230,31 @@ public class TradeListFragment extends Fragment {
 
                 String title, tradeTime, userID;
                 title = tradeObject.getString("title");
-                tradeTime = tradeObject.getString("tradeTime");
+                tradeTime = tradeObject.getString("tradeTime").substring(0,10);
                 userID = tradeObject.getString("buyerId");
 
-                // 생성된 아이템 목록에 추가
-                trade_adapter.addItem(title,userID,tradeTime);
-                trade_adapter.notifyDataSetChanged();
+                ListItem temp = new ListItem();
+                temp.setTitle(title);
+                temp.setTradeTime(tradeTime);
+                temp.setUserID(userID);
+
+                for(int i=0;i<30;i++){
+                    // 처음 받아온 데이터 한번에 itemlist에 넣음
+                    // todo : 50은 나중에 tradeVo의 사이즈로 변경
+                    itemlist.add(temp);
+                }
+
+                // 처음 출력할 아이템
+                if(itemlist.size()<10){
+                    for(int i=0;i<itemlist.size();i++){
+                        templist.add(itemlist.get(i));
+                    }
+                }
+                else{
+                    for(int i=0;i<10;i++){
+                        templist.add(itemlist.get(i));
+                    }
+                }
             }
         }
         catch (JSONException e) {
@@ -258,13 +266,10 @@ public class TradeListFragment extends Fragment {
         }
     }
 
-    public void SetItemToBoard(ViewGroup container){
-        lv_tradeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    public void SetItemToBoard(){
+        trade_adapter.setOnItemClickListener(new TradeListAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                String strText = (String) parent.getItemAtPosition(position) ;
-//                Toast.makeText(container.getContext(), strText, Toast.LENGTH_SHORT).show();
-
+            public void onItemClick(View v, int position) {
                 sharedPreferences_fragment_move_editor.putString("fragment_move","TradeListFragment").commit();
 
                 // 프래그먼트로 이동 -> 현재는 테스트용으로 fragment_mypage 로 지정해놓음
@@ -274,9 +279,9 @@ public class TradeListFragment extends Fragment {
     }
 
     public void SetItemForPost(){
-        lv_tradeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        trade_adapter.setOnItemClickListener(new TradeListAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(View v, int position) {
                 // 팝업창이 들어갈 뷰를 하나 생성해주고, 해당 뷰의 레이아웃을 LinearLayout 으로 지정
                 View popupView = getLayoutInflater().inflate(R.layout.popupwindow_image_password,null);
                 popupWindow_image_password=new PopupWindow(popupView, LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
@@ -311,7 +316,7 @@ public class TradeListFragment extends Fragment {
                         }
                         else{
                             String password_submit=et_password_submit.getText().toString();
-//                    sendImageFile(password_submit, str_CurrentPhotoPath);
+                            //sendImageFile(password_submit, str_CurrentPhotoPath);
                         }
                     }
                 });
@@ -349,5 +354,79 @@ public class TradeListFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void initAdapter(){
+        trade_adapter = new TradeListAdapter(templist);
+        rv_trade_list.setAdapter(trade_adapter);
+    }
+
+    public void initScrollListener(){
+        rv_trade_list.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                Log.d(TAG, "onScrollStateChanged : " + newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                Log.d(TAG, "onScrolled : dx " + dx + ", dy " + dy);
+
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+
+                if (!isLoading) {
+                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == templist.size() - 1) {
+                        // 리스트의 마지막일 경우
+                        dataMore();
+                        isLoading = true;
+                        Toast.makeText(getActivity(), "스크롤 맨 밑 감지", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+    }
+
+    public void dataMore(){
+        Log.w(TAG, "dataMore : ");
+
+        // 로딩 아이템을 추가하고(빈칸 하나) 추가 알림
+        templist.add(null);
+        trade_adapter.notifyItemInserted(templist.size() - 1);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // 추가되어있던 로딩 아이템(null)을 하나 제거하고
+                templist.remove(templist.size() - 1);
+                // 제거 알림 => 하나를 제거했으므로 list.size()가 이전의 list.size()-1 과 같은 값을 가짐
+                trade_adapter.notifyItemRemoved(templist.size());
+
+                int currentSize = templist.size();
+                int nextLimit = currentSize + 10;
+
+                // 아이템이 하나 제거 된 위치부터 10개를 추가할 리스트에 넣어줌
+                for (int i = currentSize; i < nextLimit; i++) {
+                    if (i == itemlist.size())
+                        return;
+
+                    templist.add(itemlist.get(i));
+                }
+
+                trade_adapter.notifyDataSetChanged();
+                isLoading = false;
+            }
+        }, 2000);
+    }
+
+    public void ToMyPage(){
+        btn_mypage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_mypage).commit();
+            }
+        });
     }
 }
