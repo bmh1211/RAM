@@ -12,7 +12,7 @@
         select * from tradeView where sellerId = #{sellerId} and tradeTime > #{tradeTime} order by tradeTime;
     </select>
 
-    <select id="FindRegion" parameterType="com.example.ramserver.vo.FindRegionVo" resultType="com.example.ramserver.vo.TradeVo">
+    <select id="FindRegion" parameterType="com.example.ramserver.vo.FindRegionVo" resultType="com.example.ramserver.vo.PurchaseRegionVo">
         select ID,userName,region from user where ID=#{buyer} or ID=#{owner};
     </select>
 </mapper>

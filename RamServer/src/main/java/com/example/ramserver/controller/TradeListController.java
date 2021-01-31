@@ -57,9 +57,9 @@ public class TradeListController {
 
     //거래 신청시 지역 위치 푸시
     @GetMapping("/applyPurchase")
-    public void SelectRegion(@RequestParam("buyer") String buyer, @RequestParam("owner") String owner){
+    public List<PurchaseRegionVo> SelectRegion(@RequestParam("buyer") String buyer, @RequestParam("owner") String owner){
         List<PurchaseRegionVo> userRegion=tradeService.FindRegion(new FindRegionVo(buyer,owner));
-        
+        return userRegion;
     }
     private Date StringToDate(String Date) throws ParseException {
         return (new SimpleDateFormat("yyyy-MM-dd")).parse(Date);
