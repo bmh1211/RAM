@@ -30,9 +30,6 @@ public class MetroInfo {
     //두 역 사이의 최단경로를 찾기위한 전처리 과정
     @PostConstruct
     public void init() throws IOException, ParseException {
-        File file = ResourceUtils.getFile(
-                "classpath:api/MetroInformation.json");
-
         ClassPathResource resource = new ClassPathResource("api/MetroInformation.json");
         JSONObject json = (JSONObject) new JSONParser().parse(new InputStreamReader(resource.getInputStream(), "UTF-8")); //json-simple
         JSONArray stationlist=(JSONArray)json.get("DATA");
