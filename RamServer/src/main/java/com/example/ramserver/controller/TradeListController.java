@@ -3,6 +3,7 @@ package com.example.ramserver.controller;
 import com.example.ramserver.Response.TradeResponse;
 import com.example.ramserver.model.User;
 import com.example.ramserver.service.TradeService;
+import com.example.ramserver.staticvalue.MetroInfo;
 import com.example.ramserver.vo.FindRegionVo;
 import com.example.ramserver.vo.PurchaseRegionVo;
 import com.example.ramserver.vo.TradeVo;
@@ -22,6 +23,8 @@ public class TradeListController {
 
     @Autowired
     TradeService tradeService;
+    @Autowired
+    MetroInfo metroInfo;
 
 
     @GetMapping("/list")
@@ -59,6 +62,8 @@ public class TradeListController {
     @GetMapping("/applyPurchase")
     public List<PurchaseRegionVo> SelectRegion(@RequestParam("buyer") String buyer, @RequestParam("owner") String owner){
         List<PurchaseRegionVo> userRegion=tradeService.FindRegion(new FindRegionVo(buyer,owner));
+
+        String res=metroInfo.GetTradePlaceCode("시청","신도림");
         return userRegion;
     }
     private Date StringToDate(String Date) throws ParseException {
