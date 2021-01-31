@@ -118,7 +118,9 @@ public class PostingFragment extends Fragment {
 //            activity.mBundle = null;
 //        }
 
-
+        if(str_fragment_move.equals("TradeListFragment") || str_fragment_move.equals("SellListFragment")){
+            this.GetPostingData(GetBundleData());
+        }
 
         //<---------------------------------------------------작성-------------------------------------------------->
         // 취소 버튼 눌렀을 때 동작 기능
@@ -451,5 +453,37 @@ public class PostingFragment extends Fragment {
         str_CurrentPhotoPath = imgPath;
 
         return imgPath;
+    }
+
+    // 게시물 출력용으로 사용할때 쓰는 함수_1 => boardId 가져오기
+    public int GetBundleData(){
+        int boardId = 0;
+        Bundle bundle = getArguments();
+        boardId = bundle.getInt("boardId",0);
+
+        Log.w("PostingFragment","GetBundleData : bundle(boardId : "+boardId+")");
+
+        return boardId;
+    }
+
+    // 게시물 출력용으로 사용할때 쓰는 함수_2 => boardId를 가지고 해당하는 게시물의 데이터 가져오기
+    public void GetPostingData(int boardId){
+        NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/board/detail/boardId="+boardId,"GET");
+
+        try{
+            JSONObject resultObject = new JSONObject(networkTask.execute().get());
+            if(resultObject == null){
+                Log.e("PostingFragment","연결실패");
+            }
+            else{
+                Log.w("PostingFragment",resultObject.toString());
+            }
+        }catch(ExecutionException e){
+            e.printStackTrace();
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
     }
 }

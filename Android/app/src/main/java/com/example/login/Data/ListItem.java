@@ -4,6 +4,7 @@ public class ListItem {
     String title;
     String userID;
     String tradeTime;
+    int boardId;
 
     public String getTitle() {
         return title;
@@ -23,4 +24,6 @@ public class ListItem {
     public void setTradeTime(String tradeTime) {
         this.tradeTime = tradeTime;
     }
+    public int getBoardId(){return boardId;}
+    public void setBoardId(int boardId){this.boardId = boardId;}
 }

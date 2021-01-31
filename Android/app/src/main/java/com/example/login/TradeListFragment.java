@@ -229,14 +229,17 @@ public class TradeListFragment extends Fragment {
                 Log.w(TAG,tradeObject.toString());
 
                 String title, tradeTime, userID;
+                int boardId;
                 title = tradeObject.getString("title");
                 tradeTime = tradeObject.getString("tradeTime").substring(0,10);
                 userID = tradeObject.getString("buyerId");
+                boardId = tradeObject.getInt("boardId");
 
                 ListItem temp = new ListItem();
                 temp.setTitle(title);
                 temp.setTradeTime(tradeTime);
                 temp.setUserID(userID);
+                temp.setBoardId(boardId);
 
                 for(int i=0;i<30;i++){
                     // 처음 받아온 데이터 한번에 itemlist에 넣음
@@ -271,6 +274,20 @@ public class TradeListFragment extends Fragment {
             @Override
             public void onItemClick(View v, int position) {
                 sharedPreferences_fragment_move_editor.putString("fragment_move","TradeListFragment").commit();
+                
+                // 게시물 제목, 등록 날짜, 등록자 같은 게시물로 이동
+                ListItem temp = trade_adapter.listviewitem.get(position);
+                String title = temp.getTitle();
+                String tradeTime = temp.getTradeTime();
+                String userID = temp.getUserID();
+                int boardId = temp.getBoardId();
+
+                Log.w(TAG,"SetItemToBoard( title : "+title+", tradeTime : "+tradeTime+", userID : "+userID+", boardId : "+boardId+" )");
+
+                // bundle을 통해 클릭된 게시물의 boardId를 보냄
+                Bundle bundle = new Bundle();
+                bundle.putInt("boardId",boardId);
+                fragment_posting.setArguments(bundle);
 
                 // 프래그먼트로 이동 -> 현재는 테스트용으로 fragment_mypage 로 지정해놓음
                 ((MainPageActivity)getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment_posting).commit();
