@@ -203,7 +203,7 @@ public class TradeListFragment extends Fragment {
         }
     }
 
-    // todo : url 임시 - 수정필요
+    // todo : url 임시 (status 추가 필요)
     public void GetTradeList(){
         Log.w(TAG,"GetTradeList() 함수 실행");
         NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/trade/list?type=false&tradeTime=2020-01-01","GET"); // true가 구매리스트, false가 판매리스트
