@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Network;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -119,7 +120,19 @@ public class PostingFragment extends Fragment {
 //        }
 
         if(str_fragment_move.equals("TradeListFragment") || str_fragment_move.equals("SellListFragment")){
-            this.GetPostingData(GetBundleData());
+            try{
+                JSONObject result = GetPostingData(GetBundleData());
+
+                // 가져온 게시물의 데이터로 설정해주기
+                et_title.setText(result.getString("title"));
+                et_title.setEnabled(false);
+                et_posting.setText("으어앙앙ㅇ아아아아아아아~~~~");
+                et_posting.setEnabled(false);
+                ib_add_photo.setEnabled(false);
+                btn_apply.setVisibility(View.GONE);
+            }catch(JSONException e){
+                e.printStackTrace();
+            }
         }
 
         //<---------------------------------------------------작성-------------------------------------------------->
@@ -467,8 +480,10 @@ public class PostingFragment extends Fragment {
     }
 
     // 게시물 출력용으로 사용할때 쓰는 함수_2 => boardId를 가지고 해당하는 게시물의 데이터 가져오기
-    public void GetPostingData(int boardId){
-        NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/board/detail/boardId="+boardId,"GET");
+    public JSONObject GetPostingData(int boardId){
+        //NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/board/detail/boardId="+boardId,"GET");
+        NetworkTask networkTask = new NetworkTask(getActivity().getApplicationContext(),"http://3.35.48.170:3000/board/list?index=0","GET");
+        JSONObject returnObject = null;
 
         try{
             JSONObject resultObject = new JSONObject(networkTask.execute().get());
@@ -477,6 +492,17 @@ public class PostingFragment extends Fragment {
             }
             else{
                 Log.w("PostingFragment",resultObject.toString());
+
+                // 임시
+                JSONArray resultArray = resultObject.getJSONArray("list");
+                for(int i = 0;i<resultArray.length();i++){
+                    if(resultArray.getJSONObject(i).getInt("boardId") == boardId){
+                        // 게시물 데이터 변경해주기
+                        returnObject = resultArray.getJSONObject(i);
+
+                        break;
+                    }
+                }
             }
         }catch(ExecutionException e){
             e.printStackTrace();
@@ -485,5 +511,7 @@ public class PostingFragment extends Fragment {
         }catch(JSONException e){
             e.printStackTrace();
         }
+
+        return returnObject;
     }
 }
